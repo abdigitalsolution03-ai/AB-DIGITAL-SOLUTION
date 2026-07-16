@@ -39,6 +39,7 @@ import AdminUsers from './pages/admin/Users'
 import AdminSecurity from './pages/admin/Security'
 import AdminChangePassword from './pages/admin/ChangePassword'
 import AdminForgotPassword from './pages/admin/ForgotPassword'
+import AdminSiteContent from './pages/admin/SiteContent'
 import PageTransition from './components/PageTransition'
 
 export default function App() {
@@ -63,6 +64,7 @@ export default function App() {
           <Route path="leads" element={<AdminLeads />} />
           <Route path="subscribers" element={<AdminSubscribers />} />
           <Route path="lead-discovery" element={<AdminLeadDiscovery />} />
+          <Route path="site-content" element={<AdminSiteContent />} />
           <Route path="media" element={<AdminMedia />} />
           <Route path="navigation" element={<AdminNavigation />} />
           <Route path="settings" element={<AdminSettings />} />

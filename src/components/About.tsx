@@ -1,13 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-
-const stats = [
-  { value: 100, suffix: "+", label: "Happy Clients" },
-  { value: 500, suffix: "+", label: "Projects Completed" },
-  { value: 98, suffix: "%", label: "Client Satisfaction" },
-  { value: 5, suffix: "+", label: "Years Experience" },
-];
+import { getSiteContent } from "@/services/siteContent";
 
 function Counter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -50,31 +44,28 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
 }
 
 export default function About() {
+  const [content, setContent] = useState(getSiteContent());
   return (
     <section id="about" className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection direction="left">
-            <span className="section-label">About Us</span>
+            <span className="section-label">{content.about.label}</span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Transforming Brands Through{" "}
-              <span className="text-[#60A5FA]">Digital Excellence</span>
+              {content.about.heading}{" "}
+              <span className="text-[#60A5FA]">{content.about.headingHighlight}</span>
             </h2>
             <p className="text-gray-500 mt-6 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
-              At AB DIGITAL SOLUTION, we combine creative strategy with cutting-edge technology to
-              deliver digital solutions that drive real business growth. Our team of experts is
-              passionate about helping brands establish a powerful online presence.
+              {content.about.paragraphs[0]}
             </p>
             <p className="text-gray-400 mt-4 leading-relaxed text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-              From startups to established enterprises, we&apos;ve partnered with 100+ businesses to
-              transform their digital footprint through data-driven strategies, stunning design, and
-              results-focused execution.
+              {content.about.paragraphs[1]}
             </p>
             <a
-              href="#contact"
+              href={content.about.ctaLink}
               className="inline-flex items-center gap-2 mt-8 text-[#111111] font-bold text-sm group doodle-btn-accent"
             >
-              Start Your Journey
+              {content.about.cta}
               <svg
                 className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
@@ -89,7 +80,7 @@ export default function About() {
 
           <AnimatedSection direction="right">
             <div className="grid grid-cols-2 gap-6">
-              {stats.map((stat, i) => (
+              {content.about.stats.map((stat, i) => (
                 <Counter key={i} {...stat} />
               ))}
             </div>

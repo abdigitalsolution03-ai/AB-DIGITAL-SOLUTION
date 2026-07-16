@@ -1,18 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Team", href: "/team" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Header() {
+  const [content, setContent] = useState(getSiteContent());
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
@@ -46,12 +38,12 @@ export default function Header() {
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 whileHover={{ scale: 1.02 }}
               >
-                AB <span className="text-[#60A5FA]">DIGITAL</span>
+                {content.header.logo} <span className="text-[#60A5FA]">{content.header.logoHighlight}</span>
               </motion.span>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
+              {content.header.navItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}
@@ -81,10 +73,10 @@ export default function Header() {
 
             <div className="hidden lg:flex items-center gap-4">
               <Link
-                to="/contact"
+                to={content.header.ctaLink}
                 className="doodle-btn-accent"
               >
-                Contact Us
+                {content.header.cta}
               </Link>
             </div>
 
@@ -119,7 +111,7 @@ export default function Header() {
               className="lg:hidden border-t-4 border-[#111111] bg-white overflow-hidden"
             >
               <div className="px-6 py-6 flex flex-col gap-2">
-                {navItems.map((item, i) => (
+                {content.header.navItems.map((item, i) => (
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, x: -20 }}
@@ -142,11 +134,11 @@ export default function Header() {
                   </motion.div>
                 ))}
                 <Link
-                  to="/contact"
+                  to={content.header.ctaLink}
                   onClick={() => setIsMobileOpen(false)}
                   className="doodle-btn-accent mt-4 text-center block"
                 >
-                  Contact Us
+                  {content.header.cta}
                 </Link>
               </div>
             </motion.div>

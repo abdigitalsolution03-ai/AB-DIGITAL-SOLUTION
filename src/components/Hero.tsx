@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { getSiteContent } from "@/services/siteContent";
 
 const floatingShapes = [
   { size: 80, x: "5%", y: "15%", duration: 6, rotation: 15 },
@@ -10,6 +11,7 @@ const floatingShapes = [
 ];
 
 export default function Hero() {
+  const [content, setContent] = useState(getSiteContent());
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -97,7 +99,7 @@ export default function Hero() {
           style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111" }}
         >
           <span className="w-2 h-2 bg-[#111111]" style={{ borderRadius: "50%" }} />
-          Premium Digital Agency
+          {content.hero.badge}
         </motion.div>
 
         <h1 className="max-w-4xl mx-auto" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -108,7 +110,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-400 tracking-[0.3em]"
             >
-              WE ARE
+              {content.hero.headline1}
             </motion.span>
           </div>
           <div className="overflow-hidden mt-2">
@@ -118,7 +120,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-[#111111] tracking-tight"
             >
-              AB <span className="text-[#60A5FA]">DIGITAL</span> SOLUTION
+              {content.hero.headline2}<span className="text-[#60A5FA]">{content.hero.headlineHighlight}</span>
             </motion.span>
           </div>
         </h1>
@@ -130,7 +132,7 @@ export default function Hero() {
           className="mt-6 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
           style={{ fontFamily: "'Inter', sans-serif" }}
         >
-          We help businesses dominate online through SEO, Website Development, Google Ads, Meta Ads, Social Media Marketing, Branding, AI Automation and Lead Generation.
+          {content.hero.description}
         </motion.p>
 
         <motion.div
@@ -140,16 +142,16 @@ export default function Hero() {
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href="#contact"
+            href={content.hero.cta1Link}
             className="doodle-btn-accent px-8 py-3.5 text-sm"
           >
-            Get Free Consultation
+            {content.hero.cta1}
           </a>
           <a
-            href="#portfolio"
+            href={content.hero.cta2Link}
             className="doodle-btn-outline px-8 py-3.5 text-sm"
           >
-            View Portfolio
+            {content.hero.cta2}
           </a>
         </motion.div>
 
@@ -159,14 +161,9 @@ export default function Hero() {
           transition={{ delay: 1.5, duration: 0.6 }}
           className="mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12"
         >
-          {[
-            { value: "100+", label: "Happy Clients" },
-            { value: "500+", label: "Projects Done" },
-            { value: "98%", label: "Satisfaction" },
-            { value: "5+", label: "Years Experience" },
-          ].map((stat, i) => (
+          {content.hero.stats.map((stat, i) => (
             <div key={i} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{stat.value}</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{stat.value}{stat.suffix}</div>
               <div className="text-xs text-gray-500 tracking-wider uppercase mt-1 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</div>
             </div>
           ))}

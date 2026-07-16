@@ -1,45 +1,17 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-
-const steps = [
-  {
-    number: "01",
-    title: "Discovery",
-    description: "We dive deep into your business, goals, and target audience to build a solid foundation."},
-  {
-    number: "02",
-    title: "Research",
-    description: "Thorough market analysis and competitor research to identify opportunities and trends."},
-  {
-    number: "03",
-    title: "Planning",
-    description: "Strategic roadmap creation with clear milestones, KPIs, and deliverables."},
-  {
-    number: "04",
-    title: "Design",
-    description: "Crafting visually stunning and user-centric designs that captivate your audience."},
-  {
-    number: "05",
-    title: "Development",
-    description: "Bringing designs to life with clean, performant, and scalable code."},
-  {
-    number: "06",
-    title: "Marketing",
-    description: "Launching data-driven campaigns to drive traffic, engagement, and conversions."},
-  {
-    number: "07",
-    title: "Growth",
-    description: "Continuous optimization and scaling to maximize ROI and long-term success."},
-];
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Process() {
+  const [content, setContent] = useState(getSiteContent());
   return (
     <section className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <AnimatedSection className="text-center mb-20">
-          <span className="section-label">Our Process</span>
+          <span className="section-label">{content.process.label}</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            How We <span className="text-[#60A5FA]">Deliver Results</span>
+            {content.process.heading} <span className="text-[#60A5FA]">{content.process.headingHighlight}</span>
           </h2>
         </AnimatedSection>
 
@@ -48,7 +20,7 @@ export default function Process() {
           <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[4px] bg-[#111111] -translate-x-1/2" style={{ opacity: 0.1 }} />
 
           <div className="space-y-20">
-            {steps.map((step, i) => (
+            {content.process.steps.map((step, i) => (
               <AnimatedSection
                 key={i}
                 direction={i % 2 === 0 ? "left" : "right"}

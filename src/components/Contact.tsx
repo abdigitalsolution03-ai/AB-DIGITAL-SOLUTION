@@ -1,20 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-
-const serviceOptions = [
-  "Website Development",
-  "SEO Optimization",
-  "Google Ads",
-  "Meta Ads",
-  "Social Media Marketing",
-  "Content Marketing",
-  "Branding",
-  "AI Automation",
-  "Lead Generation",
-];
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Contact() {
+  const [content, setContent] = useState(getSiteContent());
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -56,17 +46,17 @@ export default function Contact() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Contact</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Let&apos;s <span className="text-[#60A5FA]">Work Together</span>
+            {content.contact.heading}
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Ready to take your digital presence to the next level? Get in touch with us today.
+            {content.contact.subtext}
           </p>
         </AnimatedSection>
 
         <AnimatedSection>
           <div className="w-full h-[300px] overflow-hidden doodle-border mb-12" style={{ borderRadius: "20px", padding: "3px" }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.914770972!2d-74.119763!3d40.697403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1"
+              src={content.contact.mapsEmbed}
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -125,7 +115,7 @@ export default function Contact() {
                   style={{ borderRadius: "14px", fontFamily: "'Inter', sans-serif", boxShadow: "3px 3px 0px #111111" }}
                 >
                   <option value="">Select a service</option>
-                  {serviceOptions.map((s) => (
+                  {content.contact.serviceOptions.map((s) => (
                     <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
@@ -168,7 +158,7 @@ export default function Contact() {
                     </svg>
                   }
                   label="Email"
-                  value="abdigitalsolution03@gmail.com"
+                  value={content.contact.info.email}
                 />
                 <ContactInfo
                   icon={
@@ -177,7 +167,7 @@ export default function Contact() {
                     </svg>
                   }
                   label="Phone"
-                  value="+91 81785-26092"
+                  value={content.contact.info.phone}
                 />
                 <ContactInfo
                   icon={
@@ -187,7 +177,7 @@ export default function Contact() {
                     </svg>
                   }
                   label="Location"
-                  value="New York, NY 10001"
+                  value={content.contact.info.location}
                 />
               </div>
             </div>
@@ -195,13 +185,13 @@ export default function Contact() {
             <div className="doodle-card p-8 md:p-10">
               <h3 className="text-[#111111] text-lg font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Follow Us</h3>
               <div className="flex items-center gap-4">
-                {["Facebook", "Instagram", "LinkedIn", "Twitter"].map((social) => (
+                {content.contact.socialLinks.map((social) => (
                   <a
-                    key={social}
-                    href="#"
+                    key={social.platform}
+                    href={social.url}
                     className="w-10 h-10 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#60A5FA] transition-all duration-300"
                     style={{ borderRadius: "12px", boxShadow: "3px 3px 0px #111111" }}
-                    aria-label={social}
+                    aria-label={social.platform}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
@@ -215,7 +205,7 @@ export default function Contact() {
       </div>
 
       <motion.a
-        href="https://wa.me/918178526092"
+        href={content.contact.info.whatsapp}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-24 right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
@@ -230,7 +220,7 @@ export default function Contact() {
       </motion.a>
 
       <motion.a
-        href="tel:+918178526092"
+        href={`tel:${content.contact.info.phone}`}
         className="fixed bottom-8 right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
         style={{ borderRadius: "50%", backgroundColor: "#60A5FA", boxShadow: "4px 4px 0px #111111" }}
         aria-label="Call us"

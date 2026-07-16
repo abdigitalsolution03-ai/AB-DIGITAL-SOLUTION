@@ -1,66 +1,25 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-
-const plans = [
-  {
-    name: "Starter",
-    price: "999",
-    description: "Perfect for small businesses starting their digital journey.",
-    features: [
-      "Website Development (5 Pages)",
-      "Basic SEO Setup",
-      "Social Media Setup",
-      "Monthly Analytics Report",
-      "Email Support",
-    ],
-    popular: false},
-  {
-    name: "Professional",
-    price: "2,499",
-    description: "Ideal for growing businesses seeking comprehensive digital solutions.",
-    features: [
-      "Website Development (10 Pages)",
-      "Advanced SEO Strategy",
-      "Google Ads Management",
-      "Meta Ads Management",
-      "Content Marketing (4 posts/mo)",
-      "Priority Support",
-      "Monthly Strategy Call",
-    ],
-    popular: true},
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "Tailored solutions for large organizations with complex needs.",
-    features: [
-      "Custom Web Application",
-      "Enterprise SEO Suite",
-      "Multi-Platform Ad Management",
-      "AI Automation Integration",
-      "Full Branding Package",
-      "Dedicated Account Manager",
-      "24/7 Priority Support",
-      "Quarterly Business Review",
-    ],
-    popular: false},
-];
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Pricing() {
+  const [content, setContent] = useState(getSiteContent());
   return (
     <section id="pricing" className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <AnimatedSection className="text-center mb-16">
-          <span className="section-label">Pricing</span>
+          <span className="section-label">{content.pricing.label}</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Transparent <span className="text-[#60A5FA]">Plans</span>
+            {content.pricing.heading} <span className="text-[#60A5FA]">{content.pricing.headingHighlight}</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Choose the plan that fits your needs. All plans include a free consultation.
+            {content.pricing.subtext}
           </p>
         </AnimatedSection>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-          {plans.map((plan, i) => (
+          {content.pricing.plans.map((plan, i) => (
             <AnimatedSection key={i} delay={i * 0.15}>
               <motion.div
                 whileHover={{ translateY: -4 }}
