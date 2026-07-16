@@ -46,7 +46,7 @@ function Counter({ value, suffix, label }: StatProps) {
   return (
     <div ref={ref} className="text-center">
       <span className="text-5xl md:text-6xl font-black text-[#111]">
-        {count}<span className="text-[#FFD400]">{suffix}</span>
+        {count}<span className="text-[#60A5FA]">{suffix}</span>
       </span>
       <p className="text-[#111]/60 text-sm mt-2 tracking-wider uppercase font-medium">{label}</p>
     </div>
@@ -120,7 +120,7 @@ export default function About() {
               <span className="section-label">About Us</span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
                 Transforming Brands Through{" "}
-                <span className="text-[#FFD400]">Digital Excellence</span>
+                <span className="text-[#60A5FA]">Digital Excellence</span>
               </h1>
               <p className="text-[#111] mt-6 leading-relaxed">
                 At AB DIGITAL SOLUTION, we combine creative strategy with cutting-edge technology to
@@ -157,7 +157,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#FFD400] py-[100px]">
+      <section className="bg-[#60A5FA] py-[100px]">
         <div className="max-w-[1280px] mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
             <span className="section-label bg-[#111] text-white">Our Values</span>
@@ -170,7 +170,7 @@ export default function About() {
             {values.map((value, i) => (
               <AnimatedSection key={i} delay={i * 0.08}>
                 <div className="doodle-card p-8 h-full group">
-                  <div className="w-12 h-12 bg-[#111] flex items-center justify-center text-[#FFD400] mb-5 border-3 border-[#111] shadow-[3px_3px_0_#111] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#111] flex items-center justify-center text-[#60A5FA] mb-5 border-3 border-[#111] shadow-[3px_3px_0_#111] group-hover:scale-110 transition-transform duration-300">
                     {value.icon}
                   </div>
                   <h3 className="text-xl font-bold text-[#111] mb-3">{value.title}</h3>
@@ -187,7 +187,7 @@ export default function About() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Team</span>
             <h2 className="text-4xl md:text-5xl font-black text-[#111] mt-4 tracking-tight">
-              Meet the <span className="text-[#FFD400]">Experts</span>
+              Meet the <span className="text-[#60A5FA]">Experts</span>
             </h2>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               A diverse team of passionate professionals dedicated to your success.
@@ -198,13 +198,13 @@ export default function About() {
             {team.map((member, i) => (
               <AnimatedSection key={i} delay={i * 0.05}>
                 <div className="doodle-card p-8 group">
-                  <div className="w-16 h-16 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mb-5 shadow-[3px_3px_0_#111]">
+                  <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mb-5 shadow-[3px_3px_0_#111]">
                     <span className="text-2xl font-black text-[#111]">
                       {member.name.split(" ").map(n => n[0]).join("")}
                     </span>
                   </div>
                   <h3 className="text-lg font-bold text-[#111]">{member.name}</h3>
-                  <p className="text-[#FFD400] font-bold mt-1">{member.role}</p>
+                  <p className="text-[#60A5FA] font-bold mt-1">{member.role}</p>
                   <p className="text-[#111]/70 mt-3 leading-relaxed">{member.bio}</p>
                 </div>
               </AnimatedSection>
@@ -213,7 +213,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#FFD400] py-[100px]">
+      <section className="bg-[#60A5FA] py-[100px]">
         <div className="max-w-[1280px] mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
             <span className="section-label bg-[#111] text-white">Our Story</span>
@@ -253,3 +253,4 @@ export default function About() {
     </>
   );
 }
+

@@ -56,7 +56,7 @@ export default function Blog() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Blog</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Insights & <span className="text-[#FFD400]">Strategies</span>
+              Insights & <span className="text-[#60A5FA]">Strategies</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Stay ahead with the latest digital marketing insights, tips, and industry trends.
@@ -70,13 +70,13 @@ export default function Blog() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeCategory === cat ? "bg-[#FFD400] text-[#111]" : "bg-white text-[#111] hover:bg-[#FFD400]"
+                    activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
                   }`}
                 >
                   {activeCategory === cat && (
                     <motion.span
                       layoutId="blogCategory"
-                      className="absolute inset-0 bg-[#FFD400]"
+                      className="absolute inset-0 bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -107,7 +107,7 @@ export default function Blog() {
                       </span>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-[#111] font-bold text-lg group-hover:text-[#FFD400] transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-[#111] font-bold text-lg group-hover:text-[#60A5FA] transition-colors duration-300 line-clamp-2">
                         {post.title}
                       </h3>
                       <p className="text-[#111]/70 mt-2 leading-relaxed line-clamp-3">
@@ -156,3 +156,4 @@ export default function Blog() {
     </>
   );
 }
+

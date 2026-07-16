@@ -31,7 +31,7 @@ const advancedFilterOptions = [
 const companySizes = ['', '1-10', '11-50', '51-200', '201-500', '500+']
 
 const statusColors: Record<LeadStatus, string> = {
-  'New': '#4D7AFF', 'Contacted': '#FFD400', 'Qualified': '#8B5CF6',
+  'New': '#4D7AFF', 'Contacted': '#60A5FA', 'Qualified': '#8B5CF6',
   'Proposal Sent': '#EC4899', 'Negotiation': '#F59E0B', 'Won': '#10B981',
   'Lost': '#FF4D4D', 'Archived': '#6B7280',
 }
@@ -47,7 +47,7 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
-        <svg key={star} className={`w-3.5 h-3.5 ${star <= Math.round(rating) ? 'text-[#FFD400]' : 'text-[#111]/20'}`} fill="currentColor" viewBox="0 0 20 20">
+        <svg key={star} className={`w-3.5 h-3.5 ${star <= Math.round(rating) ? 'text-[#60A5FA]' : 'text-[#111]/20'}`} fill="currentColor" viewBox="0 0 20 20">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
       ))}
@@ -56,7 +56,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function PriorityBadge({ priority }: { priority: Lead['leadPriority'] }) {
-  const colors = { Hot: 'bg-[#FF4D4D]', Warm: 'bg-[#FFD400] text-[#111]', Cold: 'bg-[#4D7AFF]' }
+  const colors = { Hot: 'bg-[#FF4D4D]', Warm: 'bg-[#60A5FA] text-[#111]', Cold: 'bg-[#4D7AFF]' }
   return (
     <span className={`px-2 py-0.5 text-[10px] font-black border-2 border-[#111] ${colors[priority]} text-white`}>
       {priority}
@@ -97,7 +97,7 @@ function LeadCard({ lead, onView, onSave, onDelete, saved }: { lead: Lead; onVie
         </div>
         <span className={`text-[10px] font-bold px-2 py-0.5 border-2 border-[#111] ${
           lead.status === 'New' ? 'bg-[#4D7AFF] text-white' :
-          lead.status === 'Contacted' ? 'bg-[#FFD400] text-[#111]' :
+          lead.status === 'Contacted' ? 'bg-[#60A5FA] text-[#111]' :
           lead.status === 'Qualified' ? 'bg-[#8B5CF6] text-white' :
           lead.status === 'Won' ? 'bg-[#10B981] text-white' :
           lead.status === 'Lost' ? 'bg-[#FF4D4D] text-white' :
@@ -111,7 +111,7 @@ function LeadCard({ lead, onView, onSave, onDelete, saved }: { lead: Lead; onVie
           <span className="font-black text-[#111]">{lead.opportunityScore}%</span>
         </div>
         <div className="w-full h-2 border-2 border-[#111] bg-white overflow-hidden">
-          <div className="h-full bg-[#FFD400] transition-all duration-500" style={{ width: `${lead.opportunityScore}%` }} />
+          <div className="h-full bg-[#60A5FA] transition-all duration-500" style={{ width: `${lead.opportunityScore}%` }} />
         </div>
       </div>
 
@@ -124,14 +124,14 @@ function LeadCard({ lead, onView, onSave, onDelete, saved }: { lead: Lead; onVie
             Unsave
           </button>
         ) : (
-          <button onClick={onSave} className="flex-1 px-3 py-1.5 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#FFD400] transition-all flex items-center justify-center gap-1">
+          <button onClick={onSave} className="flex-1 px-3 py-1.5 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#60A5FA] transition-all flex items-center justify-center gap-1">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
             Save
           </button>
         )}
-        <button onClick={(e) => { e.stopPropagation(); onView() }} className="px-3 py-1.5 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#FFD400] transition-all flex items-center gap-1">
+        <button onClick={(e) => { e.stopPropagation(); onView() }} className="px-3 py-1.5 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#60A5FA] transition-all flex items-center gap-1">
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -144,7 +144,7 @@ function LeadCard({ lead, onView, onSave, onDelete, saved }: { lead: Lead; onVie
 }
 
 function ProgressBar({ label, value }: { label: string; value: number }) {
-  const color = value >= 80 ? '#10B981' : value >= 50 ? '#FFD400' : '#FF4D4D'
+  const color = value >= 80 ? '#10B981' : value >= 50 ? '#60A5FA' : '#FF4D4D'
   return (
     <div>
       <div className="flex items-center justify-between text-xs mb-1">
@@ -196,7 +196,7 @@ function FilterPanel({ config, setConfig, onGenerate, onSaveSearch, generating }
         </div>
         <div className="mt-3">
           <label className="block text-[10px] font-bold text-[#111]/60 mb-1">Radius: {config.radius} km</label>
-          <input type="range" min={5} max={500} value={config.radius} onChange={e => update('radius', Number(e.target.value))} className="w-full accent-[#FFD400]" />
+          <input type="range" min={5} max={500} value={config.radius} onChange={e => update('radius', Number(e.target.value))} className="w-full accent-[#60A5FA]" />
           <div className="flex items-center justify-between text-[10px] text-[#111]/40">
             <span>5 km</span>
             <span>500 km</span>
@@ -235,7 +235,7 @@ function FilterPanel({ config, setConfig, onGenerate, onSaveSearch, generating }
         </div>
         <div className="mt-3">
           <label className="block text-[10px] font-bold text-[#111]/60 mb-1">Minimum Rating: {config.rating}</label>
-          <input type="range" min={0} max={5} step={0.5} value={config.rating} onChange={e => update('rating', Number(e.target.value))} className="w-full accent-[#FFD400]" />
+          <input type="range" min={0} max={5} step={0.5} value={config.rating} onChange={e => update('rating', Number(e.target.value))} className="w-full accent-[#60A5FA]" />
           <div className="flex items-center justify-between text-[10px] text-[#111]/40">
             <span>Any</span>
             <span>5</span>
@@ -254,8 +254,8 @@ function FilterPanel({ config, setConfig, onGenerate, onSaveSearch, generating }
             { key: 'verifiedOnly', label: 'Verified Only' },
             { key: 'openNow', label: 'Open Now' },
           ] as const).map(({ key, label }) => (
-            <label key={key} className="flex items-center gap-2 px-3 py-2 border-3 border-[#111] bg-white cursor-pointer hover:bg-[#FFD400]/10 transition-all text-[11px] font-bold text-[#111]">
-              <input type="checkbox" checked={config[key] as boolean} onChange={e => update(key, e.target.checked)} className="w-3.5 h-3.5 accent-[#FFD400]" />
+            <label key={key} className="flex items-center gap-2 px-3 py-2 border-3 border-[#111] bg-white cursor-pointer hover:bg-[#60A5FA]/10 transition-all text-[11px] font-bold text-[#111]">
+              <input type="checkbox" checked={config[key] as boolean} onChange={e => update(key, e.target.checked)} className="w-3.5 h-3.5 accent-[#60A5FA]" />
               {label}
             </label>
           ))}
@@ -266,8 +266,8 @@ function FilterPanel({ config, setConfig, onGenerate, onSaveSearch, generating }
         <h3 className="text-xs font-black text-[#111]/40 uppercase tracking-wider mb-3">Advanced Filters</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {advancedFilterOptions.map(filter => (
-            <label key={filter} className={`flex items-center gap-2 px-3 py-2 border-3 border-[#111] cursor-pointer transition-all text-[11px] font-bold text-[#111] ${config.advancedFilters.includes(filter) ? 'bg-[#FFD400]' : 'bg-white hover:bg-[#FFD400]/10'}`}>
-              <input type="checkbox" checked={config.advancedFilters.includes(filter)} onChange={() => toggleAdvanced(filter)} className="w-3.5 h-3.5 accent-[#FFD400]" />
+            <label key={filter} className={`flex items-center gap-2 px-3 py-2 border-3 border-[#111] cursor-pointer transition-all text-[11px] font-bold text-[#111] ${config.advancedFilters.includes(filter) ? 'bg-[#60A5FA]' : 'bg-white hover:bg-[#60A5FA]/10'}`}>
+              <input type="checkbox" checked={config.advancedFilters.includes(filter)} onChange={() => toggleAdvanced(filter)} className="w-3.5 h-3.5 accent-[#60A5FA]" />
               {filter}
             </label>
           ))}
@@ -424,7 +424,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                   </a>
                 )}
                 {lead.googleBusinessUrl && (
-                  <a href={lead.googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#FFD400] font-bold hover:underline">
+                  <a href={lead.googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#60A5FA] font-bold hover:underline">
                     <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -459,7 +459,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                   <p className="text-[11px] font-bold text-[#111]/40 mb-2">Social Media</p>
                   <div className="flex flex-wrap gap-2">
                     {lead.socialMedia.map((s, i) => (
-                      <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="px-3 py-1 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#FFD400] transition-all">
+                      <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="px-3 py-1 border-3 border-[#111] text-[10px] font-bold text-[#111] hover:bg-[#60A5FA] transition-all">
                         {s.platform}
                       </a>
                     ))}
@@ -512,7 +512,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                   <p className="text-[10px] font-bold text-[#111]/40 mb-2">Suggested Services</p>
                   <div className="flex flex-wrap gap-1.5">
                     {lead.suggestedServices.map((s, i) => (
-                      <span key={i} className="px-2 py-0.5 bg-[#FFD400] border-2 border-[#111] text-[9px] font-bold text-[#111]">{s}</span>
+                      <span key={i} className="px-2 py-0.5 bg-[#60A5FA] border-2 border-[#111] text-[9px] font-bold text-[#111]">{s}</span>
                     ))}
                   </div>
                 </div>
@@ -541,7 +541,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                   <label className="block text-[10px] font-bold text-[#111]/60 mb-1">Tags</label>
                   <div className="flex items-center gap-2 mb-2">
                     <input type="text" value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAddTag()} className="flex-1 px-3 py-2 bg-white border-3 border-[#111] text-[#111] focus:outline-none text-sm" placeholder="Add tag..." />
-                    <button onClick={handleAddTag} className="px-3 py-2 bg-[#FFD400] border-3 border-[#111] text-[#111] font-bold text-xs hover:shadow-[2px_2px_0_#111] transition-all">Add</button>
+                    <button onClick={handleAddTag} className="px-3 py-2 bg-[#60A5FA] border-3 border-[#111] text-[#111] font-bold text-xs hover:shadow-[2px_2px_0_#111] transition-all">Add</button>
                   </div>
                   {lead.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
@@ -580,7 +580,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
             <div className="doodle-card p-5 hover:translate-x-0 hover:translate-y-0">
               <div className="flex items-center gap-1 border-b-3 border-[#111] mb-4">
                 {(['notes', 'calls', 'emails', 'whatsapp'] as const).map(tab => (
-                  <button key={tab} onClick={() => setActiveTab(tab)} className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-all border-b-3 -mb-[3px] ${activeTab === tab ? 'border-[#FFD400] text-[#111]' : 'border-transparent text-[#111]/30 hover:text-[#111]/60'}`}>
+                  <button key={tab} onClick={() => setActiveTab(tab)} className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-all border-b-3 -mb-[3px] ${activeTab === tab ? 'border-[#60A5FA] text-[#111]' : 'border-transparent text-[#111]/30 hover:text-[#111]/60'}`}>
                     {tab === 'notes' ? 'Notes' : tab === 'calls' ? 'Call History' : tab === 'emails' ? 'Email History' : 'WhatsApp History'}
                   </button>
                 ))}
@@ -644,7 +644,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                               <span className="text-xs font-bold text-[#111] truncate">{email.subject}</span>
                               <span className={`text-[10px] font-bold px-1.5 py-0.5 border-2 border-[#111] ${
                                 email.status === 'Sent' ? 'bg-[#4D7AFF] text-white' :
-                                email.status === 'Opened' ? 'bg-[#FFD400] text-[#111]' :
+                                email.status === 'Opened' ? 'bg-[#60A5FA] text-[#111]' :
                                 email.status === 'Replied' ? 'bg-[#10B981] text-white' :
                                 'bg-[#FF4D4D] text-white'
                               }`}>{email.status}</span>
@@ -671,7 +671,7 @@ function LeadDetailModal({ lead, onClose, onRefresh }: { lead: Lead; onClose: ()
                                 msg.status === 'Sent' ? 'bg-[#4D7AFF] text-white' :
                                 msg.status === 'Delivered' ? 'bg-[#8B5CF6] text-white' :
                                 msg.status === 'Read' ? 'bg-[#10B981] text-white' :
-                                'bg-[#FFD400] text-[#111]'
+                                'bg-[#60A5FA] text-[#111]'
                               }`}>{msg.status}</span>
                             </div>
                             <p className="text-xs text-[#111]/80">{msg.message}</p>
@@ -719,7 +719,7 @@ function AddToListModal({ leadId, onClose }: { leadId: string; onClose: () => vo
             <p className="text-xs text-[#111]/40 text-center py-4">No lists yet. Create one below.</p>
           ) : (
             lists.map(list => (
-              <button key={list.id} onClick={() => handleAdd(list.id)} className="w-full text-left p-3 border-3 border-[#111] bg-white hover:bg-[#FFD400]/10 transition-all">
+              <button key={list.id} onClick={() => handleAdd(list.id)} className="w-full text-left p-3 border-3 border-[#111] bg-white hover:bg-[#60A5FA]/10 transition-all">
                 <p className="text-sm font-bold text-[#111]">{list.name}</p>
                 {list.description && <p className="text-[10px] text-[#111]/40 mt-0.5">{list.description}</p>}
                 <p className="text-[10px] text-[#111]/30 mt-1">{list.leadIds.length} leads</p>
@@ -903,10 +903,10 @@ export default function LeadDiscovery() {
             </button>
             <div className="w-px h-6 bg-[#111]/20 mx-1" />
             <div className="flex items-center border-3 border-[#111] overflow-hidden">
-              <button onClick={() => setView('discovery')} className={`px-4 py-2 text-xs font-bold transition-all ${view === 'discovery' ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#FFD400]/20'}`}>
+              <button onClick={() => setView('discovery')} className={`px-4 py-2 text-xs font-bold transition-all ${view === 'discovery' ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#60A5FA]/20'}`}>
                 Search
               </button>
-              <button onClick={() => setView('saved')} className={`px-4 py-2 text-xs font-bold transition-all ${view === 'saved' ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#FFD400]/20'}`}>
+              <button onClick={() => setView('saved')} className={`px-4 py-2 text-xs font-bold transition-all ${view === 'saved' ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#60A5FA]/20'}`}>
                 Saved ({savedLeads.length})
               </button>
             </div>
@@ -915,13 +915,13 @@ export default function LeadDiscovery() {
       </div>
 
       <div className="flex gap-2 mb-6">
-        <button onClick={() => setShowHistory(!showHistory)} className={`px-4 py-2 border-3 border-[#111] text-xs font-bold transition-all flex items-center gap-2 ${showHistory ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#FFD400]/20'}`}>
+        <button onClick={() => setShowHistory(!showHistory)} className={`px-4 py-2 border-3 border-[#111] text-xs font-bold transition-all flex items-center gap-2 ${showHistory ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#60A5FA]/20'}`}>
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Search History
         </button>
-        <button onClick={() => setShowLists(!showLists)} className={`px-4 py-2 border-3 border-[#111] text-xs font-bold transition-all flex items-center gap-2 ${showLists ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#FFD400]/20'}`}>
+        <button onClick={() => setShowLists(!showLists)} className={`px-4 py-2 border-3 border-[#111] text-xs font-bold transition-all flex items-center gap-2 ${showLists ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/50 hover:bg-[#60A5FA]/20'}`}>
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h10M3 12h16M3 17h12" />
           </svg>
@@ -944,13 +944,13 @@ export default function LeadDiscovery() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {searchHistory.map(h => (
-                    <div key={h.id} className="flex items-center justify-between p-3 border-3 border-[#111] bg-white hover:bg-[#FFD400]/5 transition-all">
+                    <div key={h.id} className="flex items-center justify-between p-3 border-3 border-[#111] bg-white hover:bg-[#60A5FA]/5 transition-all">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold text-[#111] truncate">{h.name}</p>
                         <p className="text-[10px] text-[#111]/40">{h.resultCount} leads &middot; {new Date(h.createdAt).toLocaleDateString()}</p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        <button onClick={() => handleRerunSearch(h)} className="p-1.5 border-2 border-[#111] text-[#111]/50 hover:bg-[#FFD400] hover:text-[#111] transition-all" title="Rerun search">
+                        <button onClick={() => handleRerunSearch(h)} className="p-1.5 border-2 border-[#111] text-[#111]/50 hover:bg-[#60A5FA] hover:text-[#111] transition-all" title="Rerun search">
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                           </svg>
@@ -1035,7 +1035,7 @@ export default function LeadDiscovery() {
                 animate={{ opacity: 1, y: 0 }}
                 className="doodle-card p-12 text-center"
               >
-                <div className="w-16 h-16 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_#111]">
+                <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_#111]">
                   <svg className="w-8 h-8 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -1089,7 +1089,7 @@ export default function LeadDiscovery() {
               />
               <div className="flex items-center gap-1">
                 {(['all', 'New', 'Contacted', 'Qualified', 'Proposal Sent', 'Negotiation', 'Won', 'Lost', 'Archived'] as const).map(f => (
-                  <button key={f} onClick={() => setSavedFilter(f)} className={`px-2.5 py-1.5 border-3 border-[#111] text-[10px] font-bold transition-all ${savedFilter === f ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/40 hover:bg-[#FFD400]/20'}`}>
+                  <button key={f} onClick={() => setSavedFilter(f)} className={`px-2.5 py-1.5 border-3 border-[#111] text-[10px] font-bold transition-all ${savedFilter === f ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/40 hover:bg-[#60A5FA]/20'}`}>
                     {f.charAt(0).toUpperCase() + f.slice(1)}
                   </button>
                 ))}
@@ -1122,7 +1122,7 @@ export default function LeadDiscovery() {
 
           {filteredSavedLeads.length === 0 ? (
             <div className="doodle-card p-12 text-center">
-              <div className="w-16 h-16 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_#111]">
+              <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_#111]">
                 <svg className="w-8 h-8 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -1135,9 +1135,9 @@ export default function LeadDiscovery() {
               <div className="doodle-card overflow-hidden hover:translate-x-0 hover:translate-y-0">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b-3 border-[#111] bg-[#FFD400]/10">
+                    <tr className="border-b-3 border-[#111] bg-[#60A5FA]/10">
                       <th className="w-10 px-4 py-3">
-                        <input type="checkbox" checked={selectedSavedIds.length === filteredSavedLeads.length} onChange={e => setSelectedSavedIds(e.target.checked ? filteredSavedLeads.map(l => l.id) : [])} className="w-4 h-4 accent-[#FFD400]" />
+                        <input type="checkbox" checked={selectedSavedIds.length === filteredSavedLeads.length} onChange={e => setSelectedSavedIds(e.target.checked ? filteredSavedLeads.map(l => l.id) : [])} className="w-4 h-4 accent-[#60A5FA]" />
                       </th>
                       <th className="text-left text-[10px] font-black text-[#111]/50 uppercase tracking-wider px-4 py-3">Business</th>
                       <th className="text-left text-[10px] font-black text-[#111]/50 uppercase tracking-wider px-4 py-3">Contact</th>
@@ -1152,12 +1152,12 @@ export default function LeadDiscovery() {
                   <tbody>
                     <AnimatePresence>
                       {filteredSavedLeads.map(lead => (
-                        <motion.tr key={lead.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`border-b border-[#111]/10 hover:bg-[#FFD400]/5 transition-colors ${selectedSavedIds.includes(lead.id) ? 'bg-[#FFD400]/10' : ''}`}>
+                        <motion.tr key={lead.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`border-b border-[#111]/10 hover:bg-[#60A5FA]/5 transition-colors ${selectedSavedIds.includes(lead.id) ? 'bg-[#60A5FA]/10' : ''}`}>
                           <td className="px-4 py-3">
-                            <input type="checkbox" checked={selectedSavedIds.includes(lead.id)} onChange={e => setSelectedSavedIds(prev => e.target.checked ? [...prev, lead.id] : prev.filter(id => id !== lead.id))} className="w-4 h-4 accent-[#FFD400]" />
+                            <input type="checkbox" checked={selectedSavedIds.includes(lead.id)} onChange={e => setSelectedSavedIds(prev => e.target.checked ? [...prev, lead.id] : prev.filter(id => id !== lead.id))} className="w-4 h-4 accent-[#60A5FA]" />
                           </td>
                           <td className="px-4 py-3">
-                            <button onClick={() => setSelectedLead(lead)} className="text-sm font-bold text-[#111] hover:text-[#FFD400] transition-colors text-left">{lead.businessName}</button>
+                            <button onClick={() => setSelectedLead(lead)} className="text-sm font-bold text-[#111] hover:text-[#60A5FA] transition-colors text-left">{lead.businessName}</button>
                             <p className="text-[10px] text-[#111]/40">{lead.category}</p>
                           </td>
                           <td className="px-4 py-3">
@@ -1187,20 +1187,20 @@ export default function LeadDiscovery() {
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
                               <div className="w-12 h-1.5 border-2 border-[#111] bg-white overflow-hidden">
-                                <div className="h-full bg-[#FFD400]" style={{ width: `${lead.opportunityScore}%` }} />
+                                <div className="h-full bg-[#60A5FA]" style={{ width: `${lead.opportunityScore}%` }} />
                               </div>
                               <span className="text-[10px] font-bold text-[#111]">{lead.opportunityScore}%</span>
                             </div>
                           </td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-1">
-                              <button onClick={() => setSelectedLead(lead)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] hover:text-[#111] transition-all" title="View">
+                              <button onClick={() => setSelectedLead(lead)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] hover:text-[#111] transition-all" title="View">
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                               </button>
-                              <button onClick={() => setShowAddToList(lead.id)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] hover:text-[#111] transition-all" title="Add to list">
+                              <button onClick={() => setShowAddToList(lead.id)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] hover:text-[#111] transition-all" title="Add to list">
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                                 </svg>
@@ -1262,3 +1262,4 @@ export default function LeadDiscovery() {
     </PageTransition>
   )
 }
+

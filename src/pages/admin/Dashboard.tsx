@@ -55,7 +55,7 @@ export default function AdminDashboard() {
       const s = l.status || 'New'
       statusMap[s] = (statusMap[s] || 0) + 1
     })
-    const statusColors: Record<string, string> = { New: '#4D7AFF', Contacted: '#FFD400', Qualified: '#8B5CF6', Converted: '#10B981', Lost: '#FF4D4D' }
+    const statusColors: Record<string, string> = { New: '#4D7AFF', Contacted: '#60A5FA', Qualified: '#8B5CF6', Converted: '#10B981', Lost: '#FF4D4D' }
     setLeadStatuses(Object.entries(statusMap).map(([label, count]) => ({ label, count, color: statusColors[label] || '#4D7AFF' })))
 
     const published = pages.filter((p: any) => p.status === 'published').length
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
     const activity: Activity[] = []
     const sortedLogs = [...auditLogs].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 10)
     sortedLogs.forEach((l: any) => {
-      const color = l.action === 'Login' ? '#4D7AFF' : l.action === 'Logout' ? '#6B7280' : l.action === 'Create' ? '#10B981' : l.action === 'Update' ? '#FFD400' : '#FF4D4D'
+      const color = l.action === 'Login' ? '#4D7AFF' : l.action === 'Logout' ? '#6B7280' : l.action === 'Create' ? '#10B981' : l.action === 'Update' ? '#60A5FA' : '#FF4D4D'
       activity.push({ id: l.id, message: l.description, time: new Date(l.timestamp).toLocaleString(), color })
     })
     setRecentActivity(activity)
@@ -74,7 +74,7 @@ export default function AdminDashboard() {
 
   const statCards = [
     { label: 'Total Leads', value: stats.totalLeads, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', link: '/admin/leads', color: '#4D7AFF' },
-    { label: 'Active Services', value: stats.activeServices, icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', link: '/admin/services', color: '#FFD400' },
+    { label: 'Active Services', value: stats.activeServices, icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', link: '/admin/services', color: '#60A5FA' },
     { label: 'Blog Posts', value: stats.blogPosts, icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z', link: '/admin/blog', color: '#8B5CF6' },
     { label: 'Media Files', value: stats.mediaFiles, icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', link: '/admin/media', color: '#10B981' },
     { label: 'Subscribers', value: stats.subscribers, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', link: '/admin/subscribers', color: '#FF4D4D' },
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
               <Link
                 key={action.label}
                 to={action.link}
-                className="flex items-center gap-3 p-4 border-3 border-[#111] bg-white hover:bg-[#FFD400] transition-all duration-300 group"
+                className="flex items-center gap-3 p-4 border-3 border-[#111] bg-white hover:bg-[#60A5FA] transition-all duration-300 group"
               >
                 <svg className="w-5 h-5 text-[#111] group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d={action.icon} />
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
             {trafficData.map((d) => (
               <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
                 <div
-                  className="w-full bg-[#FFD400] border-2 border-[#111] transition-all duration-500 hover:opacity-80"
+                  className="w-full bg-[#60A5FA] border-2 border-[#111] transition-all duration-500 hover:opacity-80"
                   style={{ height: `${(d.visits / maxVisits) * 100}%`, minHeight: '8px' }}
                 />
                 <span className="text-[10px] font-bold text-[#111]/60">{d.day}</span>
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                 <span className="text-sm font-bold text-[#111]">{s.label}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-[#111]/60">{s.value}</span>
-                  <div className={`w-2.5 h-2.5 ${s.status === 'good' ? 'bg-[#10B981]' : 'bg-[#FFD400]'}`} style={{ border: '2px solid #111' }} />
+                  <div className={`w-2.5 h-2.5 ${s.status === 'good' ? 'bg-[#10B981]' : 'bg-[#60A5FA]'}`} style={{ border: '2px solid #111' }} />
                 </div>
               </div>
             ))}
@@ -297,7 +297,7 @@ export default function AdminDashboard() {
                 <span className="text-[#111]/60 text-xs">{draftCount}</span>
               </div>
               <div className="w-full h-4 border-2 border-[#111] bg-white overflow-hidden">
-                <div className="h-full bg-[#FFD400] transition-all duration-500" style={{ width: `${(draftCount / Math.max(publishedCount + draftCount, 1)) * 100}%` }} />
+                <div className="h-full bg-[#60A5FA] transition-all duration-500" style={{ width: `${(draftCount / Math.max(publishedCount + draftCount, 1)) * 100}%` }} />
               </div>
             </div>
             <div className="pt-2 text-center">
@@ -331,3 +331,4 @@ export default function AdminDashboard() {
     </PageTransition>
   )
 }
+

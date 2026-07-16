@@ -37,7 +37,7 @@ export default function Contact() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Contact</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Let's <span className="text-[#FFD400]">Work Together</span>
+              Let's <span className="text-[#60A5FA]">Work Together</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Ready to take your digital presence to the next level? Get in touch with us today.
@@ -66,7 +66,7 @@ export default function Contact() {
                 <InputField label="Business Name" name="business" value={formData.business} onChange={handleChange} />
                 <div>
                   <label className="block text-[#111] text-sm font-bold mb-2">
-                    Required Service <span className="text-[#FFD400]">*</span>
+                    Required Service <span className="text-[#60A5FA]">*</span>
                   </label>
                   <select
                     name="service" value={formData.service} onChange={handleChange} required
@@ -139,7 +139,7 @@ export default function Contact() {
                   {["Facebook", "Instagram", "LinkedIn", "Twitter"].map((social) => (
                     <a
                       key={social} href="#"
-                      className="w-10 h-10 border-3 border-[#111] flex items-center justify-center text-[#111]/60 hover:text-[#FFD400] hover:bg-[#FFD400] transition-all duration-300"
+                      className="w-10 h-10 border-3 border-[#111] flex items-center justify-center text-[#111]/60 hover:text-[#60A5FA] hover:bg-[#60A5FA] transition-all duration-300"
                       aria-label={social}
                     >
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -165,7 +165,7 @@ function InputField({
   return (
     <div>
       <label className="block text-[#111] text-sm font-bold mb-2">
-        {label}{required && <span className="text-[#FFD400] ml-1">*</span>}
+        {label}{required && <span className="text-[#60A5FA] ml-1">*</span>}
       </label>
       <input
         type={type} name={name} value={value} onChange={onChange}
@@ -179,7 +179,7 @@ function InputField({
 function ContactInfo({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center text-[#111] shrink-0 shadow-[2px_2px_0_#111]">
+      <div className="w-10 h-10 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center text-[#111] shrink-0 shadow-[2px_2px_0_#111]">
         {icon}
       </div>
       <div>
@@ -189,3 +189,4 @@ function ContactInfo({ icon, label, value }: { icon: React.ReactNode; label: str
     </div>
   );
 }
+

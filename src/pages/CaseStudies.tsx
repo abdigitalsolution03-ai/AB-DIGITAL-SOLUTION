@@ -104,7 +104,7 @@ export default function CaseStudies() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Case Studies</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Real <span className="text-[#FFD400]">Results</span>
+              Real <span className="text-[#60A5FA]">Results</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Discover how we've helped businesses achieve remarkable growth through our strategic digital solutions.
@@ -118,13 +118,13 @@ export default function CaseStudies() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeCategory === cat ? "bg-[#FFD400] text-[#111]" : "bg-white text-[#111] hover:bg-[#FFD400]"
+                    activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
                   }`}
                 >
                   {activeCategory === cat && (
                     <motion.span
                       layoutId="caseStudyCategory"
-                      className="absolute inset-0 bg-[#FFD400]"
+                      className="absolute inset-0 bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -149,7 +149,7 @@ export default function CaseStudies() {
                     className="doodle-card overflow-hidden cursor-pointer"
                     onClick={() => setExpandedIndex(expandedIndex === i ? null : i)}
                   >
-                    <div className="bg-[#FFD400] border-b-3 border-[#111] px-6 py-4">
+                    <div className="bg-[#60A5FA] border-b-3 border-[#111] px-6 py-4">
                       <span className="text-[#111]/60 text-xs tracking-widest uppercase font-bold">{cs.category}</span>
                       <h3 className="text-[#111] text-xl font-bold mt-1">{cs.title}</h3>
                       <p className="text-[#111]/70 text-sm mt-1">{cs.client}</p>
@@ -169,7 +169,7 @@ export default function CaseStudies() {
                       <div className="grid grid-cols-3 gap-4 mb-4">
                         {cs.metrics.map((metric, j) => (
                           <div key={j} className="text-center">
-                            <p className="text-[#FFD400] text-xl font-black">{metric.value}</p>
+                            <p className="text-[#60A5FA] text-xl font-black">{metric.value}</p>
                             <p className="text-[#111]/50 text-[10px] uppercase tracking-wider mt-1">{metric.label}</p>
                           </div>
                         ))}
@@ -225,3 +225,4 @@ export default function CaseStudies() {
     </>
   );
 }
+

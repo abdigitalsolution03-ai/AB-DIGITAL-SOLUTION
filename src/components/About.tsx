@@ -41,7 +41,7 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
       >
         <span className="text-5xl md:text-6xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
           {count}
-          <span className="text-[#FFD400]">{suffix}</span>
+          <span className="text-[#60A5FA]">{suffix}</span>
         </span>
       </motion.div>
       <p className="text-gray-500 text-sm mt-2 tracking-wider uppercase font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{label}</p>
@@ -58,7 +58,7 @@ export default function About() {
             <span className="section-label">About Us</span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Transforming Brands Through{" "}
-              <span className="text-[#FFD400]">Digital Excellence</span>
+              <span className="text-[#60A5FA]">Digital Excellence</span>
             </h2>
             <p className="text-gray-500 mt-6 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
               At AB DIGITAL SOLUTION, we combine creative strategy with cutting-edge technology to
@@ -99,3 +99,4 @@ export default function About() {
     </section>
   );
 }
+

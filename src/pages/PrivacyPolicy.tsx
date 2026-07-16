@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Legal</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Privacy <span className="text-[#FFD400]">Policy</span>
+              Privacy <span className="text-[#60A5FA]">Policy</span>
             </h1>
             <p className="text-[#111] mt-4">
               Last updated: January 1, 2025
@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
                 <h2 className="text-[#111] text-xl font-bold mb-4">Contact Us</h2>
                 <p className="text-[#111]/70 leading-relaxed">
                   If you have any questions about this Privacy Policy, please contact us at{" "}
-                  <a href="mailto:abdigitalsolution03@gmail.com" className="text-[#FFD400] font-bold hover:underline">abdigitalsolution03@gmail.com</a>.
+                  <a href="mailto:abdigitalsolution03@gmail.com" className="text-[#60A5FA] font-bold hover:underline">abdigitalsolution03@gmail.com</a>.
                 </p>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
           <AnimatedSection className="mt-8 text-center">
             <Link
               to="/terms"
-              className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#FFD400] transition-colors duration-300"
+              className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#60A5FA] transition-colors duration-300"
             >
               View Terms of Service
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -90,3 +90,4 @@ export default function PrivacyPolicy() {
     </>
   );
 }
+

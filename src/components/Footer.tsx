@@ -30,13 +30,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <Link to="/" className="text-xl font-bold text-[#111111] tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              AB <span className="text-[#FFD400]">DIGITAL</span>
+              AB <span className="text-[#60A5FA]">DIGITAL</span>
             </Link>
             <p className="text-gray-500 text-sm mt-3 leading-relaxed max-w-xs" style={{ fontFamily: "'Inter', sans-serif" }}>
               Premium digital marketing and web development agency delivering data-driven results for
               brands worldwide.
             </p>
-            <p className="text-[#FFD400] text-xs tracking-widest uppercase mt-4 font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <p className="text-[#60A5FA] text-xs tracking-widest uppercase mt-4 font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Your Growth. Our Strategy.
             </p>
             <div className="flex items-center gap-3 mt-6">
@@ -44,7 +44,7 @@ export default function Footer() {
                 <a
                   key={social}
                   href="#"
-                  className="w-9 h-9 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#FFD400] transition-all duration-300"
+                  className="w-9 h-9 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#60A5FA] transition-all duration-300"
                   style={{ borderRadius: "10px", boxShadow: "3px 3px 0px #111111" }}
                   aria-label={social}
                 >
@@ -111,7 +111,7 @@ export default function Footer() {
               <motion.button
                 whileHover={{ translateX: -2, translateY: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-4 py-2.5 bg-[#FFD400] text-[#111111] font-bold text-sm border-3 border-[#111111]"
+                className="px-4 py-2.5 bg-[#60A5FA] text-[#111111] font-bold text-sm border-3 border-[#111111]"
                 style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111", fontFamily: "'Inter', sans-serif" }}
               >
                 Subscribe
@@ -127,10 +127,10 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} AB DIGITAL SOLUTION. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link to="/privacy-policy" className="text-gray-400 text-xs hover:text-[#FFD400] transition-colors duration-300" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <Link to="/privacy-policy" className="text-gray-400 text-xs hover:text-[#60A5FA] transition-colors duration-300" style={{ fontFamily: "'Inter', sans-serif" }}>
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-gray-400 text-xs hover:text-[#FFD400] transition-colors duration-300" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <Link to="/terms" className="text-gray-400 text-xs hover:text-[#60A5FA] transition-colors duration-300" style={{ fontFamily: "'Inter', sans-serif" }}>
               Terms of Service
             </Link>
           </div>
@@ -139,3 +139,4 @@ export default function Footer() {
     </footer>
   );
 }
+

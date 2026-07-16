@@ -25,7 +25,7 @@ export default function BackToTop() {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[9997] w-12 h-12 rounded-full bg-[#111111] border-3 border-[#111111] flex items-center justify-center text-[#FFD400] hover:bg-[#FFD400] hover:text-[#111111] transition-all duration-300 shadow-[4px_4px_0px_#111111] hover:shadow-[6px_6px_0px_#111111] hover:translate-x-[-2px] hover:translate-y-[-2px]"
+          className="fixed bottom-8 right-8 z-[9997] w-12 h-12 rounded-full bg-[#111111] border-3 border-[#111111] flex items-center justify-center text-[#60A5FA] hover:bg-[#60A5FA] hover:text-[#111111] transition-all duration-300 shadow-[4px_4px_0px_#111111] hover:shadow-[6px_6px_0px_#111111] hover:translate-x-[-2px] hover:translate-y-[-2px]"
           aria-label="Back to top"
         >
           <svg
@@ -42,3 +42,4 @@ export default function BackToTop() {
     </AnimatePresence>
   );
 }
+

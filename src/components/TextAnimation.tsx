@@ -50,7 +50,7 @@ export default function TextAnimation({
               animate={
                 isHovered
                   ? {
-                      color: "#FFD400",
+                      color: "#60A5FA",
                       y: -8,
                       textShadow: "0 0 20px rgba(255, 212, 0, 0.3)"}
                   : {
@@ -70,7 +70,7 @@ export default function TextAnimation({
       ))}
       {isHovered && (
         <motion.span
-          className="absolute bottom-0 left-0 h-[3px] bg-[#FFD400]"
+          className="absolute bottom-0 left-0 h-[3px] bg-[#60A5FA]"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -79,3 +79,4 @@ export default function TextAnimation({
     </motion.div>
   );
 }
+

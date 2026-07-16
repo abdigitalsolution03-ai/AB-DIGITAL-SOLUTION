@@ -98,7 +98,7 @@ export default function AdminAudit() {
           <p className="text-[#111]/60 text-sm mt-1">{logs.length} total entries</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={exportCSV} className="px-4 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#FFD400] transition-all flex items-center gap-2">
+          <button onClick={exportCSV} className="px-4 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#60A5FA] transition-all flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -132,7 +132,7 @@ export default function AdminAudit() {
               key={a}
               onClick={() => { setFilterAction(a); setCurrentPage(1) }}
               className={`px-3 py-1.5 text-xs font-bold border-3 border-[#111] transition-all ${
-                filterAction === a ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]'
+                filterAction === a ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]'
               }`}
             >
               {a}
@@ -159,7 +159,7 @@ export default function AdminAudit() {
                 </tr>
               ) : (
                 paginated.map((entry) => (
-                  <tr key={entry.id} className="border-b border-[#111]/10 hover:bg-[#FFD400]/10 transition-colors">
+                  <tr key={entry.id} className="border-b border-[#111]/10 hover:bg-[#60A5FA]/10 transition-colors">
                     <td className="px-6 py-4">
                       <p className="text-sm text-[#111]/60 font-mono text-xs">{new Date(entry.timestamp).toLocaleString()}</p>
                     </td>
@@ -168,7 +168,7 @@ export default function AdminAudit() {
                         entry.action === 'Login' ? 'bg-green-200 text-green-900' :
                         entry.action === 'Logout' ? 'bg-gray-200 text-gray-900' :
                         entry.action === 'Create' ? 'bg-blue-200 text-blue-900' :
-                        entry.action === 'Update' ? 'bg-[#FFD400] text-[#111]' :
+                        entry.action === 'Update' ? 'bg-[#60A5FA] text-[#111]' :
                         'bg-red-200 text-red-900'
                       }`}>
                         {entry.action}
@@ -193,7 +193,7 @@ export default function AdminAudit() {
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1.5 border-3 border-[#111] text-sm font-bold text-[#111]/60 hover:bg-[#FFD400] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 border-3 border-[#111] text-sm font-bold text-[#111]/60 hover:bg-[#60A5FA] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Prev
           </button>
@@ -202,7 +202,7 @@ export default function AdminAudit() {
               key={p}
               onClick={() => setCurrentPage(p)}
               className={`px-3 py-1.5 border-3 border-[#111] text-sm font-bold transition-all ${
-                currentPage === p ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]'
+                currentPage === p ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]'
               }`}
             >
               {p}
@@ -211,7 +211,7 @@ export default function AdminAudit() {
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="px-3 py-1.5 border-3 border-[#111] text-sm font-bold text-[#111]/60 hover:bg-[#FFD400] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 border-3 border-[#111] text-sm font-bold text-[#111]/60 hover:bg-[#60A5FA] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Next
           </button>
@@ -230,7 +230,7 @@ export default function AdminAudit() {
               <h3 className="text-lg font-black text-[#111] mb-2">Clear All Logs</h3>
               <p className="text-[#111]/60 text-sm mb-6">This will permanently remove all audit log entries.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setShowClearConfirm(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setShowClearConfirm(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={clearLogs} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Clear All</button>
               </div>
             </motion.div>
@@ -240,3 +240,4 @@ export default function AdminAudit() {
     </PageTransition>
   )
 }
+

@@ -95,7 +95,7 @@ export default function ForgotPassword() {
         >
           <div className="doodle-card p-8 md:p-10">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
+              <div className="w-14 h-14 mx-auto mb-4 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
                 <svg className="w-7 h-7 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
@@ -191,7 +191,7 @@ export default function ForgotPassword() {
       >
         <div className="doodle-card p-8 md:p-10">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 mx-auto mb-4 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
+            <div className="w-14 h-14 mx-auto mb-4 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
               <svg className="w-7 h-7 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
@@ -262,3 +262,4 @@ export default function ForgotPassword() {
     </div>
   )
 }
+

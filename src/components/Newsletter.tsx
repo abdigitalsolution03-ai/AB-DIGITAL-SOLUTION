@@ -18,7 +18,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="relative py-24 bg-[#FFD400]">
+    <section className="relative py-24 bg-[#60A5FA]">
       <div className="max-w-[1280px] mx-auto px-6">
         <AnimatedSection className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111111] tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -69,3 +69,4 @@ export default function Newsletter() {
     </section>
   );
 }
+

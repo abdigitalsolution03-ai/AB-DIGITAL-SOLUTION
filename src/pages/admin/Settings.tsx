@@ -14,7 +14,7 @@ const defaultSettings: SiteSettings = {
   general: { siteName: 'AB DIGITAL', tagline: 'Digital Solutions Agency', logoUrl: '', faviconUrl: '', footerCopyright: '© 2026 AB DIGITAL SOLUTION. All rights reserved.' },
   contact: { email: '', phone: '', address: '', googleMapsKey: '' },
   social: { facebook: '', instagram: '', linkedin: '', twitter: '', youtube: '' },
-  theme: { primaryColor: '#111111', accentColor: '#FFD400', borderRadius: 20, fontFamily: 'Poppins' },
+  theme: { primaryColor: '#111111', accentColor: '#60A5FA', borderRadius: 20, fontFamily: 'Poppins' },
   analytics: { googleAnalyticsId: '', facebookPixelId: '', customHeadCode: '' },
 }
 
@@ -75,7 +75,7 @@ export default function AdminSettings() {
             key={tab}
             onClick={() => setActiveTab(i)}
             className={`px-5 py-2.5 text-sm font-bold transition-all border-3 border-[#111] whitespace-nowrap ${
-              activeTab === i ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]'
+              activeTab === i ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]'
             }`}
           >
             {tab}
@@ -183,7 +183,7 @@ export default function AdminSettings() {
                   </div>
                   <div>
                     <label className={labelClass}>Border Radius: {settings.theme.borderRadius}px</label>
-                    <input type="range" min="0" max="40" value={settings.theme.borderRadius} onChange={(e) => updateTheme('borderRadius', parseInt(e.target.value))} className="w-full accent-[#FFD400] cursor-pointer" />
+                    <input type="range" min="0" max="40" value={settings.theme.borderRadius} onChange={(e) => updateTheme('borderRadius', parseInt(e.target.value))} className="w-full accent-[#60A5FA] cursor-pointer" />
                   </div>
                   <div>
                     <label className={labelClass}>Font Family</label>
@@ -317,3 +317,4 @@ export default function AdminSettings() {
     </PageTransition>
   )
 }
+

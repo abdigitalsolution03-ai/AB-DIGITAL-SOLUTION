@@ -46,7 +46,7 @@ export default function Header() {
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 whileHover={{ scale: 1.02 }}
               >
-                AB <span className="text-[#FFD400]">DIGITAL</span>
+                AB <span className="text-[#60A5FA]">DIGITAL</span>
               </motion.span>
             </Link>
 
@@ -71,7 +71,7 @@ export default function Header() {
                   {isActive(item.href) && (
                     <motion.span
                       layoutId="activeNav"
-                      className="absolute -bottom-1 left-4 right-4 h-[3px] bg-[#FFD400]"
+                      className="absolute -bottom-1 left-4 right-4 h-[3px] bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -132,7 +132,7 @@ export default function Header() {
                       onClick={() => setIsMobileOpen(false)}
                       className={`block py-3 px-4 font-semibold text-sm transition-all duration-300 border-2 border-transparent ${
                         isActive(item.href)
-                          ? "text-[#111111] bg-[#FFD400] border-[#111111]"
+                          ? "text-[#111111] bg-[#60A5FA] border-[#111111]"
                           : "text-gray-500 hover:text-[#111111] hover:bg-gray-100"
                       }`}
                       style={{ borderRadius: "14px", fontFamily: "'Inter', sans-serif" }}
@@ -156,3 +156,4 @@ export default function Header() {
     </>
   );
 }
+

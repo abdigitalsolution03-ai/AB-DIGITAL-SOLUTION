@@ -21,7 +21,7 @@ export default function NotFound() {
             >
               <div className="inline-block mb-8">
                 <motion.span
-                  className="text-[150px] md:text-[200px] font-black text-[#FFD400] leading-none tracking-tighter"
+                  className="text-[150px] md:text-[200px] font-black text-[#60A5FA] leading-none tracking-tighter"
                   animate={{
                     y: [0, -10, 0]}}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -74,7 +74,7 @@ export default function NotFound() {
                 >
                   <Link
                     to={path}
-                    className="text-[#111]/40 text-xs hover:text-[#FFD400] transition-colors duration-300 uppercase tracking-wider font-bold"
+                    className="text-[#111]/40 text-xs hover:text-[#60A5FA] transition-colors duration-300 uppercase tracking-wider font-bold"
                   >
                     {path === "/" ? "Home" : path.replace("/", "").replace("/", " ")}
                   </Link>
@@ -87,3 +87,4 @@ export default function NotFound() {
     </>
   );
 }
+

@@ -41,7 +41,7 @@ const features = [
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
-    color: "#FFD400"},
+    color: "#60A5FA"},
   {
     title: "ROI Focused",
     description: "Every strategy is data-driven and designed to deliver maximum return on investment.",
@@ -60,7 +60,7 @@ export default function WhyChooseUs() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Why Choose Us</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Built for <span className="text-[#FFD400]">Excellence</span>
+            Built for <span className="text-[#60A5FA]">Excellence</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
             What sets us apart and makes us the preferred partner for businesses worldwide.
@@ -87,3 +87,4 @@ export default function WhyChooseUs() {
     </section>
   );
 }
+

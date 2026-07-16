@@ -45,7 +45,7 @@ export default function Terms() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Legal</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Terms of <span className="text-[#FFD400]">Service</span>
+              Terms of <span className="text-[#60A5FA]">Service</span>
             </h1>
             <p className="text-[#111] mt-4">
               Last updated: January 1, 2025
@@ -71,7 +71,7 @@ export default function Terms() {
                 <h2 className="text-[#111] text-xl font-bold mb-4">Contact</h2>
                 <p className="text-[#111]/70 leading-relaxed">
                   For questions about these Terms of Service, please contact us at{" "}
-                  <a href="mailto:abdigitalsolution03@gmail.com" className="text-[#FFD400] font-bold hover:underline">abdigitalsolution03@gmail.com</a>.
+                  <a href="mailto:abdigitalsolution03@gmail.com" className="text-[#60A5FA] font-bold hover:underline">abdigitalsolution03@gmail.com</a>.
                 </p>
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function Terms() {
           <AnimatedSection className="mt-8 text-center">
             <Link
               to="/privacy-policy"
-              className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#FFD400] transition-colors duration-300"
+              className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#60A5FA] transition-colors duration-300"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m7 7l-7-7 7-7" />
@@ -93,3 +93,4 @@ export default function Terms() {
     </>
   );
 }
+

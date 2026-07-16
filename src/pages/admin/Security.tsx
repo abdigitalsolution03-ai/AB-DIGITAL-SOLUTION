@@ -126,7 +126,7 @@ export default function AdminSecurity() {
   const labelClass = "block text-sm font-bold text-[#111]/60 mb-2"
   const inputClass = "w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none text-sm"
   const toggleBase = "relative w-11 h-6 border-3 border-[#111] cursor-pointer transition-all"
-  const toggleActive = "bg-[#FFD400]"
+  const toggleActive = "bg-[#60A5FA]"
   const toggleInactive = "bg-white"
   const toggleDot = "absolute top-0.5 left-0.5 w-4 h-4 bg-[#111] transition-all"
 
@@ -161,7 +161,7 @@ export default function AdminSecurity() {
               {urlSaved ? 'Saved!' : 'Save'}
             </button>
           </div>
-          <div className="mt-3 flex items-start gap-2 bg-[#FFD400]/20 border-3 border-[#FFD400]/50 p-3">
+          <div className="mt-3 flex items-start gap-2 bg-[#60A5FA]/20 border-3 border-[#60A5FA]/50 p-3">
             <svg className="w-4 h-4 text-[#111] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
@@ -179,14 +179,14 @@ export default function AdminSecurity() {
           <p className={sectionDescClass}>Configure password requirements for admin accounts.</p>
           <div className="space-y-5">
             <div>
-              <label className={labelClass}>Minimum Length: <span className="text-[#FFD400] bg-[#111] px-2 py-0.5 text-xs font-bold">{minLength}</span></label>
+              <label className={labelClass}>Minimum Length: <span className="text-[#60A5FA] bg-[#111] px-2 py-0.5 text-xs font-bold">{minLength}</span></label>
               <input
                 type="range"
                 min={8}
                 max={32}
                 value={minLength}
                 onChange={(e) => setMinLength(parseInt(e.target.value))}
-                className="w-full accent-[#FFD400] cursor-pointer"
+                className="w-full accent-[#60A5FA] cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-[#111]/40 font-bold mt-1">
                 <span>8</span>
@@ -241,14 +241,14 @@ export default function AdminSecurity() {
               </select>
             </div>
             <div>
-              <label className={labelClass}>Max Login Attempts: <span className="text-[#FFD400] bg-[#111] px-2 py-0.5 text-xs font-bold">{maxAttempts}</span></label>
+              <label className={labelClass}>Max Login Attempts: <span className="text-[#60A5FA] bg-[#111] px-2 py-0.5 text-xs font-bold">{maxAttempts}</span></label>
               <input
                 type="range"
                 min={3}
                 max={10}
                 value={maxAttempts}
                 onChange={(e) => setMaxAttempts(parseInt(e.target.value))}
-                className="w-full accent-[#FFD400] cursor-pointer"
+                className="w-full accent-[#60A5FA] cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-[#111]/40 font-bold mt-1">
                 <span>3</span>
@@ -326,7 +326,7 @@ export default function AdminSecurity() {
                   className="flex items-center justify-between bg-white border-3 border-[#111] p-4"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#FFD400] border-2 border-[#111] flex items-center justify-center shadow-[2px_2px_0_#111]">
+                    <div className="w-8 h-8 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center shadow-[2px_2px_0_#111]">
                       <svg className="w-4 h-4 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -338,7 +338,7 @@ export default function AdminSecurity() {
                   </div>
                   <button
                     onClick={() => setRestoreConfirm(backup.id)}
-                    className="px-4 py-2 border-3 border-[#111] text-sm font-bold text-[#111] hover:bg-[#FFD400] transition-all"
+                    className="px-4 py-2 border-3 border-[#111] text-sm font-bold text-[#111] hover:bg-[#60A5FA] transition-all"
                   >
                     Restore
                   </button>
@@ -381,7 +381,7 @@ export default function AdminSecurity() {
               className="w-full max-w-sm doodle-card p-6 md:p-8 text-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-12 h-12 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]">
+              <div className="w-12 h-12 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]">
                 <svg className="w-6 h-6 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
@@ -389,8 +389,8 @@ export default function AdminSecurity() {
               <h3 className="text-lg font-black text-[#111] mb-2">Restore Backup</h3>
               <p className="text-[#111]/60 text-sm mb-6">This will overwrite current data with the selected backup. This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setRestoreConfirm(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
-                <button onClick={() => handleRestoreBackup(restoreConfirm)} className="px-5 py-2.5 bg-[#FFD400] border-3 border-[#111] text-[#111] font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Restore</button>
+                <button onClick={() => setRestoreConfirm(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
+                <button onClick={() => handleRestoreBackup(restoreConfirm)} className="px-5 py-2.5 bg-[#60A5FA] border-3 border-[#111] text-[#111] font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Restore</button>
               </div>
             </motion.div>
           </motion.div>
@@ -399,3 +399,4 @@ export default function AdminSecurity() {
     </PageTransition>
   )
 }
+

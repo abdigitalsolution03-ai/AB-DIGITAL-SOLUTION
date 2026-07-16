@@ -39,7 +39,7 @@ export default function Process() {
         <AnimatedSection className="text-center mb-20">
           <span className="section-label">Our Process</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            How We <span className="text-[#FFD400]">Deliver Results</span>
+            How We <span className="text-[#60A5FA]">Deliver Results</span>
           </h2>
         </AnimatedSection>
 
@@ -61,14 +61,14 @@ export default function Process() {
                 >
                   <div className="flex-1">
                     <div className="doodle-card p-8 lg:p-10">
-                      <span className="text-5xl font-bold text-[#FFD400] opacity-50">
+                      <span className="text-5xl font-bold text-[#60A5FA] opacity-50">
                         {step.number}
                       </span>
                       <h3 className="text-2xl font-bold text-[#111111] mt-4">{step.title}</h3>
                       <p className="text-gray-500 mt-3 leading-relaxed">{step.description}</p>
                     </div>
                   </div>
-                  <div className="hidden lg:flex items-center justify-center w-14 h-14 bg-[#FFD400] border-4 border-[#111111] text-[#111111] font-bold text-lg z-10"
+                  <div className="hidden lg:flex items-center justify-center w-14 h-14 bg-[#60A5FA] border-4 border-[#111111] text-[#111111] font-bold text-lg z-10"
                     style={{ borderRadius: "50%", boxShadow: "4px 4px 0px #111111" }}
                   >
                     <motion.div
@@ -90,3 +90,4 @@ export default function Process() {
     </section>
   );
 }
+

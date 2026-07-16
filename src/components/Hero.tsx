@@ -93,7 +93,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-5 py-2 bg-[#FFD400] border-3 border-[#111111] text-[#111111] text-xs font-bold tracking-widest uppercase mb-8"
+          className="inline-flex items-center gap-2 px-5 py-2 bg-[#60A5FA] border-3 border-[#111111] text-[#111111] text-xs font-bold tracking-widest uppercase mb-8"
           style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111" }}
         >
           <span className="w-2 h-2 bg-[#111111]" style={{ borderRadius: "50%" }} />
@@ -118,7 +118,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-[#111111] tracking-tight"
             >
-              AB <span className="text-[#FFD400]">DIGITAL</span> SOLUTION
+              AB <span className="text-[#60A5FA]">DIGITAL</span> SOLUTION
             </motion.span>
           </div>
         </h1>
@@ -185,9 +185,10 @@ export default function Hero() {
           className="w-6 h-10 border-3 border-[#111111] flex items-start justify-center pt-2"
           style={{ borderRadius: "12px" }}
         >
-          <motion.div className="w-1.5 h-1.5 bg-[#FFD400]" style={{ borderRadius: "50%" }} />
+          <motion.div className="w-1.5 h-1.5 bg-[#60A5FA]" style={{ borderRadius: "50%" }} />
         </motion.div>
       </motion.div>
     </section>
   );
 }
+

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 
-const accentColors = ["#FF4D4D", "#4D7AFF", "#8B5CF6", "#FFD400"];
+const accentColors = ["#FF4D4D", "#4D7AFF", "#8B5CF6", "#60A5FA"];
 
 const defaultServices = [
   {
@@ -154,7 +154,7 @@ export default function Services() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">What We Do</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Our <span className="text-[#FFD400]">Services</span>
+            Our <span className="text-[#60A5FA]">Services</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
             Comprehensive digital solutions tailored to elevate your brand and drive measurable results.
@@ -195,3 +195,4 @@ export default function Services() {
     </section>
   );
 }
+

@@ -90,7 +90,7 @@ export default function AdminLeads() {
             key={f}
             onClick={() => setFilter(f)}
             className={`px-4 py-2 text-sm font-bold transition-all border-3 border-[#111] ${
-              filter === f ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]'
+              filter === f ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]'
             }`}
           >
             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -121,12 +121,12 @@ export default function AdminLeads() {
                 </tr>
               ) : (
                 filteredLeads.map((lead) => (
-                  <tr key={lead.id} className={`border-b border-[#111]/10 hover:bg-[#FFD400]/10 transition-colors ${!lead.read ? 'bg-[#FFD400]/5' : ''}`}>
+                  <tr key={lead.id} className={`border-b border-[#111]/10 hover:bg-[#60A5FA]/10 transition-colors ${!lead.read ? 'bg-[#60A5FA]/5' : ''}`}>
                     <td className="px-6 py-4">
-                      <button onClick={() => toggleRead(lead.id)} className={`w-3 h-3 border-2 border-[#111] transition-all ${lead.read ? 'bg-white' : 'bg-[#FFD400]'}`} title={lead.read ? 'Mark as unread' : 'Mark as read'} />
+                      <button onClick={() => toggleRead(lead.id)} className={`w-3 h-3 border-2 border-[#111] transition-all ${lead.read ? 'bg-white' : 'bg-[#60A5FA]'}`} title={lead.read ? 'Mark as unread' : 'Mark as read'} />
                     </td>
                     <td className="px-6 py-4">
-                      <button onClick={() => setViewLead(lead)} className="text-sm font-bold text-[#111] hover:text-[#FFD400] transition-colors text-left">
+                      <button onClick={() => setViewLead(lead)} className="text-sm font-bold text-[#111] hover:text-[#60A5FA] transition-colors text-left">
                         {lead.name}
                       </button>
                     </td>
@@ -134,14 +134,14 @@ export default function AdminLeads() {
                       <p className="text-sm text-[#111]/60">{lead.email}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-block px-2.5 py-1 bg-[#FFD400] border-2 border-[#111] text-[#111] text-xs font-bold">{lead.service || 'General'}</span>
+                      <span className="inline-block px-2.5 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold">{lead.service || 'General'}</span>
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-sm text-[#111]/40">{lead.date}</p>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => setViewLead(lead)} className="p-2 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] transition-all">
+                        <button onClick={() => setViewLead(lead)} className="p-2 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] transition-all">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -205,10 +205,10 @@ export default function AdminLeads() {
                 </div>
               </div>
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button onClick={() => { toggleRead(viewLead.id); setViewLead(null) }} className="px-5 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#FFD400] transition-all">
+                <button onClick={() => { toggleRead(viewLead.id); setViewLead(null) }} className="px-5 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#60A5FA] transition-all">
                   {viewLead.read ? 'Mark as Unread' : 'Mark as Read'}
                 </button>
-                <button onClick={() => setViewLead(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Close</button>
+                <button onClick={() => setViewLead(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Close</button>
               </div>
             </motion.div>
           </motion.div>
@@ -261,7 +261,7 @@ export default function AdminLeads() {
                 </div>
               </div>
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button onClick={() => setShowAdd(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setShowAdd(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={handleAddLead} disabled={!addForm.name.trim() || !addForm.email.trim()} className="doodle-btn-accent px-5 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Add Lead</button>
               </div>
             </motion.div>
@@ -281,7 +281,7 @@ export default function AdminLeads() {
               <h3 className="text-lg font-black text-[#111] mb-2">Delete Lead</h3>
               <p className="text-[#111]/60 text-sm mb-6">Are you sure? This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={confirmDelete} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Delete</button>
               </div>
             </motion.div>
@@ -291,3 +291,4 @@ export default function AdminLeads() {
     </PageTransition>
   )
 }
+

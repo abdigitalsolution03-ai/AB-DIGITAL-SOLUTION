@@ -54,7 +54,7 @@ export default function FAQ() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">FAQ</span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Frequently Asked <span className="text-[#FFD400]">Questions</span>
+              Frequently Asked <span className="text-[#60A5FA]">Questions</span>
             </h2>
           </AnimatedSection>
 
@@ -63,7 +63,7 @@ export default function FAQ() {
               <AnimatedSection key={i} delay={i * 0.05}>
                 <div
                   className={`doodle-card overflow-hidden cursor-pointer ${
-                    openIndex === i ? "border-[#FFD400]" : ""
+                    openIndex === i ? "border-[#60A5FA]" : ""
                   }`}
                   onClick={() => toggle(i)}
                 >
@@ -74,7 +74,7 @@ export default function FAQ() {
                     <motion.div
                       animate={{ rotate: openIndex === i ? 45 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className="w-7 h-7 shrink-0 flex items-center justify-center bg-[#FFD400] border-2 border-[#111111]"
+                      className="w-7 h-7 shrink-0 flex items-center justify-center bg-[#60A5FA] border-2 border-[#111111]"
                       style={{ borderRadius: "8px" }}
                     >
                       <svg
@@ -112,3 +112,4 @@ export default function FAQ() {
     </section>
   );
 }
+

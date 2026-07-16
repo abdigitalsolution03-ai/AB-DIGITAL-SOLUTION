@@ -82,7 +82,7 @@ export default function Testimonials() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Testimonials</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            What Our <span className="text-[#FFD400]">Clients Say</span>
+            What Our <span className="text-[#60A5FA]">Clients Say</span>
           </h2>
         </AnimatedSection>
 
@@ -103,7 +103,7 @@ export default function Testimonials() {
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
-                      className="w-5 h-5 text-[#FFD400]"
+                      className="w-5 h-5 text-[#60A5FA]"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -129,7 +129,7 @@ export default function Testimonials() {
                 onClick={() => goTo(i)}
                 className={`transition-all duration-500 ease-out ${
                   i === current
-                    ? "w-10 h-[4px] bg-[#FFD400]"
+                    ? "w-10 h-[4px] bg-[#60A5FA]"
                     : "w-6 h-[4px] bg-gray-200 hover:bg-gray-300"
                 }`}
                 aria-label={`Go to testimonial ${i + 1}`}
@@ -141,3 +141,4 @@ export default function Testimonials() {
     </section>
   );
 }
+

@@ -128,7 +128,7 @@ export default function AdminMedia() {
           <p className="text-[#111]/60 text-sm mt-1">{media.length} files total</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => setShowFolderModal(true)} className="px-4 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#FFD400] transition-all">
+          <button onClick={() => setShowFolderModal(true)} className="px-4 py-2.5 border-3 border-[#111] text-[#111] text-sm font-bold hover:bg-[#60A5FA] transition-all">
             New Folder
           </button>
           <button onClick={() => fileInputRef.current?.click()} className="doodle-btn-accent px-5 py-2.5 text-sm">
@@ -144,7 +144,7 @@ export default function AdminMedia() {
             key={folder.id}
             onClick={() => setActiveFolder(folder.id)}
             className={`px-4 py-2 text-sm font-bold transition-all border-3 border-[#111] ${
-              activeFolder === folder.id ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]'
+              activeFolder === folder.id ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]'
             }`}
           >
             {folder.name}
@@ -171,13 +171,13 @@ export default function AdminMedia() {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={() => setDragOver(false)}
-        className={`doodle-card p-8 mb-6 text-center transition-all ${dragOver ? 'bg-[#FFD400]' : ''}`}
+        className={`doodle-card p-8 mb-6 text-center transition-all ${dragOver ? 'bg-[#60A5FA]' : ''}`}
       >
         {dragOver ? (
           <p className="text-lg font-bold text-[#111]">Drop files here</p>
         ) : (
           <div>
-            <svg className="w-12 h-12 text-[#FFD400] mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+            <svg className="w-12 h-12 text-[#60A5FA] mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             <p className="text-[#111]/60 text-sm">Drag and drop images here, or click Upload</p>
@@ -202,7 +202,7 @@ export default function AdminMedia() {
               <div className="relative aspect-square bg-[#f8f8f8] border-b-3 border-[#111] overflow-hidden">
                 <img src={item.data} alt={item.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                  <button onClick={() => setMoveId(item.id)} className="p-2 bg-white border-2 border-[#111] text-[#111] hover:bg-[#FFD400] transition-all">
+                  <button onClick={() => setMoveId(item.id)} className="p-2 bg-white border-2 border-[#111] text-[#111] hover:bg-[#60A5FA] transition-all">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
@@ -233,7 +233,7 @@ export default function AdminMedia() {
               <h2 className="text-lg font-black text-[#111] mb-6">New Folder</h2>
               <input type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} className="w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none" placeholder="Folder name" onKeyDown={(e) => e.key === 'Enter' && addFolder()} />
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button onClick={() => setShowFolderModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setShowFolderModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={addFolder} className="doodle-btn-accent px-5 py-2.5 text-sm">Create</button>
               </div>
             </motion.div>
@@ -251,14 +251,14 @@ export default function AdminMedia() {
                   <button
                     key={folder.id}
                     onClick={() => moveToFolder(moveId, folder.id)}
-                    className="w-full text-left px-4 py-3 border-3 border-[#111] text-sm font-bold text-[#111] hover:bg-[#FFD400] transition-all"
+                    className="w-full text-left px-4 py-3 border-3 border-[#111] text-sm font-bold text-[#111] hover:bg-[#60A5FA] transition-all"
                   >
                     {folder.name}
                   </button>
                 ))}
               </div>
               <div className="flex items-center justify-end mt-6">
-                <button onClick={() => setMoveId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setMoveId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
               </div>
             </motion.div>
           </motion.div>
@@ -277,7 +277,7 @@ export default function AdminMedia() {
               <h3 className="text-lg font-black text-[#111] mb-2">Delete Media</h3>
               <p className="text-[#111]/60 text-sm mb-6">Are you sure? This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={confirmDelete} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Delete</button>
               </div>
             </motion.div>
@@ -287,3 +287,4 @@ export default function AdminMedia() {
     </PageTransition>
   )
 }
+

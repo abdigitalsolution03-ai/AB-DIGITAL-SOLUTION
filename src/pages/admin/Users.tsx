@@ -226,7 +226,7 @@ export default function AdminUsers() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b-3 border-[#111] bg-[#FFD400]/10">
+              <tr className="border-b-3 border-[#111] bg-[#60A5FA]/10">
                 <th className="text-left text-xs font-black text-[#111] uppercase tracking-wider px-5 py-4">Name</th>
                 <th className="text-left text-xs font-black text-[#111] uppercase tracking-wider px-5 py-4">Email</th>
                 <th className="text-left text-xs font-black text-[#111] uppercase tracking-wider px-5 py-4">Role</th>
@@ -250,12 +250,12 @@ export default function AdminUsers() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03, duration: 0.3 }}
                     className={`border-b-2 border-[#111]/10 last:border-b-0 ${
-                      !user.isActive ? 'bg-[#FF4D4D]/5' : 'hover:bg-[#FFD400]/5'
+                      !user.isActive ? 'bg-[#FF4D4D]/5' : 'hover:bg-[#60A5FA]/5'
                     } transition-colors`}
                   >
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-[#FFD400] border-2 border-[#111] flex items-center justify-center font-black text-sm text-[#111] flex-shrink-0 shadow-[2px_2px_0_#111]">
+                        <div className="w-9 h-9 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center font-black text-sm text-[#111] flex-shrink-0 shadow-[2px_2px_0_#111]">
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -271,7 +271,7 @@ export default function AdminUsers() {
                       <span
                         className={`text-xs font-bold px-3 py-1 border-2 border-[#111] inline-block ${
                           user.role === 'super_admin'
-                            ? 'bg-[#FFD400] text-[#111]'
+                            ? 'bg-[#60A5FA] text-[#111]'
                             : user.role === 'admin'
                             ? 'bg-[#4D7AFF] text-white'
                             : user.role === 'editor'
@@ -533,3 +533,4 @@ export default function AdminUsers() {
     </PageTransition>
   )
 }
+

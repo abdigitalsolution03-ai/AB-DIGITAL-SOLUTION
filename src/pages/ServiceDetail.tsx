@@ -259,13 +259,13 @@ export default function ServiceDetail() {
             <>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
                 <AnimatedSection direction="left">
-                  <Link to="/services" className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#FFD400] transition-colors duration-300 mb-6">
+                  <Link to="/services" className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#60A5FA] transition-colors duration-300 mb-6">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m7 7l-7-7 7-7" />
                     </svg>
                     Back to Services
                   </Link>
-                  <div className="w-16 h-16 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center text-[#111] mb-6 shadow-[3px_3px_0_#111]">
+                  <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center text-[#111] mb-6 shadow-[3px_3px_0_#111]">
                     {serviceData.icon}
                   </div>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] tracking-tight">
@@ -295,7 +295,7 @@ export default function ServiceDetail() {
                           transition={{ delay: i * 0.08 }}
                           className="flex items-center gap-3"
                         >
-                          <div className="w-6 h-6 bg-[#FFD400] border-2 border-[#111] flex items-center justify-center shrink-0">
+                          <div className="w-6 h-6 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center shrink-0">
                             <svg className="w-3.5 h-3.5 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
@@ -322,7 +322,7 @@ export default function ServiceDetail() {
                       transition={{ delay: i * 0.08 }}
                       className="doodle-card p-8"
                     >
-                      <div className="w-10 h-10 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center text-[#111] font-black text-sm mb-4 shadow-[2px_2px_0_#111]">
+                      <div className="w-10 h-10 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center text-[#111] font-black text-sm mb-4 shadow-[2px_2px_0_#111]">
                         {i + 1}
                       </div>
                       <h3 className="text-lg font-bold text-[#111] mb-2">{step.step}</h3>
@@ -359,3 +359,4 @@ export default function ServiceDetail() {
     </>
   );
 }
+

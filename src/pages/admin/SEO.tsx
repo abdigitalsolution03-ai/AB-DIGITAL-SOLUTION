@@ -114,7 +114,7 @@ ${urls}
 
       {!editing && !seo.siteTitle ? (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="doodle-card p-12 text-center">
-          <div className="w-16 h-16 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]">
+          <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]">
             <svg className="w-8 h-8 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -185,7 +185,7 @@ ${urls}
                   <label className="block text-sm font-bold text-[#111]/60 mb-2">Twitter Card Type</label>
                   <div className="grid grid-cols-2 gap-2">
                     {twitterCardOptions.map((card) => (
-                      <button key={card} onClick={() => setForm({ ...form, twitterCard: card })} className={`px-4 py-3 border-3 border-[#111] text-sm font-bold text-left transition-all ${form.twitterCard === card ? 'bg-[#FFD400] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#FFD400]/20'}`}>
+                      <button key={card} onClick={() => setForm({ ...form, twitterCard: card })} className={`px-4 py-3 border-3 border-[#111] text-sm font-bold text-left transition-all ${form.twitterCard === card ? 'bg-[#60A5FA] text-[#111]' : 'bg-white text-[#111]/60 hover:bg-[#60A5FA]/20'}`}>
                         {card.replace(/_/g, ' ')}
                       </button>
                     ))}
@@ -208,7 +208,7 @@ ${urls}
             </motion.div>
 
             <div className="flex items-center justify-end gap-3">
-              <button onClick={handleCancel} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+              <button onClick={handleCancel} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
               <button onClick={handleSave} className="doodle-btn-accent px-5 py-2.5 text-sm">Save SEO Settings</button>
             </div>
           </div>
@@ -291,3 +291,4 @@ ${urls}
     </PageTransition>
   )
 }
+

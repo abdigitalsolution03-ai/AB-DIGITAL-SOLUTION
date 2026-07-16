@@ -161,7 +161,7 @@ export default function AdminLogin() {
         >
           <div className="doodle-card p-8 md:p-10">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
+              <div className="w-14 h-14 mx-auto mb-4 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center shadow-[3px_3px_0_#111]">
                 <svg className="w-7 h-7 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -234,7 +234,7 @@ export default function AdminLogin() {
         <div className="doodle-card p-8 md:p-10">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-black text-[#111] tracking-tight">
-              AB <span className="text-[#FFD400]">DIGITAL</span>
+              AB <span className="text-[#60A5FA]">DIGITAL</span>
             </h1>
             <p className="text-[#111]/40 text-sm mt-1">Admin Login</p>
           </div>
@@ -273,7 +273,7 @@ export default function AdminLogin() {
                 <div
                   onClick={() => setRememberMe(!rememberMe)}
                   className={`w-5 h-5 border-3 border-[#111] flex items-center justify-center transition-all cursor-pointer ${
-                    rememberMe ? 'bg-[#FFD400]' : 'bg-white'
+                    rememberMe ? 'bg-[#60A5FA]' : 'bg-white'
                   }`}
                 >
                   {rememberMe && (
@@ -306,12 +306,12 @@ export default function AdminLogin() {
                   <div className="bg-white border-3 border-[#111] p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-sm font-bold text-[#111]">
-                        What is <span className="text-[#FFD400] text-lg">{captcha.question}</span>?
+                        What is <span className="text-[#60A5FA] text-lg">{captcha.question}</span>?
                       </p>
                       <button
                         type="button"
                         onClick={refreshCaptcha}
-                        className="p-1.5 border-2 border-[#111] hover:bg-[#FFD400] transition-colors"
+                        className="p-1.5 border-2 border-[#111] hover:bg-[#60A5FA] transition-colors"
                         title="New question"
                       >
                         <svg className="w-4 h-4 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -363,3 +363,4 @@ export default function AdminLogin() {
     </div>
   )
 }
+

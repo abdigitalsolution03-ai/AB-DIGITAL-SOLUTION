@@ -52,7 +52,7 @@ export default function Pricing() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Pricing</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Transparent <span className="text-[#FFD400]">Plans</span>
+            Transparent <span className="text-[#60A5FA]">Plans</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
             Choose the plan that fits your needs. All plans include a free consultation.
@@ -65,11 +65,11 @@ export default function Pricing() {
               <motion.div
                 whileHover={{ translateY: -4 }}
                 className={`relative doodle-card p-8 h-full flex flex-col ${
-                  plan.popular ? "border-[#FFD400]" : ""
+                  plan.popular ? "border-[#60A5FA]" : ""
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#FFD400] border-3 border-[#111111] text-[#111111] text-xs font-bold tracking-wider uppercase whitespace-nowrap"
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#60A5FA] border-3 border-[#111111] text-[#111111] text-xs font-bold tracking-wider uppercase whitespace-nowrap"
                     style={{ borderRadius: "10px", boxShadow: "3px 3px 0px #111111" }}
                   >
                     Most Popular
@@ -91,7 +91,7 @@ export default function Pricing() {
                   {plan.features.map((feat, j) => (
                     <div key={j} className="flex items-start gap-3">
                       <svg
-                        className="w-5 h-5 text-[#FFD400] shrink-0 mt-0.5"
+                        className="w-5 h-5 text-[#60A5FA] shrink-0 mt-0.5"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -124,3 +124,4 @@ export default function Pricing() {
     </section>
   );
 }
+

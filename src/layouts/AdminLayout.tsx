@@ -107,12 +107,12 @@ export default function AdminLayout() {
       >
         <div className="p-6 border-b-3 border-[#111]">
           <Link to="/admin" className="text-xl font-black text-[#111] tracking-tight">
-            AB <span className="text-[#FFD400]">DIGITAL</span>
+            AB <span className="text-[#60A5FA]">DIGITAL</span>
           </Link>
           <p className="text-[#111]/40 text-xs mt-1 font-medium">Admin Panel</p>
           {session && (
             <div className="flex items-center gap-2 mt-3">
-              <div className="w-6 h-6 bg-[#FFD400] border-2 border-[#111] flex items-center justify-center text-[10px] font-black text-[#111] rounded-full">
+              <div className="w-6 h-6 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center text-[10px] font-black text-[#111] rounded-full">
                 {session.name.charAt(0)}
               </div>
               <div className="text-xs">
@@ -136,8 +136,8 @@ export default function AdminLayout() {
                     onClick={() => setIsSidebarOpen(false)}
                     className={`flex items-center gap-3 px-3 py-2.5 text-sm font-bold transition-all duration-200 ${
                       location.pathname === `${basePath}${item.path}`
-                        ? 'bg-[#FFD400] text-[#111] border-l-4 border-[#111] -ml-px'
-                        : 'text-[#111]/50 hover:text-[#111] hover:bg-[#FFD400]/10'
+                        ? 'bg-[#60A5FA] text-[#111] border-l-4 border-[#111] -ml-px'
+                        : 'text-[#111]/50 hover:text-[#111] hover:bg-[#60A5FA]/10'
                     }`}
                   >
                     <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -151,7 +151,7 @@ export default function AdminLayout() {
           })}
         </nav>
         <div className="sticky bottom-0 p-3 border-t-3 border-[#111] bg-white space-y-1">
-          <Link to="/admin/change-password" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/50 hover:text-[#111] hover:bg-[#FFD400]/10 w-full transition-all duration-200">
+          <Link to="/admin/change-password" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/50 hover:text-[#111] hover:bg-[#60A5FA]/10 w-full transition-all duration-200">
             <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
@@ -163,7 +163,7 @@ export default function AdminLayout() {
             </svg>
             Logout
           </button>
-          <Link to="/" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/30 hover:text-[#FFD400] transition-all duration-200">
+          <Link to="/" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/30 hover:text-[#60A5FA] transition-all duration-200">
             <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -181,7 +181,7 @@ export default function AdminLayout() {
               <span className="w-5 h-[3px] bg-[#111] block" />
             </button>
             <div className="flex items-center gap-3 ml-auto">
-              <div className="w-8 h-8 bg-[#FFD400] border-2 border-[#111] flex items-center justify-center text-[#111] text-xs font-black rounded-full">
+              <div className="w-8 h-8 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center text-[#111] text-xs font-black rounded-full">
                 {session?.name?.charAt(0) || 'A'}
               </div>
             </div>
@@ -194,3 +194,4 @@ export default function AdminLayout() {
     </div>
   )
 }
+

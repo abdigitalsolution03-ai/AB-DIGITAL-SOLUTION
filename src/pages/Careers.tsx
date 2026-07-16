@@ -118,7 +118,7 @@ export default function Careers() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Careers</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Join Our <span className="text-[#FFD400]">Team</span>
+              Join Our <span className="text-[#60A5FA]">Team</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Help us shape the future of digital marketing. We're looking for passionate people to join our growing team.
@@ -136,7 +136,7 @@ export default function Careers() {
                   transition={{ delay: i * 0.08 }}
                   className="doodle-card p-6 text-center group"
                 >
-                  <div className="w-12 h-12 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center text-[#111] mx-auto mb-4 shadow-[3px_3px_0_#111] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center text-[#111] mx-auto mb-4 shadow-[3px_3px_0_#111] group-hover:scale-110 transition-transform duration-300">
                     {perk.icon}
                   </div>
                   <h3 className="text-[#111] font-bold">{perk.title}</h3>
@@ -159,13 +159,13 @@ export default function Careers() {
                   key={dept}
                   onClick={() => setActiveDepartment(dept)}
                   className={`relative px-5 py-2 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeDepartment === dept ? "bg-[#FFD400] text-[#111]" : "bg-white text-[#111] hover:bg-[#FFD400]"
+                    activeDepartment === dept ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
                   }`}
                 >
                   {activeDepartment === dept && (
                     <motion.span
                       layoutId="jobDepartment"
-                      className="absolute inset-0 bg-[#FFD400]"
+                      className="absolute inset-0 bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -193,11 +193,11 @@ export default function Careers() {
                         <div>
                           <h3 className="text-[#111] font-bold text-lg">{job.title}</h3>
                           <div className="flex flex-wrap items-center gap-3 mt-2">
-                            <span className="text-[#FFD400] text-xs font-bold">{job.department}</span>
+                            <span className="text-[#60A5FA] text-xs font-bold">{job.department}</span>
                             <span className="text-[#111]/40">-</span>
                             <span className="text-[#111]/60 text-xs">{job.location}</span>
                             <span className="text-[#111]/40">-</span>
-                            <span className="px-2.5 py-0.5 bg-[#FFD400] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                            <span className="px-2.5 py-0.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
                               {job.type}
                             </span>
                           </div>
@@ -205,7 +205,7 @@ export default function Careers() {
                         <motion.button
                           animate={{ rotate: expandedJob === job.id ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
-                          className="text-[#111]/40 hover:text-[#FFD400] transition-colors"
+                          className="text-[#111]/40 hover:text-[#60A5FA] transition-colors"
                         >
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -226,7 +226,7 @@ export default function Careers() {
                             <ul className="space-y-2 mb-6">
                               {job.requirements.map((req, j) => (
                                 <li key={j} className="flex items-start gap-2 text-[#111]/70">
-                                  <svg className="w-4 h-4 text-[#FFD400] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <svg className="w-4 h-4 text-[#60A5FA] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                   </svg>
                                   {req}
@@ -276,3 +276,4 @@ export default function Careers() {
     </>
   );
 }
+

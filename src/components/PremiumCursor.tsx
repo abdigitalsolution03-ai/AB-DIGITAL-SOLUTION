@@ -15,7 +15,7 @@ function createParticle(x: number, y: number) {
     border-radius: 50%;
     pointer-events: none;
     z-index: 99999;
-    background: #FFD400;
+    background: #60A5FA;
     box-shadow: 0 0 6px rgba(255, 212, 0, 0.8);
   `;
 
@@ -53,7 +53,7 @@ function createRipple(x: number, y: number) {
     border-radius: 50%;
     pointer-events: none;
     z-index: 99999;
-    border: 3px solid #FFD400;
+    border: 3px solid #60A5FA;
     opacity: 1;
   `;
 
@@ -100,3 +100,4 @@ export default function PremiumCursor() {
 
   return null;
 }
+

@@ -55,7 +55,7 @@ export default function Portfolio() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Work</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Featured <span className="text-[#FFD400]">Projects</span>
+              Featured <span className="text-[#60A5FA]">Projects</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Each project reflects our commitment to excellence and results-driven approach.
@@ -69,13 +69,13 @@ export default function Portfolio() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeCategory === cat ? "bg-[#FFD400] text-[#111]" : "bg-white text-[#111] hover:bg-[#FFD400]"
+                    activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
                   }`}
                 >
                   {activeCategory === cat && (
                     <motion.span
                       layoutId="portfolioCategory"
-                      className="absolute inset-0 bg-[#FFD400]"
+                      className="absolute inset-0 bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -120,7 +120,7 @@ export default function Portfolio() {
                       className="px-6 pb-6 flex flex-wrap gap-2"
                     >
                       {project.metrics.map((metric, j) => (
-                        <span key={j} className="px-3 py-1 bg-[#FFD400] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                        <span key={j} className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
                           {metric}
                         </span>
                       ))}
@@ -135,3 +135,4 @@ export default function Portfolio() {
     </>
   );
 }
+

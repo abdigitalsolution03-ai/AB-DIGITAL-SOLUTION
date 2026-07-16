@@ -56,7 +56,7 @@ export default function Contact() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Contact</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Let&apos;s <span className="text-[#FFD400]">Work Together</span>
+            Let&apos;s <span className="text-[#60A5FA]">Work Together</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
             Ready to take your digital presence to the next level? Get in touch with us today.
@@ -114,7 +114,7 @@ export default function Contact() {
               />
               <div>
                 <label className="block text-[#111111] text-sm font-bold mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  Required Service <span className="text-[#FFD400]">*</span>
+                  Required Service <span className="text-[#60A5FA]">*</span>
                 </label>
                 <select
                   name="service"
@@ -132,7 +132,7 @@ export default function Contact() {
               </div>
               <div>
                 <label className="block text-[#111111] text-sm font-bold mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  Message <span className="text-[#FFD400]">*</span>
+                  Message <span className="text-[#60A5FA]">*</span>
                 </label>
                 <textarea
                   name="message"
@@ -149,7 +149,7 @@ export default function Contact() {
                 type="submit"
                 whileHover={{ translateX: -2, translateY: -2 }}
                 whileTap={{ scale: 0.99 }}
-                className="w-full py-3.5 bg-[#FFD400] text-[#111111] font-bold text-sm border-3 border-[#111111] transition-all duration-300"
+                className="w-full py-3.5 bg-[#60A5FA] text-[#111111] font-bold text-sm border-3 border-[#111111] transition-all duration-300"
                 style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111", fontFamily: "'Inter', sans-serif" }}
               >
                 {submitted ? "Message Sent!" : "Contact Us"}
@@ -199,7 +199,7 @@ export default function Contact() {
                   <a
                     key={social}
                     href="#"
-                    className="w-10 h-10 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#FFD400] transition-all duration-300"
+                    className="w-10 h-10 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#60A5FA] transition-all duration-300"
                     style={{ borderRadius: "12px", boxShadow: "3px 3px 0px #111111" }}
                     aria-label={social}
                   >
@@ -232,7 +232,7 @@ export default function Contact() {
       <motion.a
         href="tel:+918178526092"
         className="fixed bottom-8 right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
-        style={{ borderRadius: "50%", backgroundColor: "#FFD400", boxShadow: "4px 4px 0px #111111" }}
+        style={{ borderRadius: "50%", backgroundColor: "#60A5FA", boxShadow: "4px 4px 0px #111111" }}
         aria-label="Call us"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -263,7 +263,7 @@ function InputField({
     <div>
       <label className="block text-[#111111] text-sm font-bold mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
         {label}
-        {required && <span className="text-[#FFD400] ml-1">*</span>}
+        {required && <span className="text-[#60A5FA] ml-1">*</span>}
       </label>
       <input
         type={type}
@@ -289,7 +289,7 @@ function ContactInfo({
 }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 flex items-center justify-center bg-[#FFD400] border-3 border-[#111111] text-[#111111] shrink-0"
+      <div className="w-10 h-10 flex items-center justify-center bg-[#60A5FA] border-3 border-[#111111] text-[#111111] shrink-0"
         style={{ borderRadius: "12px", boxShadow: "3px 3px 0px #111111" }}
       >
         {icon}
@@ -301,3 +301,4 @@ function ContactInfo({
     </div>
   );
 }
+

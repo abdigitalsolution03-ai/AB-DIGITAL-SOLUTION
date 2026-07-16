@@ -18,7 +18,7 @@
   }
 
   ::selection {
-    background: #FFD400;
+    background: #60A5FA;
     color: #111111;
   }
 
@@ -36,7 +36,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #FFD400;
+    background: #60A5FA;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -81,7 +81,7 @@
   }
 
   .doodle-card-accent {
-    background: #FFD400;
+    background: #60A5FA;
     border: 3px solid #111111;
     border-radius: 20px;
     box-shadow: 4px 4px 0px #111111;
@@ -132,7 +132,7 @@
   }
 
   .doodle-btn-accent {
-    background: #FFD400;
+    background: #60A5FA;
     color: #111111;
     border: 3px solid #111111;
     border-radius: 14px;
@@ -176,7 +176,7 @@
 
   .section-label {
     display: inline-block;
-    background: #FFD400;
+    background: #60A5FA;
     color: #111111;
     font-weight: 700;
     font-size: 0.75rem;
@@ -199,7 +199,7 @@
     left: 0;
     width: 0;
     height: 3px;
-    background: #FFD400;
+    background: #60A5FA;
     transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
@@ -232,3 +232,4 @@
 .animate-dash-move {
   animation: dash-move 3s linear infinite;
 }
+

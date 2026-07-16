@@ -9,32 +9,32 @@ const hardcodedProjects = [
     title: "E-Commerce Platform",
     category: "Website",
     description: "Next-gen online store with seamless checkout experience",
-    gradient: "from-amber-200 to-yellow-400"},
+    gradient: "from-blue-200 to-blue-400"},
   {
     title: "Local SEO Campaign",
     category: "SEO",
     description: "Top 3 rankings across 50+ local search terms",
-    gradient: "from-yellow-300 to-amber-500"},
+    gradient: "from-blue-300 to-blue-500"},
   {
     title: "Google Ads Optimization",
     category: "Ads",
     description: "3.5x ROAS improvement through smart bidding",
-    gradient: "from-amber-300 to-yellow-400"},
+    gradient: "from-blue-300 to-blue-400"},
   {
     title: "Brand Identity Design",
     category: "Branding",
     description: "Complete brand overhaul for a fintech startup",
-    gradient: "from-yellow-200 to-amber-400"},
+    gradient: "from-blue-200 to-blue-400"},
   {
     title: "SaaS Dashboard",
     category: "Website",
     description: "Interactive analytics dashboard with real-time data",
-    gradient: "from-amber-200 to-yellow-500"},
+    gradient: "from-blue-200 to-blue-500"},
   {
     title: "Meta Ads Campaign",
     category: "Ads",
     description: "Scaled revenue 4x with targeted social advertising",
-    gradient: "from-yellow-300 to-amber-400"},
+    gradient: "from-blue-300 to-blue-400"},
 ];
 
 export default function Portfolio() {
@@ -72,7 +72,7 @@ export default function Portfolio() {
         <AnimatedSection className="text-center mb-16">
           <span className="section-label">Our Work</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Featured <span className="text-[#FFD400]">Projects</span>
+            Featured <span className="text-[#60A5FA]">Projects</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
             Each project reflects our commitment to excellence and results-driven approach.
@@ -91,7 +91,7 @@ export default function Portfolio() {
                 {activeCategory === cat ? (
                   <motion.span
                     layoutId="portfolioCategory"
-                    className="absolute inset-0 bg-[#FFD400] border-3 border-[#111111]"
+                    className="absolute inset-0 bg-[#60A5FA] border-3 border-[#111111]"
                     style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111" }}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
@@ -138,7 +138,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <div className="p-6">
-                  <span className="text-[#FFD400] text-xs font-bold tracking-widest uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  <span className="text-[#60A5FA] text-xs font-bold tracking-widest uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     {project.category}
                   </span>
                   <h3 className="text-[#111111] text-lg font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project.title}</h3>
@@ -152,3 +152,4 @@ export default function Portfolio() {
     </section>
   );
 }
+

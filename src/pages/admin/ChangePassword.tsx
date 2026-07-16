@@ -13,7 +13,7 @@ function getPasswordStrength(password: string): { score: number; label: string; 
   if (password.length >= 16) score++
 
   if (score <= 1) return { score: 0, label: 'Weak', color: '#FF4D4D' }
-  if (score <= 3) return { score: 1, label: 'Medium', color: '#FFD400' }
+  if (score <= 3) return { score: 1, label: 'Medium', color: '#60A5FA' }
   return { score: 2, label: 'Strong', color: '#22C55E' }
 }
 
@@ -103,7 +103,7 @@ export default function AdminChangePassword() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                  className="w-14 h-14 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]"
+                  className="w-14 h-14 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0_#111]"
                 >
                   <svg className="w-7 h-7 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -242,3 +242,4 @@ export default function AdminChangePassword() {
     </div>
   )
 }
+

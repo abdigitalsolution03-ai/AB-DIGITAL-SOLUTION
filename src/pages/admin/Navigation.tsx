@@ -168,7 +168,7 @@ export default function AdminNavigation() {
                         onDragStart={() => handleDragStart(index)}
                         onDragOver={(e) => handleDragOver(e, index)}
                         onDragEnd={handleDragEnd}
-                        className={`border-b border-[#111]/10 hover:bg-[#FFD400]/10 transition-colors cursor-grab active:cursor-grabbing ${dragIndex === index ? 'opacity-50 bg-[#FFD400]/20' : ''}`}
+                        className={`border-b border-[#111]/10 hover:bg-[#60A5FA]/10 transition-colors cursor-grab active:cursor-grabbing ${dragIndex === index ? 'opacity-50 bg-[#60A5FA]/20' : ''}`}
                         layout
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -186,28 +186,28 @@ export default function AdminNavigation() {
                           <p className="text-sm font-bold text-[#111]">{item.label}</p>
                         </td>
                         <td className="px-4 py-4">
-                          <code className="text-xs px-2 py-1 bg-[#FFD400]/20 border-2 border-[#111] text-[#111]">{item.path}</code>
+                          <code className="text-xs px-2 py-1 bg-[#60A5FA]/20 border-2 border-[#111] text-[#111]">{item.path}</code>
                           {item.openInNewTab && <span className="ml-2 text-[10px] text-[#111]/40 font-bold">[New Tab]</span>}
                         </td>
                         <td className="px-4 py-4">
-                          <button onClick={() => toggleStatus(item.id)} className={`inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#111] text-xs font-bold transition-all ${item.status ? 'bg-[#4D7AFF] text-white' : 'bg-[#FFD400] text-[#111]'}`}>
+                          <button onClick={() => toggleStatus(item.id)} className={`inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#111] text-xs font-bold transition-all ${item.status ? 'bg-[#4D7AFF] text-white' : 'bg-[#60A5FA] text-[#111]'}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${item.status ? 'bg-white' : 'bg-[#111]'}`} />
                             {item.status ? 'Active' : 'Hidden'}
                           </button>
                         </td>
                         <td className="px-4 py-4 text-right">
                           <div className="flex items-center justify-end gap-1">
-                            <button onClick={() => moveUp(index)} disabled={index === 0} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                            <button onClick={() => moveUp(index)} disabled={index === 0} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
                               </svg>
                             </button>
-                            <button onClick={() => moveDown(index)} disabled={index === items.length - 1} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                            <button onClick={() => moveDown(index)} disabled={index === items.length - 1} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                               </svg>
                             </button>
-                            <button onClick={() => openEdit(item)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] transition-all">
+                            <button onClick={() => openEdit(item)} className="p-1.5 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] transition-all">
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                               </svg>
@@ -232,7 +232,7 @@ export default function AdminNavigation() {
           <div className="doodle-card p-6">
             <h2 className="text-lg font-black text-[#111] mb-4">Preview</h2>
             <div className="bg-white border-3 border-[#111] overflow-hidden">
-              <div className="bg-[#FFD400] border-b-3 border-[#111] px-4 py-2">
+              <div className="bg-[#60A5FA] border-b-3 border-[#111] px-4 py-2">
                 <p className="text-xs font-black text-[#111]">AB <span className="opacity-60">DIGITAL</span></p>
               </div>
               <div className="p-3 space-y-1">
@@ -241,7 +241,7 @@ export default function AdminNavigation() {
                 ) : (
                   items.filter((i) => i.status).map((item, i) => (
                     <div key={item.id} className="flex items-center gap-2 px-3 py-2 border-2 border-[#111] bg-white text-sm font-bold text-[#111]">
-                      <span className="w-1.5 h-1.5 bg-[#FFD400] border border-[#111]" />
+                      <span className="w-1.5 h-1.5 bg-[#60A5FA] border border-[#111]" />
                       <span>{item.label}</span>
                       {item.openInNewTab && (
                         <svg className="w-3 h-3 text-[#111]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -276,13 +276,13 @@ export default function AdminNavigation() {
                 </div>
                 <div>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={form.openInNewTab} onChange={(e) => setForm({ ...form, openInNewTab: e.target.checked })} className="w-4 h-4 accent-[#FFD400]" />
+                    <input type="checkbox" checked={form.openInNewTab} onChange={(e) => setForm({ ...form, openInNewTab: e.target.checked })} className="w-4 h-4 accent-[#60A5FA]" />
                     <span className="text-sm font-bold text-[#111]/60">Open in new tab</span>
                   </label>
                 </div>
               </div>
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button onClick={() => setShowModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setShowModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={handleSave} className="doodle-btn-accent px-5 py-2.5 text-sm">Save</button>
               </div>
             </motion.div>
@@ -302,7 +302,7 @@ export default function AdminNavigation() {
               <h3 className="text-lg font-black text-[#111] mb-2">Delete Menu Item</h3>
               <p className="text-[#111]/60 text-sm mb-6">Are you sure? This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={confirmDelete} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Delete</button>
               </div>
             </motion.div>
@@ -312,3 +312,4 @@ export default function AdminNavigation() {
     </PageTransition>
   )
 }
+

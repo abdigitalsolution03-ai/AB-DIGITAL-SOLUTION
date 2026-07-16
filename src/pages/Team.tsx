@@ -4,12 +4,12 @@ import PageTransition from '@/components/PageTransition'
 import AnimatedSection from '@/components/AnimatedSection'
 
 const teamMembers = [
-  { name: 'Arjun Mehta', role: 'Founder & CEO', bio: 'Visionary leader with 15+ years in digital strategy and brand transformation.', color: '#FFD400' },
+  { name: 'Arjun Mehta', role: 'Founder & CEO', bio: 'Visionary leader with 15+ years in digital strategy and brand transformation.', color: '#60A5FA' },
   { name: 'Priya Sharma', role: 'Creative Director', bio: 'Award-winning creative mind behind iconic brand campaigns and visual identities.', color: '#FF4D4D' },
   { name: 'Rohan Desai', role: 'Head of SEO', bio: 'Data-driven SEO specialist who has ranked 200+ sites on page one of Google.', color: '#4D7AFF' },
   { name: 'Ananya Patel', role: 'Lead Developer', bio: 'Full-stack engineer building high-performance websites and web applications.', color: '#8B5CF6' },
   { name: 'Vikram Singh', role: 'Marketing Director', bio: 'Paid media expert managing $5M+ in annual ad spend across global markets.', color: '#10B981' },
-  { name: 'Neha Gupta', role: 'Social Media Head', bio: 'Social strategist who grew brand communities to 1M+ engaged followers.', color: '#FFD400' },
+  { name: 'Neha Gupta', role: 'Social Media Head', bio: 'Social strategist who grew brand communities to 1M+ engaged followers.', color: '#60A5FA' },
   { name: 'Karan Joshi', role: 'Content Strategist', bio: 'Storyteller crafting compelling narratives that drive conversions and brand love.', color: '#FF4D4D' },
   { name: 'Divya Kumar', role: 'UI/UX Designer', bio: 'User-centric designer creating intuitive digital experiences that delight users.', color: '#4D7AFF' },
   { name: 'Rahul Verma', role: 'Analytics Lead', bio: 'Conversion rate optimization expert with a data-first approach to growth.', color: '#8B5CF6' },
@@ -35,7 +35,7 @@ export default function Team() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Team</span>
             <h1 className="text-5xl md:text-7xl font-bold text-[#111] mt-6 tracking-tight">
-              Meet the <span className="text-[#FFD400]">Mafia</span>
+              Meet the <span className="text-[#60A5FA]">Mafia</span>
             </h1>
             <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-lg">
               A powerhouse of creative strategists, tech wizards, and marketing mavericks — we don't just follow trends, we set them.
@@ -56,7 +56,7 @@ export default function Team() {
                     {member.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <h3 className="text-xl font-bold text-[#111] mb-1">{member.name}</h3>
-                  <p className="text-sm font-semibold text-[#FFD400] mb-3">{member.role}</p>
+                  <p className="text-sm font-semibold text-[#60A5FA] mb-3">{member.role}</p>
                   <p className="text-gray-500 text-sm">{member.bio}</p>
                 </motion.div>
               </AnimatedSection>
@@ -78,3 +78,4 @@ export default function Team() {
     </PageTransition>
   )
 }
+

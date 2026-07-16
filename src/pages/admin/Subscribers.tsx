@@ -73,7 +73,7 @@ export default function AdminSubscribers() {
                 </tr>
               ) : (
                 subscribers.map((sub, index) => (
-                  <tr key={sub.id} className="border-b border-[#111]/10 hover:bg-[#FFD400]/10 transition-colors">
+                  <tr key={sub.id} className="border-b border-[#111]/10 hover:bg-[#60A5FA]/10 transition-colors">
                     <td className="px-6 py-4">
                       <p className="text-sm text-[#111]/40">{index + 1}</p>
                     </td>
@@ -110,7 +110,7 @@ export default function AdminSubscribers() {
               <h3 className="text-lg font-black text-[#111] mb-2">Delete Subscriber</h3>
               <p className="text-[#111]/60 text-sm mb-6">Are you sure? This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={confirmDelete} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Delete</button>
               </div>
             </motion.div>
@@ -120,3 +120,4 @@ export default function AdminSubscribers() {
     </PageTransition>
   )
 }
+

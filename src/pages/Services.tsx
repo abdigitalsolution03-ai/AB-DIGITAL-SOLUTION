@@ -53,7 +53,7 @@ export default function Services() {
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">What We Do</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#111] mt-4 tracking-tight">
-              Our <span className="text-[#FFD400]">Services</span>
+              Our <span className="text-[#60A5FA]">Services</span>
             </h1>
             <p className="text-[#111] mt-4 max-w-2xl mx-auto">
               Comprehensive digital solutions tailored to elevate your brand and drive measurable results.
@@ -67,13 +67,13 @@ export default function Services() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeCategory === cat ? "bg-[#FFD400] text-[#111]" : "bg-white text-[#111] hover:bg-[#FFD400]"
+                    activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
                   }`}
                 >
                   {activeCategory === cat && (
                     <motion.span
                       layoutId="serviceCategory"
-                      className="absolute inset-0 bg-[#FFD400]"
+                      className="absolute inset-0 bg-[#60A5FA]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -103,7 +103,7 @@ export default function Services() {
                       transform: hoveredIndex === i ? "translateY(-8px)" : "translateY(0)",
                       transition: "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)"}}
                   >
-                    <div className="w-14 h-14 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center text-[#111] mb-5 shadow-[3px_3px_0_#111]"
+                    <div className="w-14 h-14 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center text-[#111] mb-5 shadow-[3px_3px_0_#111]"
                       style={hoveredIndex === i ? { transform: "scale(1.1) rotate(5deg)" } : {}}
                     >
                       {service.icon}
@@ -124,7 +124,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="bg-[#FFD400] py-[100px]">
+      <section className="bg-[#60A5FA] py-[100px]">
         <div className="max-w-[1280px] mx-auto px-6">
           <div className="doodle-card p-12 md:p-16 text-center max-w-4xl mx-auto">
             <AnimatedSection>
@@ -151,3 +151,4 @@ export default function Services() {
     </>
   );
 }
+

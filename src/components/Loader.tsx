@@ -33,13 +33,13 @@ export default function Loader() {
               className="text-4xl md:text-5xl font-bold text-[#111111] tracking-tight"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
-              AB <span className="text-[#FFD400]">DIGITAL</span>
+              AB <span className="text-[#60A5FA]">DIGITAL</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-[#FFD400] text-sm tracking-[0.3em] uppercase mt-2 font-semibold"
+              className="text-[#60A5FA] text-sm tracking-[0.3em] uppercase mt-2 font-semibold"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
               SOLUTION
@@ -50,7 +50,7 @@ export default function Loader() {
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ delay: 0.8, duration: 0.8, ease: "easeInOut" }}
-              className="absolute top-0 left-0 h-full bg-[#FFD400]"
+              className="absolute top-0 left-0 h-full bg-[#60A5FA]"
             />
           </div>
           <motion.p
@@ -67,3 +67,4 @@ export default function Loader() {
     </AnimatePresence>
   );
 }
+

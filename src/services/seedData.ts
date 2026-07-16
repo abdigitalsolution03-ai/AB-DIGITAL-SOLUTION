@@ -40,12 +40,12 @@ export function seedAdminData() {
   }
 
   const projects = [
-    { title: 'E-Commerce Platform', category: 'Website', description: 'Next-gen online store with seamless checkout experience', color: 'from-amber-200 to-yellow-400' },
-    { title: 'Local SEO Campaign', category: 'SEO', description: 'Top 3 rankings across 50+ local search terms', color: 'from-yellow-300 to-amber-500' },
-    { title: 'Google Ads Optimization', category: 'Ads', description: '3.5x ROAS improvement through smart bidding', color: 'from-amber-300 to-yellow-400' },
-    { title: 'Brand Identity Design', category: 'Branding', description: 'Complete brand overhaul for a fintech startup', color: 'from-yellow-200 to-amber-400' },
-    { title: 'SaaS Dashboard', category: 'Website', description: 'Interactive analytics dashboard with real-time data', color: 'from-amber-200 to-yellow-500' },
-    { title: 'Meta Ads Campaign', category: 'Ads', description: 'Scaled revenue 4x with targeted social advertising', color: 'from-yellow-300 to-amber-400' },
+    { title: 'E-Commerce Platform', category: 'Website', description: 'Next-gen online store with seamless checkout experience', color: 'from-blue-200 to-blue-400' },
+    { title: 'Local SEO Campaign', category: 'SEO', description: 'Top 3 rankings across 50+ local search terms', color: 'from-blue-300 to-blue-500' },
+    { title: 'Google Ads Optimization', category: 'Ads', description: '3.5x ROAS improvement through smart bidding', color: 'from-blue-300 to-blue-400' },
+    { title: 'Brand Identity Design', category: 'Branding', description: 'Complete brand overhaul for a fintech startup', color: 'from-blue-200 to-blue-400' },
+    { title: 'SaaS Dashboard', category: 'Website', description: 'Interactive analytics dashboard with real-time data', color: 'from-blue-200 to-blue-500' },
+    { title: 'Meta Ads Campaign', category: 'Ads', description: 'Scaled revenue 4x with targeted social advertising', color: 'from-blue-300 to-blue-400' },
   ]
   if (!localStorage.getItem('adminPortfolio') || JSON.parse(localStorage.getItem('adminPortfolio')!).length === 0) {
     localStorage.setItem('adminPortfolio', JSON.stringify(projects.map((p, i) => ({ id: Date.now().toString() + i, ...p, image: '' }))))

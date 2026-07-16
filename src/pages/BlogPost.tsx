@@ -143,7 +143,7 @@ export default function BlogPost() {
             </div>
           ) : (
             <>
-              <Link to="/blog" className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#FFD400] transition-colors duration-300 mb-8">
+              <Link to="/blog" className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#60A5FA] transition-colors duration-300 mb-8">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m7 7l-7-7 7-7" />
                 </svg>
@@ -152,7 +152,7 @@ export default function BlogPost() {
 
               <AnimatedSection>
                 <div className="doodle-card overflow-hidden mb-8">
-                  <div className="bg-[#FFD400] border-b-3 border-[#111] px-8 py-6">
+                  <div className="bg-[#60A5FA] border-b-3 border-[#111] px-8 py-6">
                     <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
                       {data.category}
                     </span>
@@ -174,7 +174,7 @@ export default function BlogPost() {
                     
                     <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t-3 border-[#111]">
                       {data.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1.5 bg-[#FFD400] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                        <span key={tag} className="px-3 py-1.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
                           #{tag}
                         </span>
                       ))}
@@ -182,7 +182,7 @@ export default function BlogPost() {
 
                     <div className="mt-8 pt-6 border-t-3 border-[#111]">
                       <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 bg-[#FFD400] border-3 border-[#111] flex items-center justify-center shadow-[2px_2px_0_#111]">
+                        <div className="w-14 h-14 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center shadow-[2px_2px_0_#111]">
                           <span className="text-[#111] text-lg font-black">{data.author.split(" ").map(n => n[0]).join("")}</span>
                         </div>
                         <div>
@@ -216,3 +216,4 @@ export default function BlogPost() {
     </>
   );
 }
+

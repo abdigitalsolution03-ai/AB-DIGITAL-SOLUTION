@@ -116,26 +116,26 @@ export default function AdminBlog() {
                 </tr>
               ) : (
                 posts.map((post) => (
-                  <tr key={post.id} className="border-b border-[#111]/10 hover:bg-[#FFD400]/10 transition-colors">
+                  <tr key={post.id} className="border-b border-[#111]/10 hover:bg-[#60A5FA]/10 transition-colors">
                     <td className="px-6 py-4">
                       <p className="text-sm font-bold text-[#111]">{post.title}</p>
                       {post.excerpt && <p className="text-xs text-[#111]/40 mt-0.5 truncate max-w-[250px]">{post.excerpt}</p>}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-block px-2.5 py-1 bg-[#FFD400] border-2 border-[#111] text-[#111] text-xs font-bold">{post.category}</span>
+                      <span className="inline-block px-2.5 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold">{post.category}</span>
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-sm text-[#111]/60">{post.date}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <button onClick={() => togglePublish(post.id)} className={`inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#111] text-xs font-bold transition-all ${post.published ? 'bg-[#4D7AFF] text-white' : 'bg-[#FFD400] text-[#111]'}`}>
+                      <button onClick={() => togglePublish(post.id)} className={`inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#111] text-xs font-bold transition-all ${post.published ? 'bg-[#4D7AFF] text-white' : 'bg-[#60A5FA] text-[#111]'}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${post.published ? 'bg-white' : 'bg-[#111]'}`} />
                         {post.published ? 'Published' : 'Draft'}
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => openEdit(post)} className="p-2 border-2 border-[#111] text-[#111]/40 hover:bg-[#FFD400] transition-all">
+                        <button onClick={() => openEdit(post)} className="p-2 border-2 border-[#111] text-[#111]/40 hover:bg-[#60A5FA] transition-all">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
@@ -194,7 +194,7 @@ export default function AdminBlog() {
                 </div>
               </div>
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button onClick={() => setShowModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setShowModal(false)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={handleSave} className="doodle-btn-accent px-5 py-2.5 text-sm">Save</button>
               </div>
             </motion.div>
@@ -214,7 +214,7 @@ export default function AdminBlog() {
               <h3 className="text-lg font-black text-[#111] mb-2">Delete Post</h3>
               <p className="text-[#111]/60 text-sm mb-6">Are you sure? This action cannot be undone.</p>
               <div className="flex items-center justify-center gap-3">
-                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#FFD400] transition-all">Cancel</button>
+                <button onClick={() => setDeleteId(null)} className="px-5 py-2.5 border-3 border-[#111] text-[#111]/60 text-sm font-bold hover:bg-[#60A5FA] transition-all">Cancel</button>
                 <button onClick={confirmDelete} className="px-5 py-2.5 bg-[#FF4D4D] border-3 border-[#111] text-white font-bold text-sm shadow-[3px_3px_0_#111] hover:shadow-[1px_1px_0_#111] transition-all">Delete</button>
               </div>
             </motion.div>
@@ -224,3 +224,4 @@ export default function AdminBlog() {
     </PageTransition>
   )
 }
+
