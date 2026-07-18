@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getSiteContent } from "@/services/siteContent";
+import { sanitize, validateEmail } from "@/services/sanitize";
 
 export default function Newsletter() {
   const [content, setContent] = useState(getSiteContent());
@@ -10,9 +11,12 @@ export default function Newsletter() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    const trimmed = email.trim();
+    if (trimmed && validateEmail(trimmed)) {
+      const safeEmail = sanitize(trimmed.toLowerCase());
       const subs = JSON.parse(localStorage.getItem('adminSubscribers') || '[]');
-      subs.unshift({ id: Date.now().toString(), email, date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+      if (subs.some((s: any) => s.email === safeEmail)) return;
+      subs.unshift({ id: Date.now().toString(), email: safeEmail, date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) });
       localStorage.setItem('adminSubscribers', JSON.stringify(subs.slice(0, 1000)));
       setSubscribed(true);
       setEmail("");

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { getSiteContent } from "@/services/siteContent";
+import { sanitize, validateEmail, validatePhone, stripHtml } from "@/services/sanitize";
 
 export default function Contact() {
   const [content, setContent] = useState(getSiteContent());
@@ -22,14 +23,17 @@ export default function Contact() {
     e.preventDefault();
 
     const { name, email, phone, service, message } = formData;
+    if (!name.trim() || !email.trim() || !validateEmail(email)) return;
+    if (phone && !validatePhone(phone)) return;
+
     const leads = JSON.parse(localStorage.getItem('adminLeads') || '[]');
     const newLead = {
       id: Date.now().toString(),
-      name,
-      email,
-      phone,
-      message,
-      service,
+      name: sanitize(stripHtml(name.trim())),
+      email: sanitize(email.trim().toLowerCase()),
+      phone: sanitize(stripHtml(phone.trim())),
+      message: sanitize(stripHtml(message.trim())),
+      service: sanitize(stripHtml(service)),
       read: false,
       date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
     };

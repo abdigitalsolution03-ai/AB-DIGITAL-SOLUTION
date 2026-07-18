@@ -26,6 +26,8 @@ export interface Session {
   expiresAt: string
   rememberMe: boolean
   twoFactorVerified: boolean
+  fingerprint: string
+  createdAt: string
 }
 
 const SESSION_KEY = 'ab_admin_session'
@@ -178,6 +180,13 @@ export async function verify2FA(code: string): Promise<boolean> {
   return false
 }
 
+function getFingerprint(): string {
+  try {
+    const parts = [navigator.userAgent, navigator.language, screen.width, screen.height]
+    return parts.join('||')
+  } catch { return 'unknown' }
+}
+
 export function createSession(user: AdminUser, rememberMe: boolean) {
   const session: Session = {
     userId: user.id,
@@ -190,6 +199,8 @@ export function createSession(user: AdminUser, rememberMe: boolean) {
       : new Date(Date.now() + 60 * 60000).toISOString(),
     rememberMe,
     twoFactorVerified: true,
+    fingerprint: getFingerprint(),
+    createdAt: new Date().toISOString(),
   }
   localStorage.setItem(SESSION_KEY, JSON.stringify(session))
 }
@@ -294,7 +305,9 @@ export async function changePassword(currentPassword: string, newPassword: strin
 
   const updated = users.map(u => u.id === user.id ? user : u)
   localStorage.setItem(USERS_KEY, JSON.stringify(updated))
-  addAuditLog(session.email, 'Password changed')
+  revokeAllSessions(session.userId)
+  createSession(user, session.rememberMe)
+  addAuditLog(session.email, 'Password changed — sessions rotated')
   return { success: true }
 }
 
@@ -456,4 +469,42 @@ export function restoreBackup(id: string): { success: boolean; error?: string } 
 
   addAuditLog(getSession()?.email || 'unknown', `Backup restored: ${backup.timestamp}`)
   return { success: true }
+}
+
+const CSRF_KEY = 'ab_csrf_token'
+
+export function generateCsrfToken(): string {
+  const token = generateToken()
+  localStorage.setItem(CSRF_KEY, JSON.stringify({ token, expires: Date.now() + 3600000 }))
+  return token
+}
+
+export function validateCsrfToken(token: string): boolean {
+  try {
+    const stored = JSON.parse(localStorage.getItem(CSRF_KEY) || '{}')
+    return stored.token === token && Date.now() < stored.expires
+  } catch { return false }
+}
+
+export function validateSessionFingerprint(): boolean {
+  const session = getSession()
+  if (!session) return false
+  return session.fingerprint === getFingerprint()
+}
+
+export function revokeAllSessions(userId: string) {
+  const session = getSession()
+  if (session && session.userId === userId) {
+    localStorage.removeItem(SESSION_KEY)
+    addAuditLog(session.email, 'All sessions revoked — password changed')
+  }
+}
+
+export function rotateSessionToken() {
+  const session = getSession()
+  if (!session) return
+  session.token = generateToken()
+  session.fingerprint = getFingerprint()
+  session.createdAt = new Date().toISOString()
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
 }
