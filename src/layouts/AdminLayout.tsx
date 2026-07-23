@@ -1,94 +1,207 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getSession, logout, hasRole, updateSessionActivity, addAuditLog } from '@/services/auth'
-import { seedAdminData } from '@/services/seedData'
-import { seedSiteContent } from '@/services/siteContent'
+import {
+  FiHome, FiUsers, FiCalendar, FiCheckSquare, FiFolder, FiBriefcase,
+  FiDollarSign, FiBarChart2, FiFileText, FiMessageSquare, FiSettings,
+  FiLogOut, FiBell, FiSearch, FiMenu, FiX, FiChevronDown, FiChevronRight,
+  FiUserCheck, FiClock, FiHeart, FiTrendingUp, FiCreditCard, FiGrid,
+  FiBookOpen, FiActivity, FiShield, FiMonitor, FiLayers, FiMapPin,
+  FiPieChart, FiSend, FiMail, FiStar, FiPaperclip, FiAward, FiGlobe,
+  FiCpu, FiDatabase, FiRefreshCw, FiUser,
+} from 'react-icons/fi'
+import { getSession, logout, getCurrentUser } from '@/services/auth'
+import { seedAllData } from '@/services/seedData'
+import { useTheme } from '@/context/ThemeContext'
+import ThemeToggle from '@/components/ThemeToggle'
+import GlobalSearch from '@/components/GlobalSearch'
+import Avatar from '@/components/ui/Avatar'
+import Badge from '@/components/ui/Badge'
+import Dropdown from '@/components/ui/Dropdown'
 
-const sidebarItems = [
-  { label: 'Dashboard', path: '', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', group: 'main', roles: ['super_admin','admin','editor','marketing'] },
-  { label: 'SEO', path: '/seo', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', group: 'main', roles: ['super_admin','admin','marketing'] },
-  { label: 'Services', path: '/services', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', group: 'content', roles: ['super_admin','admin','editor'] },
-  { label: 'Blog', path: '/blog', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z', group: 'content', roles: ['super_admin','admin','editor','marketing'] },
-  { label: 'Portfolio', path: '/portfolio', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', group: 'content', roles: ['super_admin','admin','editor'] },
-  { label: 'Testimonials', path: '/testimonials', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', group: 'content', roles: ['super_admin','admin','editor'] },
-  { label: 'FAQs', path: '/faqs', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', group: 'content', roles: ['super_admin','admin','editor'] },
-  { label: 'Pages', path: '/pages', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', group: 'content', roles: ['super_admin','admin'] },
-  { label: 'Leads', path: '/leads', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', group: 'leads', roles: ['super_admin','admin','marketing'] },
-  { label: 'Lead Discovery', path: '/lead-discovery', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', group: 'leads', roles: ['super_admin','admin','marketing'] },
-  { label: 'Subscribers', path: '/subscribers', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', group: 'leads', roles: ['super_admin','admin','marketing'] },
-  { label: 'Media', path: '/media', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', group: 'media', roles: ['super_admin','admin','editor'] },
-  { label: 'Navigation', path: '/navigation', icon: 'M4 6h16M4 12h16M4 18h16', group: 'settings', roles: ['super_admin','admin'] },
-  { label: 'Site Content', path: '/site-content', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', group: 'settings', roles: ['super_admin','admin'] },
-  { label: 'Settings', path: '/settings', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', group: 'settings', roles: ['super_admin'] },
-  { label: 'Security', path: '/security', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', group: 'settings', roles: ['super_admin'] },
-  { label: 'Users', path: '/users', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', group: 'settings', roles: ['super_admin'] },
-  { label: 'Audit Logs', path: '/audit', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', group: 'settings', roles: ['super_admin','admin'] },
+interface NavItem {
+  label: string
+  path: string
+  icon: React.ReactNode
+  roles?: string[]
+}
+
+interface NavGroup {
+  label: string
+  items: NavItem[]
+}
+
+const navGroups: NavGroup[] = [
+  {
+    label: 'DASHBOARD',
+    items: [
+      { label: 'Dashboard', path: '/admin', icon: <FiHome size={18} /> },
+    ],
+  },
+  {
+    label: 'CRM',
+    items: [
+      { label: 'Leads', path: '/admin/crm/leads', icon: <FiStar size={18} /> },
+      { label: 'Contacts', path: '/admin/crm/contacts', icon: <FiUsers size={18} /> },
+      { label: 'Companies', path: '/admin/crm/companies', icon: <FiBriefcase size={18} /> },
+      { label: 'Deals', path: '/admin/crm/deals', icon: <FiTrendingUp size={18} /> },
+      { label: 'Pipeline', path: '/admin/crm/pipeline', icon: <FiMapPin size={18} /> },
+    ],
+  },
+  {
+    label: 'EMPLOYEES',
+    items: [
+      { label: 'Directory', path: '/admin/employees', icon: <FiUsers size={18} /> },
+      { label: 'Departments', path: '/admin/employees/departments', icon: <FiGrid size={18} /> },
+      { label: 'Designations', path: '/admin/employees/designations', icon: <FiAward size={18} /> },
+    ],
+  },
+  {
+    label: 'ATTENDANCE',
+    items: [
+      { label: 'Dashboard', path: '/admin/attendance', icon: <FiClock size={18} /> },
+      { label: 'Calendar', path: '/admin/attendance/calendar', icon: <FiCalendar size={18} /> },
+      { label: 'Reports', path: '/admin/attendance/reports', icon: <FiBarChart2 size={18} /> },
+    ],
+  },
+  {
+    label: 'HRMS',
+    items: [
+      { label: 'Leave', path: '/admin/hrms/leave', icon: <FiSend size={18} /> },
+      { label: 'Holidays', path: '/admin/hrms/holidays', icon: <FiHeart size={18} /> },
+      { label: 'Policies', path: '/admin/hrms/policies', icon: <FiFileText size={18} /> },
+      { label: 'Performance', path: '/admin/hrms/performance', icon: <FiActivity size={18} /> },
+      { label: 'Payroll', path: '/admin/hrms/payroll', icon: <FiDollarSign size={18} /> },
+    ],
+  },
+  {
+    label: 'PROJECTS',
+    items: [
+      { label: 'All Projects', path: '/admin/projects', icon: <FiFolder size={18} /> },
+      { label: 'Kanban Board', path: '/admin/projects/kanban', icon: <FiLayers size={18} /> },
+    ],
+  },
+  {
+    label: 'TASKS',
+    items: [
+      { label: 'All Tasks', path: '/admin/tasks', icon: <FiCheckSquare size={18} /> },
+      { label: 'My Tasks', path: '/admin/tasks/my', icon: <FiUserCheck size={18} /> },
+    ],
+  },
+  {
+    label: 'CLIENTS',
+    items: [
+      { label: 'Client Portal', path: '/admin/clients', icon: <FiGlobe size={18} /> },
+    ],
+  },
+  {
+    label: 'FINANCE',
+    items: [
+      { label: 'Invoices', path: '/admin/invoices', icon: <FiFileText size={18} /> },
+      { label: 'Payments', path: '/admin/payments', icon: <FiCreditCard size={18} /> },
+    ],
+  },
+  {
+    label: 'REPORTS',
+    items: [
+      { label: 'Reports', path: '/admin/reports', icon: <FiPieChart size={18} /> },
+      { label: 'Analytics', path: '/admin/analytics', icon: <FiTrendingUp size={18} /> },
+    ],
+  },
+  {
+    label: 'DOCUMENTS',
+    items: [
+      { label: 'Documents', path: '/admin/documents', icon: <FiPaperclip size={18} /> },
+    ],
+  },
+  {
+    label: 'SUPPORT',
+    items: [
+      { label: 'Tickets', path: '/admin/tickets', icon: <FiMessageSquare size={18} /> },
+      { label: 'Knowledge Base', path: '/admin/knowledge', icon: <FiBookOpen size={18} /> },
+    ],
+  },
+  {
+    label: 'COMMUNICATION',
+    items: [
+      { label: 'Chat', path: '/admin/chat', icon: <FiMessageSquare size={18} /> },
+      { label: 'Announcements', path: '/admin/announcements', icon: <FiMail size={18} /> },
+      { label: 'Notifications', path: '/admin/notifications', icon: <FiBell size={18} /> },
+    ],
+  },
+  {
+    label: 'SETTINGS',
+    items: [
+      { label: 'Settings', path: '/admin/settings', icon: <FiSettings size={18} /> },
+      { label: 'Security', path: '/admin/security', icon: <FiShield size={18} /> },
+      { label: 'Audit Logs', path: '/admin/audit', icon: <FiMonitor size={18} /> },
+    ],
+  },
 ]
 
-const groups = [
-  { key: 'main', label: 'Main' },
-  { key: 'content', label: 'Content' },
-  { key: 'leads', label: 'Leads & CRM' },
-  { key: 'media', label: 'Media' },
-  { key: 'settings', label: 'Administration' },
-]
+function getBreadcrumbs(pathname: string): { label: string; path: string }[] {
+  const parts = pathname.split('/').filter(Boolean)
+  const crumbs: { label: string; path: string }[] = []
+  let current = ''
+  for (const part of parts) {
+    current += `/${part}`
+    const label = part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ')
+    crumbs.push({ label, path: current })
+  }
+  return crumbs
+}
 
 export default function AdminLayout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { isDark } = useTheme()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const [session, setSession] = useState(getSession())
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false)
+  const user = getCurrentUser()
 
   useEffect(() => {
-    seedAdminData()
-    seedSiteContent()
-
+    seedAllData()
     const s = getSession()
-    if (!s) {
-      navigate('/admin/login', { replace: true })
-      return
-    }
+    if (!s) { navigate('/admin/login', { replace: true }); return }
     setSession(s)
   }, [navigate])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const s = getSession()
-      if (!s) {
-        navigate('/admin/login', { replace: true })
-        return
-      }
-      updateSessionActivity()
-      setSession(s)
-    }, 30000)
-    return () => clearInterval(interval)
-  }, [navigate])
-
-  useEffect(() => {
-    const handleActivity = () => updateSessionActivity()
-    window.addEventListener('mousemove', handleActivity)
-    window.addEventListener('keydown', handleActivity)
-    window.addEventListener('click', handleActivity)
-    window.addEventListener('scroll', handleActivity)
-    return () => {
-      window.removeEventListener('mousemove', handleActivity)
-      window.removeEventListener('keydown', handleActivity)
-      window.removeEventListener('click', handleActivity)
-      window.removeEventListener('scroll', handleActivity)
-    }
+    try {
+      const notifs = JSON.parse(localStorage.getItem('ab_notifications') || '[]')
+      setUnreadCount(notifs.filter((n: any) => !n.read).length)
+    } catch {}
   }, [])
 
-  const handleLogout = () => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        setShowGlobalSearch(true)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  const handleLogout = useCallback(() => {
     logout()
     navigate('/admin/login', { replace: true })
+  }, [navigate])
+
+  const toggleGroup = (label: string) => {
+    setCollapsedGroups(prev => ({ ...prev, [label]: !prev[label] }))
   }
 
-  const basePath = '/admin'
-  const role = session?.role || ''
+  const breadcrumbs = getBreadcrumbs(location.pathname)
+  const isActive = (path: string) => location.pathname === path
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex">
+      <GlobalSearch />
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -96,7 +209,7 @@ export default function AdminLayout() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsSidebarOpen(false)}
-            className="fixed inset-0 bg-black/20 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           />
         )}
       </AnimatePresence>
@@ -104,97 +217,197 @@ export default function AdminLayout() {
       <motion.aside
         initial={{ x: -320 }}
         animate={{ x: 0 }}
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-[280px] bg-white border-r-3 border-[#111] overflow-y-auto ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-[280px] bg-[var(--bg-secondary)] border-r border-[var(--border-primary)] flex flex-col transition-transform duration-300 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300`}
+        } lg:translate-x-0`}
       >
-        <div className="p-6 border-b-3 border-[#111]">
-          <Link to="/admin" className="text-xl font-black text-[#111] tracking-tight">
-            AB <span className="text-[#60A5FA]">DIGITAL</span>
-          </Link>
-          <p className="text-[#111]/40 text-xs mt-1 font-medium">Admin Panel</p>
-          {session && (
-            <div className="flex items-center gap-2 mt-3">
-              <div className="w-6 h-6 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center text-[10px] font-black text-[#111] rounded-full">
-                {session.name.charAt(0)}
-              </div>
-              <div className="text-xs">
-                <p className="font-bold text-[#111]">{session.name}</p>
-                <p className="text-[#111]/40 text-[10px] capitalize">{session.role.replace('_', ' ')}</p>
-              </div>
+        <div className="p-5 border-b border-[var(--border-primary)]">
+          <Link to="/admin" className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--royal-500)] to-[var(--royal-700)] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-royal-500/20">
+              AB
             </div>
-          )}
+            <div>
+              <h1 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
+                AB <span className="text-[var(--royal-500)]">DIGITAL</span>
+              </h1>
+              <p className="text-[10px] font-medium text-[var(--text-tertiary)] tracking-wider uppercase">Enterprise CRM & HRMS</p>
+            </div>
+          </Link>
         </div>
-        <nav className="p-3 space-y-4">
-          {groups.map(group => {
-            const items = sidebarItems.filter(i => i.group === group.key && i.roles.includes(role as any))
-            if (items.length === 0) return null
+
+        <div className="px-4 py-3 border-b border-[var(--border-primary)]">
+          <Link to="/admin/settings" className="flex items-center gap-3 group">
+            <Avatar name={user?.name || 'User'} size="sm" status="online" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[var(--text-primary)] truncate group-hover:text-[var(--royal-500)] transition-colors">
+                {user?.name || 'User'}
+              </p>
+              <Badge variant="info" size="sm">
+                {user?.role?.replace('_', ' ') || 'N/A'}
+              </Badge>
+            </div>
+          </Link>
+        </div>
+
+        <div className="px-4 py-3 border-b border-[var(--border-primary)]">
+          <button
+            onClick={() => setShowGlobalSearch(true)}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[var(--bg-tertiary)] text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+          >
+            <FiSearch size={16} />
+            <span>Search...</span>
+            <span className="ml-auto text-[10px] font-medium bg-[var(--bg-secondary)] px-1.5 py-0.5 rounded border border-[var(--border-primary)]">
+              Ctrl+K
+            </span>
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto scrollbar-thin py-2 px-3">
+          {navGroups.map(group => {
+            const isCollapsed = collapsedGroups[group.label]
             return (
-              <div key={group.key}>
-                <p className="px-3 text-[10px] font-bold text-[#111]/30 uppercase tracking-[0.2em] mb-1">{group.label}</p>
-                {items.map(item => (
-                  <Link
-                    key={item.path}
-                    to={`${basePath}${item.path}`}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm font-bold transition-all duration-200 ${
-                      location.pathname === `${basePath}${item.path}`
-                        ? 'bg-[#60A5FA] text-[#111] border-l-4 border-[#111] -ml-px'
-                        : 'text-[#111]/50 hover:text-[#111] hover:bg-[#60A5FA]/10'
-                    }`}
-                  >
-                    <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                    </svg>
-                    {item.label}
-                  </Link>
-                ))}
+              <div key={group.label} className="mb-1">
+                <button
+                  onClick={() => toggleGroup(group.label)}
+                  className="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.15em] hover:text-[var(--text-secondary)] transition-colors"
+                >
+                  {group.label}
+                  {isCollapsed ? <FiChevronRight size={12} /> : <FiChevronDown size={12} />}
+                </button>
+                <AnimatePresence>
+                  {!isCollapsed && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      {group.items.map(item => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setIsSidebarOpen(false)}
+                          className={`sidebar-link text-sm ${
+                            isActive(item.path)
+                              ? 'active'
+                              : ''
+                          }`}
+                        >
+                          <span className={`${isActive(item.path) ? 'text-[var(--royal-500)]' : 'text-[var(--text-tertiary)]'}`}>
+                            {item.icon}
+                          </span>
+                          {item.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )
           })}
         </nav>
-        <div className="sticky bottom-0 p-3 border-t-3 border-[#111] bg-white space-y-1">
-          <Link to="/admin/change-password" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/50 hover:text-[#111] hover:bg-[#60A5FA]/10 w-full transition-all duration-200">
-            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-            </svg>
-            Change Password
+
+        <div className="p-3 border-t border-[var(--border-primary)] space-y-1">
+          <Link
+            to="/"
+            className="sidebar-link text-sm text-[var(--text-tertiary)]"
+          >
+            <FiGlobe size={18} />
+            Back to Website
           </Link>
-          <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#FF4D4D] hover:bg-[#FF4D4D]/10 w-full transition-all duration-200">
-            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
+          <button
+            onClick={handleLogout}
+            className="sidebar-link w-full text-sm text-red-500 hover:bg-red-50 hover:text-red-600"
+          >
+            <FiLogOut size={18} />
             Logout
           </button>
-          <Link to="/" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-[#111]/30 hover:text-[#60A5FA] transition-all duration-200">
-            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Site
-          </Link>
         </div>
       </motion.aside>
 
       <div className="flex-1 min-h-screen flex flex-col">
-        <header className="sticky top-0 z-30 bg-white border-b-3 border-[#111]">
-          <div className="flex items-center justify-between px-6 h-14">
-            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden w-8 h-8 flex flex-col items-center justify-center gap-1">
-              <span className="w-5 h-[3px] bg-[#111] block" />
-              <span className="w-5 h-[3px] bg-[#111] block" />
-              <span className="w-5 h-[3px] bg-[#111] block" />
-            </button>
-            <div className="flex items-center gap-3 ml-auto">
-              <div className="w-8 h-8 bg-[#60A5FA] border-2 border-[#111] flex items-center justify-center text-[#111] text-xs font-black rounded-full">
-                {session?.name?.charAt(0) || 'A'}
-              </div>
+        <header className="sticky top-0 z-30 bg-[var(--bg-secondary)]/80 backdrop-blur-xl border-b border-[var(--border-primary)]">
+          <div className="flex items-center justify-between px-4 lg:px-6 h-16">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-secondary)]"
+              >
+                {isSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+              </button>
+              <nav className="hidden md:flex items-center gap-1.5 text-sm">
+                {breadcrumbs.map((crumb, i) => (
+                  <span key={crumb.path} className="flex items-center gap-1.5">
+                    {i > 0 && <span className="text-[var(--text-tertiary)]">/</span>}
+                    <Link
+                      to={crumb.path}
+                      className={`font-medium transition-colors ${
+                        i === breadcrumbs.length - 1
+                          ? 'text-[var(--text-primary)]'
+                          : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
+                      }`}
+                    >
+                      {crumb.label}
+                    </Link>
+                  </span>
+                ))}
+              </nav>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setShowGlobalSearch(true)}
+                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--bg-tertiary)] text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+              >
+                <FiSearch size={15} />
+                <span className="hidden lg:inline">Search...</span>
+                <span className="text-[10px] font-medium bg-[var(--bg-secondary)] px-1.5 py-0.5 rounded border border-[var(--border-primary)]">Ctrl+K</span>
+              </button>
+
+              <ThemeToggle />
+
+              <Dropdown
+                trigger={
+                  <button className="relative w-9 h-9 rounded-xl flex items-center justify-center hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-secondary)]">
+                    <FiBell size={20} />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-[var(--bg-secondary)]">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </button>
+                }
+                items={[
+                  { label: 'View All Notifications', icon: <FiBell size={16} />, onClick: () => navigate('/admin/notifications') },
+                ]}
+              />
+
+              <Dropdown
+                trigger={
+                  <button className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors">
+                    <Avatar name={user?.name || 'User'} size="xs" />
+                    <span className="hidden md:inline text-sm font-medium text-[var(--text-primary)] max-w-[100px] truncate">
+                      {user?.name || 'User'}
+                    </span>
+                  </button>
+                }
+                items={[
+                  { label: 'My Profile', icon: <FiUser size={16} />, onClick: () => navigate('/admin/settings') },
+                  { label: 'Settings', icon: <FiSettings size={16} />, onClick: () => navigate('/admin/settings') },
+                  { label: 'Security', icon: <FiShield size={16} />, onClick: () => navigate('/admin/security') },
+                  { divider: true, label: '', onClick: () => {} },
+                  { label: 'Logout', icon: <FiLogOut size={16} />, onClick: handleLogout, danger: true },
+                ]}
+              />
             </div>
           </div>
         </header>
-        <div className="flex-1 p-4 md:p-6">
+
+        <main className="flex-1 p-4 lg:p-6 overflow-auto">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   )
 }
-

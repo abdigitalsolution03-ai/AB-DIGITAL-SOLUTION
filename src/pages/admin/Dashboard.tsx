@@ -1,334 +1,242 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { FiUsers, FiTarget, FiFolder, FiCheckSquare, FiAlertCircle, FiArrowRight, FiCalendar, FiClock, FiBarChart2, FiFileText, FiDollarSign, FiMessageSquare, FiUserPlus, FiMail } from 'react-icons/fi'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import PageTransition from '@/components/PageTransition'
+import { getCollection } from '@/services/store'
+import { getSession } from '@/services/auth'
+import { Card, StatsCard, Badge, Avatar, ProgressBar, Button, EmptyState } from '@/components/ui'
 
-interface Stats {
-  totalLeads: number
-  activeServices: number
-  blogPosts: number
-  mediaFiles: number
-  subscribers: number
-  pages: number
+const stagger = {
+  initial: { opacity: 0, y: 20 },
+  animate: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+  })
 }
 
-interface Activity {
-  id: string
-  message: string
-  time: string
-  color: string
+const statusColors: Record<string, string> = {
+  new: 'info', contacted: 'info', qualified: 'warning',
+  proposal: 'warning', negotiation: 'warning', won: 'success',
+  lost: 'danger', closed: 'success', cancelled: 'danger',
+  completed: 'success', in_progress: 'warning', todo: 'default',
+  open: 'info', pending: 'warning', resolved: 'success',
 }
 
-interface LeadStatus {
-  label: string
-  count: number
-  color: string
+const stageBadge = (status: string) => {
+  const v = statusColors[status.toLowerCase()] || 'default'
+  return <Badge variant={v as any}>{status}</Badge>
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<Stats>({ totalLeads: 0, activeServices: 0, blogPosts: 0, mediaFiles: 0, subscribers: 0, pages: 0 })
-  const [recentActivity, setRecentActivity] = useState<Activity[]>([])
-  const [leadStatuses, setLeadStatuses] = useState<LeadStatus[]>([])
-  const [publishedCount, setPublishedCount] = useState(0)
-  const [draftCount, setDraftCount] = useState(0)
+  const session = getSession()
+  const [employees] = useState(() => getCollection('employees'))
+  const [leads] = useState(() => getCollection('leads'))
+  const [projects] = useState(() => getCollection('projects'))
+  const [tasks] = useState(() => getCollection('tasks'))
+  const [tickets] = useState(() => getCollection('tickets'))
+  const [payments] = useState(() => getCollection('payments'))
+  const [auditLogs] = useState(() => getCollection('auditLogs'))
+  const [attendance] = useState(() => getCollection('attendance'))
 
-  useEffect(() => {
-    const leads = JSON.parse(localStorage.getItem('adminLeads') || '[]')
-    const services = JSON.parse(localStorage.getItem('adminServices') || '[]')
-    const blog = JSON.parse(localStorage.getItem('adminBlogPosts') || '[]')
-    const media = JSON.parse(localStorage.getItem('adminMedia') || '[]')
-    const subscribers = JSON.parse(localStorage.getItem('adminSubscribers') || '[]')
-    const pages = JSON.parse(localStorage.getItem('adminPages') || '[]')
-    const auditLogs = JSON.parse(localStorage.getItem('adminAuditLogs') || '[]')
+  const activeLeads = leads.filter((l: any) => l.status !== 'won' && l.status !== 'lost')
+  const activeProjects = projects.filter((p: any) => p.status !== 'completed' && p.status !== 'cancelled')
+  const pendingTasks = tasks.filter((t: any) => t.status !== 'completed')
+  const openTickets = tickets.filter((t: any) => t.status === 'open' || t.status === 'pending')
 
-    setStats({
-      totalLeads: leads.length,
-      activeServices: services.length,
-      blogPosts: blog.length,
-      mediaFiles: media.length,
-      subscribers: subscribers.length,
-      pages: pages.length,
-    })
+  const today = new Date().toDateString()
+  const todayAttendance = attendance.filter((a: any) => new Date(a.date).toDateString() === today)
 
-    const statusMap: Record<string, number> = {}
-    leads.forEach((l: any) => {
-      const s = l.status || 'New'
-      statusMap[s] = (statusMap[s] || 0) + 1
-    })
-    const statusColors: Record<string, string> = { New: '#4D7AFF', Contacted: '#60A5FA', Qualified: '#8B5CF6', Converted: '#10B981', Lost: '#FF4D4D' }
-    setLeadStatuses(Object.entries(statusMap).map(([label, count]) => ({ label, count, color: statusColors[label] || '#4D7AFF' })))
-
-    const published = pages.filter((p: any) => p.status === 'published').length
-    const drafts = pages.filter((p: any) => p.status === 'draft').length
-    setPublishedCount(published)
-    setDraftCount(drafts)
-
-    const activity: Activity[] = []
-    const sortedLogs = [...auditLogs].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 10)
-    sortedLogs.forEach((l: any) => {
-      const color = l.action === 'Login' ? '#4D7AFF' : l.action === 'Logout' ? '#6B7280' : l.action === 'Create' ? '#10B981' : l.action === 'Update' ? '#60A5FA' : '#FF4D4D'
-      activity.push({ id: l.id, message: l.description, time: new Date(l.timestamp).toLocaleString(), color })
-    })
-    setRecentActivity(activity)
-  }, [])
-
-  const statCards = [
-    { label: 'Total Leads', value: stats.totalLeads, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', link: '/admin/leads', color: '#4D7AFF' },
-    { label: 'Active Services', value: stats.activeServices, icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', link: '/admin/services', color: '#60A5FA' },
-    { label: 'Blog Posts', value: stats.blogPosts, icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z', link: '/admin/blog', color: '#8B5CF6' },
-    { label: 'Media Files', value: stats.mediaFiles, icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', link: '/admin/media', color: '#10B981' },
-    { label: 'Subscribers', value: stats.subscribers, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', link: '/admin/subscribers', color: '#FF4D4D' },
-    { label: 'Pages', value: stats.pages, icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', link: '/admin/pages', color: '#EC4899' },
+  const revenueData = [
+    { month: 'Jan', revenue: 0 }, { month: 'Feb', revenue: 0 }, { month: 'Mar', revenue: 0 },
+    { month: 'Apr', revenue: 0 }, { month: 'May', revenue: 0 }, { month: 'Jun', revenue: 0 },
   ]
+
+  payments.forEach((p: any) => {
+    const d = new Date(p.date || p.createdAt)
+    const monthIdx = d.getMonth()
+    if (monthIdx >= 0 && monthIdx < 6) revenueData[monthIdx].revenue += (p.amount || 0)
+  })
+
+  const recentLogs = [...auditLogs].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 8)
+
+  const upcomingTasks = [...tasks]
+    .filter((t: any) => t.status !== 'completed' && t.dueDate)
+    .sort((a: any, b: any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+    .slice(0, 6)
+
+  const projectCards = [...projects].filter((p: any) => p.status !== 'cancelled').slice(0, 4)
+
+  const presentCount = todayAttendance.filter((a: any) => a.status === 'present').length
+  const absentCount = todayAttendance.filter((a: any) => a.status === 'absent').length
+  const leaveCount = todayAttendance.filter((a: any) => a.status === 'leave').length
 
   const quickActions = [
-    { label: 'New Blog Post', link: '/admin/blog', icon: 'M12 4v16m8-8H4' },
-    { label: 'Add Service', link: '/admin/services', icon: 'M12 4v16m8-8H4' },
-    { label: 'Upload Media', link: '/admin/media', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { label: 'View Leads', link: '/admin/leads', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-  ]
-
-  const trafficData = [
-    { day: 'Mon', visits: 120 },
-    { day: 'Tue', visits: 200 },
-    { day: 'Wed', visits: 150 },
-    { day: 'Thu', visits: 280 },
-    { day: 'Fri', visits: 190 },
-    { day: 'Sat', visits: 90 },
-    { day: 'Sun', visits: 60 },
-  ]
-
-  const maxVisits = Math.max(...trafficData.map((d) => d.visits))
-
-  const systemHealth = [
-    { label: 'Uptime', value: '99.9%', status: 'good' },
-    { label: 'Response Time', value: '245ms', status: 'good' },
-    { label: 'Error Rate', value: '0.02%', status: 'good' },
-    { label: 'Server Load', value: '34%', status: 'good' },
-    { label: 'Memory Usage', value: '62%', status: 'warning' },
-    { label: 'Storage', value: '78%', status: 'warning' },
-  ]
-
-  const browserStats = [
-    { label: 'Chrome', percentage: 58, color: '#4D7AFF' },
-    { label: 'Firefox', percentage: 18, color: '#FF8C00' },
-    { label: 'Safari', percentage: 14, color: '#8B5CF6' },
-    { label: 'Edge', percentage: 7, color: '#10B981' },
-    { label: 'Other', percentage: 3, color: '#6B7280' },
+    { label: 'Add Lead', icon: FiUserPlus, link: '/admin/crm/leads', color: 'royal' },
+    { label: 'New Project', icon: FiFolder, link: '/admin/projects', color: 'gold' },
+    { label: 'Send Invoice', icon: FiFileText, link: '/admin/invoices', color: 'green' },
+    { label: 'View Reports', icon: FiBarChart2, link: '/admin/reports', color: 'purple' },
+    { label: 'New Ticket', icon: FiMessageSquare, link: '/admin/tickets', color: 'red' },
+    { label: 'Send Email', icon: FiMail, link: '/admin/marketing', color: 'royal' },
   ]
 
   return (
     <PageTransition>
-      <div className="mb-8">
-        <h1 className="text-2xl font-black text-[#111]">Dashboard</h1>
-        <p className="text-[#111]/60 text-sm mt-1">Overview of your digital agency</p>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
+            Welcome back, {session?.name || 'User'}
+          </h1>
+          <p className="text-[var(--text-tertiary)] text-sm mt-1">
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <Badge variant="success" size="lg" dot>System Online</Badge>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-        {statCards.map((stat, i) => (
-          <Link to={stat.link} key={stat.label}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="doodle-card p-5"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 flex items-center justify-center" style={{ backgroundColor: stat.color, border: '3px solid #111', boxShadow: '3px 3px 0 #111' }}>
-                  <svg className="w-4 h-4 text-[#111]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d={stat.icon} />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-2xl font-black text-[#111]">{stat.value}</p>
-              <p className="text-[#111]/50 text-xs mt-1 font-medium">{stat.label}</p>
-            </motion.div>
-          </Link>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Recent Activity</h2>
-          {recentActivity.length === 0 ? (
-            <p className="text-[#111]/40 text-sm">No recent activity</p>
-          ) : (
-            <div className="space-y-2">
-              {recentActivity.map((a) => (
-                <div key={a.id} className="flex items-center gap-3 p-3 border-2 border-[#111] bg-white">
-                  <div className="w-2.5 h-2.5 flex-shrink-0" style={{ backgroundColor: a.color }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#111] font-medium truncate">{a.message}</p>
-                    <p className="text-xs text-[#111]/40">{a.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {quickActions.map((action) => (
-              <Link
-                key={action.label}
-                to={action.link}
-                className="flex items-center gap-3 p-4 border-3 border-[#111] bg-white hover:bg-[#60A5FA] transition-all duration-300 group"
-              >
-                <svg className="w-5 h-5 text-[#111] group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d={action.icon} />
-                </svg>
-                <span className="text-sm text-[#111] font-bold">{action.label}</span>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Traffic Overview</h2>
-          <div className="flex items-end justify-between gap-2 h-[180px] pt-4">
-            {trafficData.map((d) => (
-              <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
-                <div
-                  className="w-full bg-[#60A5FA] border-2 border-[#111] transition-all duration-500 hover:opacity-80"
-                  style={{ height: `${(d.visits / maxVisits) * 100}%`, minHeight: '8px' }}
-                />
-                <span className="text-[10px] font-bold text-[#111]/60">{d.day}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-[#111]/10">
-            <span className="text-xs text-[#111]/40">Weekly traffic</span>
-            <span className="text-xs font-bold text-[#111]">{trafficData.reduce((s, d) => s + d.visits, 0)} visits</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Leads by Status</h2>
-          {leadStatuses.length === 0 ? (
-            <div className="flex items-center justify-center h-[180px] border-3 border-[#111]/20 bg-white">
-              <p className="text-[#111]/40 text-sm">No lead data</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {leadStatuses.map((s) => (
-                <div key={s.label}>
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span className="font-bold text-[#111]">{s.label}</span>
-                    <span className="text-[#111]/60 text-xs">{s.count}</span>
-                  </div>
-                  <div className="w-full h-3 border-2 border-[#111] bg-white overflow-hidden">
-                    <div
-                      className="h-full transition-all duration-500"
-                      style={{ width: `${(s.count / Math.max(...leadStatuses.map((x) => x.count))) * 100}%`, backgroundColor: s.color }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+        <StatsCard icon={<FiUsers />} value={employees.length} label="Total Employees" color="royal" />
+        <StatsCard icon={<FiTarget />} value={activeLeads.length} label="Active Leads" color="gold" />
+        <StatsCard icon={<FiFolder />} value={activeProjects.length} label="Active Projects" color="green" />
+        <StatsCard icon={<FiCheckSquare />} value={pendingTasks.length} label="Pending Tasks" color="purple" />
+        <StatsCard icon={<FiAlertCircle />} value={openTickets.length} label="Open Tickets" color="red" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">System Health</h2>
-          <div className="space-y-3">
-            {systemHealth.map((s) => (
-              <div key={s.label} className="flex items-center justify-between p-3 border-2 border-[#111] bg-white">
-                <span className="text-sm font-bold text-[#111]">{s.label}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-[#111]/60">{s.value}</span>
-                  <div className={`w-2.5 h-2.5 ${s.status === 'good' ? 'bg-[#10B981]' : 'bg-[#60A5FA]'}`} style={{ border: '2px solid #111' }} />
-                </div>
-              </div>
-            ))}
+        <Card title="Revenue Overview" subtitle="Last 6 months" className="lg:col-span-2" action={<Button size="sm" variant="ghost" icon={<FiBarChart2 />}>Report</Button>}>
+          <div className="h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={revenueData}>
+                <defs>
+                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--royal-blue)" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="var(--royal-blue)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+                <XAxis dataKey="month" tick={{ fill: 'var(--text-primary)', fontSize: 12 }} />
+                <YAxis tick={{ fill: 'var(--text-primary)', fontSize: 12 }} />
+                <Tooltip
+                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 12, color: 'var(--text-primary)' }}
+                  formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Revenue']}
+                />
+                <Area type="monotone" dataKey="revenue" stroke="var(--royal-blue)" fill="url(#revGrad)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-        </motion.div>
+        </Card>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Content Overview</h2>
-          <div className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between text-sm mb-2">
-                <span className="font-bold text-[#111]">Published</span>
-                <span className="text-[#111]/60 text-xs">{publishedCount}</span>
-              </div>
-              <div className="w-full h-4 border-2 border-[#111] bg-white overflow-hidden">
-                <div className="h-full bg-[#10B981] transition-all duration-500" style={{ width: `${(publishedCount / Math.max(publishedCount + draftCount, 1)) * 100}%` }} />
-              </div>
+        <Card title="Recent Activity" subtitle="Latest actions">
+          {recentLogs.length === 0 ? (
+            <EmptyState title="No activity yet" description="Activities will appear here" />
+          ) : (
+            <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
+              {recentLogs.map((log: any, i: number) => (
+                <motion.div key={log.id} custom={i} variants={stagger} initial="initial" animate="animate" className="flex items-start gap-3 p-3 rounded-xl bg-[var(--bg-secondary)]">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center text-[var(--royal-blue)] flex-shrink-0">
+                    <FiClock size={14} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)] truncate">{log.action}</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">{log.userName || log.user}</p>
+                    <p className="text-[10px] text-[var(--text-tertiary)] mt-0.5">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            <div>
-              <div className="flex items-center justify-between text-sm mb-1">
-                <span className="font-bold text-[#111]">Drafts</span>
-                <span className="text-[#111]/60 text-xs">{draftCount}</span>
-              </div>
-              <div className="w-full h-4 border-2 border-[#111] bg-white overflow-hidden">
-                <div className="h-full bg-[#60A5FA] transition-all duration-500" style={{ width: `${(draftCount / Math.max(publishedCount + draftCount, 1)) * 100}%` }} />
-              </div>
-            </div>
-            <div className="pt-2 text-center">
-              <span className="text-xs text-[#111]/40">{publishedCount + draftCount} total pages</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.4 }}
-          className="doodle-card p-6"
-        >
-          <h2 className="text-lg font-black text-[#111] mb-4">Browser / Device Stats</h2>
-          <div className="space-y-3">
-            {browserStats.map((b) => (
-              <div key={b.label}>
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="font-bold text-[#111]">{b.label}</span>
-                  <span className="text-[#111]/60 text-xs">{b.percentage}%</span>
-                </div>
-                <div className="w-full h-3 border-2 border-[#111] bg-white overflow-hidden">
-                  <div className="h-full transition-all duration-500" style={{ width: `${b.percentage}%`, backgroundColor: b.color }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+          )}
+        </Card>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <Card title="Quick Actions" className="lg:col-span-1">
+          <div className="grid grid-cols-1 gap-2">
+            {quickActions.map((action, i) => (
+              <motion.div key={action.label} custom={i} variants={stagger} initial="initial" animate="animate">
+                <Link to={action.link} className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors group">
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg text-white bg-${action.color}-500`}>
+                    <action.icon size={16} />
+                  </div>
+                  <span className="text-sm font-medium text-[var(--text-primary)] flex-1">{action.label}</span>
+                  <FiArrowRight className="text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors" size={14} />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </Card>
+
+        <Card title="Upcoming Tasks" subtitle={`${pendingTasks.length} pending`} className="lg:col-span-2">
+          {upcomingTasks.length === 0 ? (
+            <EmptyState title="No upcoming tasks" description="All tasks completed" />
+          ) : (
+            <div className="space-y-2">
+              {upcomingTasks.map((task: any, i: number) => (
+                <motion.div key={task.id} custom={i} variants={stagger} initial="initial" animate="animate" className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-secondary)]">
+                  <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
+                    task.priority === 'high' ? 'bg-red-500' :
+                    task.priority === 'medium' ? 'bg-gold-500' : 'bg-green-500'
+                  }`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)] truncate">{task.title}</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      {task.project ? `${task.project} · ` : ''}Due {new Date(task.dueDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {stageBadge(task.status || 'todo')}
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        <Card title="Attendance Today" subtitle={`${presentCount} present of ${employees.length}`} className="lg:col-span-1">
+          <div className="space-y-4">
+            <div className="flex items-center justify-center gap-6 py-4">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-green-500">{presentCount}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">Present</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-red-500">{absentCount}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">Absent</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gold-500">{leaveCount}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">Leave</p>
+              </div>
+            </div>
+            <ProgressBar value={presentCount} max={employees.length || 1} label="Attendance Rate" size="sm" color="green" />
+          </div>
+        </Card>
+      </div>
+
+      <Card title="Active Projects" subtitle="Project progress overview">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {projectCards.length === 0 ? (
+            <div className="md:col-span-2">
+              <EmptyState title="No projects found" description="Create your first project to get started" />
+            </div>
+          ) : projectCards.map((project: any, i: number) => (
+            <motion.div key={project.id} custom={i} variants={stagger} initial="initial" animate="animate" className="p-4 rounded-xl bg-[var(--bg-secondary)]">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)]">{project.name}</h4>
+                  <p className="text-xs text-[var(--text-tertiary)]">{project.client || project.lead || 'Internal'}</p>
+                </div>
+                {stageBadge(project.status || 'in_progress')}
+              </div>
+              <ProgressBar value={project.progress || 0} size="sm" color={project.progress >= 70 ? 'green' : 'royal'} />
+              <div className="flex items-center gap-4 mt-3 text-xs text-[var(--text-tertiary)]">
+                <span className="flex items-center gap-1"><FiCalendar size={12} /> {project.deadline ? new Date(project.deadline).toLocaleDateString() : 'No deadline'}</span>
+                {project.team && <span className="flex items-center gap-1"><FiUsers size={12} /> {project.team.length} members</span>}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </Card>
     </PageTransition>
   )
 }
-

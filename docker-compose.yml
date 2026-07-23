@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: directus
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: directus
+    ports:
+      - "5432:5432"
+
+  directus:
+    image: directus/directus:10.9.0
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8055:8055"
+    environment:
+      KEY: ${KEY}
+      SECRET: ${SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      DB_CLIENT: pg
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: directus
+      DB_USERNAME: directus
+      DB_PASSWORD: directus
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      # Enable file uploads to local storage (can be changed to S3 later)
+      STORAGE_LOCATION: ./uploads
+      # Enable public asset uploads
+      PUBLIC_ASSETS: true
+    volumes:
+      - ./directus/uploads:/directus/uploads
+      - ./directus/database:/directus/database
+      - ./directus/extensions:/directus/extensions
+      - ./directus/config:/directus/config
+
+volumes:
+  pgdata:
