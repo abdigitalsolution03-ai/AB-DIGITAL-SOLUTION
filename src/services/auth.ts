@@ -28,6 +28,10 @@ export interface Session {
   expiresAt: string
 }
 
+export interface AdminUser extends User {
+  isActive: boolean
+}
+
 export interface AuditLog {
   id: string
   action: string
@@ -165,6 +169,13 @@ export function logout(): void {
   const session = getSession()
   if (session) addAuditLog(session.email, session.name, 'Logout')
   localStorage.removeItem(SESSION_KEY)
+}
+
+export function checkFirstLogin(): boolean {
+  const session = getSession()
+  if (!session) return false
+  const user = getCurrentUser()
+  return user?.lastLogin === undefined || user?.lastLogin === null
 }
 
 export function getSession(): Session | null {
@@ -312,4 +323,74 @@ export function getCurrentUser(): User | undefined {
   const session = getSession()
   if (!session) return undefined
   return getUsers().find(u => u.id === session.userId)
+}
+
+export function isSuperAdmin(): boolean {
+  const user = getCurrentUser()
+  return user?.role === 'super_admin'
+}
+
+export function getAdminUrl(): string {
+  return localStorage.getItem('ab_admin_url') || '/admin'
+}
+
+export function setAdminUrl(url: string): void {
+  localStorage.setItem('ab_admin_url', url)
+  addAuditLog('System', 'System', 'Changed admin URL', 'Security', `New URL: ${url}`)
+}
+
+export function getAdminSettings(): Record<string, any> {
+  try {
+    return JSON.parse(localStorage.getItem('ab_admin_settings') || '{}')
+  } catch { return {} }
+}
+
+export function saveAdminSettings(settings: Record<string, any>): void {
+  localStorage.setItem('ab_admin_settings', JSON.stringify(settings))
+}
+
+export function getBackups(): any[] {
+  try {
+    return JSON.parse(localStorage.getItem('ab_backups') || '[]')
+  } catch { return [] }
+}
+
+export function createBackup(): { success: boolean; error?: string } {
+  try {
+    const backups = getBackups()
+    const data: Record<string, any> = {}
+    Object.keys(localStorage).filter(k => k.startsWith('ab_')).forEach(k => {
+      try { data[k] = JSON.parse(localStorage.getItem(k) || '') } catch { data[k] = localStorage.getItem(k) }
+    })
+    const backup = {
+      id: Date.now().toString(36),
+      name: `Backup ${new Date().toLocaleDateString()}`,
+      data,
+      createdAt: new Date().toISOString(),
+      size: new Blob([JSON.stringify(data)]).size,
+    }
+    backups.unshift(backup)
+    const MAX_BACKUPS = 20
+    if (backups.length > MAX_BACKUPS) backups.length = MAX_BACKUPS
+    localStorage.setItem('ab_backups', JSON.stringify(backups))
+    addAuditLog('System', 'System', 'Created backup', 'Backup', `Backup #${backup.id}`)
+    return { success: true }
+  } catch (e: any) {
+    return { success: false, error: e.message }
+  }
+}
+
+export function restoreBackup(id: string): { success: boolean; error?: string } {
+  try {
+    const backups = getBackups()
+    const backup = backups.find((b: any) => b.id === id)
+    if (!backup) return { success: false, error: 'Backup not found' }
+    Object.entries(backup.data).forEach(([key, value]) => {
+      localStorage.setItem(key, JSON.stringify(value))
+    })
+    addAuditLog('System', 'System', 'Restored backup', 'Backup', `Restored backup #${id}`)
+    return { success: true }
+  } catch (e: any) {
+    return { success: false, error: e.message }
+  }
 }

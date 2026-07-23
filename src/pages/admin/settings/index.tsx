@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FiSave, FiDatabase, FiClock, FiBell, FiShield, FiPlus, FiTrash2, FiX } from 'react-icons/fi'
+import { FiSave, FiDatabase, FiClock, FiBell, FiShield } from 'react-icons/fi'
 import PageTransition from '@/components/PageTransition'
 import { store } from '@/services/store'
-import { Card, Button, Input, Badge } from '@/components/ui'
+import { Card, Button, Input } from '@/components/ui'
 
-const TABS = ['General', 'Departments', 'Notifications', 'Security', 'Backup']
+const TABS = ['General', 'Notifications', 'Security', 'Backup']
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState(0)
@@ -17,8 +17,6 @@ export default function SettingsPage() {
       companyPhone: '',
       companyAddress: '',
       logo: '',
-      workingHoursStart: '09:00',
-      workingHoursEnd: '18:00',
       timezone: 'Asia/Kolkata',
       emailNotifications: true,
       pushNotifications: true,
@@ -26,15 +24,12 @@ export default function SettingsPage() {
       requireSpecialChars: true,
     }
   })
-  const [departments, setDepartments] = useState(() => store.getCollection<any>('departments'))
-  const [newDept, setNewDept] = useState('')
   const [lastBackup, setLastBackup] = useState(localStorage.getItem('ab_last_backup') || 'Never')
   const [toast, setToast] = useState('')
 
   useEffect(() => {
     const s = store.getCollection<any>('settings')[0]
     if (s) setSettings(s)
-    setDepartments(store.getCollection<any>('departments'))
   }, [])
 
   const showToast = (msg: string) => {
@@ -54,28 +49,6 @@ export default function SettingsPage() {
 
   const updateField = (field: string, value: any) => {
     setSettings((prev: any) => ({ ...prev, [field]: value }))
-  }
-
-  const addDepartment = () => {
-    if (!newDept.trim()) return
-    const exists = store.getCollection<any>('departments')
-    store.create('departments', {
-      name: newDept.trim(),
-      code: newDept.trim().slice(0, 3).toUpperCase(),
-      headCount: 0,
-      budget: 0,
-      color: '#3B82F6',
-      description: '',
-    })
-    setNewDept('')
-    setDepartments(store.getCollection<any>('departments'))
-    showToast('Department added')
-  }
-
-  const removeDepartment = (id: string) => {
-    store.delete('departments', id)
-    setDepartments(store.getCollection<any>('departments'))
-    showToast('Department removed')
   }
 
   const handleBackup = () => {
@@ -111,10 +84,9 @@ export default function SettingsPage() {
                   }`}>
                   <div className="flex items-center gap-2">
                     {i === 0 && <FiClock size={16} />}
-                    {i === 1 && <FiDatabase size={16} />}
-                    {i === 2 && <FiBell size={16} />}
-                    {i === 3 && <FiShield size={16} />}
-                    {i === 4 && <FiSave size={16} />}
+                    {i === 1 && <FiBell size={16} />}
+                    {i === 2 && <FiShield size={16} />}
+                    {i === 3 && <FiSave size={16} />}
                     {tab}
                   </div>
                 </button>
@@ -133,38 +105,11 @@ export default function SettingsPage() {
                 <Input label="Company Address" value={settings.companyAddress || ''} onChange={v => updateField('companyAddress', v)} placeholder="42, Business Tower, Mumbai" />
                 <Input label="Logo URL" value={settings.logo || ''} onChange={v => updateField('logo', v)} placeholder="https://example.com/logo.png" />
                 <Input label="Timezone" value={settings.timezone || 'Asia/Kolkata'} onChange={v => updateField('timezone', v)} placeholder="Asia/Kolkata" />
-                <Input label="Working Hours Start" type="time" value={settings.workingHoursStart || '09:00'} onChange={v => updateField('workingHoursStart', v)} />
-                <Input label="Working Hours End" type="time" value={settings.workingHoursEnd || '18:00'} onChange={v => updateField('workingHoursEnd', v)} />
               </div>
             </Card>
           )}
 
           {activeTab === 1 && (
-            <Card title="Departments" action={<Button size="sm" icon={<FiSave />} onClick={() => handleSave('Departments')}>Save</Button>}>
-              <div className="flex gap-2 mb-4">
-                <input value={newDept} onChange={e => setNewDept(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none text-sm"
-                  placeholder="New department name" onKeyDown={e => e.key === 'Enter' && addDepartment()} />
-                <Button size="sm" icon={<FiPlus />} onClick={addDepartment} disabled={!newDept.trim()}>Add</Button>
-              </div>
-              <div className="space-y-2">
-                {departments.map((dept: any) => (
-                  <div key={dept.id} className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-secondary)]">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: dept.color || '#3B82F6' }} />
-                      <span className="text-sm font-medium text-[var(--text-primary)]">{dept.name}</span>
-                      <span className="text-xs text-[var(--text-tertiary)]">({dept.code})</span>
-                    </div>
-                    <button onClick={() => removeDepartment(dept.id)} className="p-1.5 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-red-500">
-                      <FiTrash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          {activeTab === 2 && (
             <Card title="Notification Settings" action={<Button size="sm" icon={<FiSave />} onClick={() => handleSave('Notifications')}>Save</Button>}>
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-secondary)]">
@@ -191,7 +136,7 @@ export default function SettingsPage() {
             </Card>
           )}
 
-          {activeTab === 3 && (
+          {activeTab === 2 && (
             <Card title="Security Settings" action={<Button size="sm" icon={<FiSave />} onClick={() => handleSave('Security')}>Save</Button>}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -211,7 +156,7 @@ export default function SettingsPage() {
             </Card>
           )}
 
-          {activeTab === 4 && (
+          {activeTab === 3 && (
             <Card title="Backup" subtitle="Backup your data">
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-[var(--bg-secondary)]">

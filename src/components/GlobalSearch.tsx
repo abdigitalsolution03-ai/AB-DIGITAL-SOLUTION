@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiSearch, FiX, FiUsers, FiBriefcase, FiCheckSquare, FiFolder, FiArrowRight } from 'react-icons/fi'
+import { FiSearch, FiX, FiBriefcase, FiArrowRight } from 'react-icons/fi'
 import { store } from '@/services/store'
 
 interface SearchResult {
@@ -46,45 +46,10 @@ export default function GlobalSearch() {
     const q = query.toLowerCase()
     const results: SearchResult[] = []
 
-    const employees = store.getCollection<any>('employees')
-    employees.forEach(emp => {
-      if (emp.name.toLowerCase().includes(q) || emp.email.toLowerCase().includes(q) || emp.employeeId.toLowerCase().includes(q)) {
-        results.push({ id: emp.id, title: emp.name, subtitle: `${emp.designation} · ${emp.employeeId}`, category: 'Employees', link: `/admin/employees/${emp.id}`, icon: <FiUsers size={16} /> })
-      }
-    })
-
     const leads = store.getCollection<any>('leads')
     leads.forEach(lead => {
-      if (lead.firstName.toLowerCase().includes(q) || lead.lastName.toLowerCase().includes(q) || lead.company?.toLowerCase().includes(q)) {
-        results.push({ id: lead.id, title: `${lead.firstName} ${lead.lastName}`, subtitle: `${lead.company} · ${lead.stage}`, category: 'Leads', link: `/admin/crm/leads/${lead.id}`, icon: <FiBriefcase size={16} /> })
-      }
-    })
-
-    const projects = store.getCollection<any>('projects')
-    projects.forEach(proj => {
-      if (proj.name.toLowerCase().includes(q)) {
-        results.push({ id: proj.id, title: proj.name, subtitle: `${proj.status} · ${proj.company}`, category: 'Projects', link: `/admin/projects/${proj.id}`, icon: <FiFolder size={16} /> })
-      }
-    })
-
-    const tasks = store.getCollection<any>('tasks')
-    tasks.forEach(task => {
-      if (task.title.toLowerCase().includes(q)) {
-        results.push({ id: task.id, title: task.title, subtitle: `${task.projectName} · ${task.status}`, category: 'Tasks', link: `/admin/tasks`, icon: <FiCheckSquare size={16} /> })
-      }
-    })
-
-    const companies = store.getCollection<any>('companies')
-    companies.forEach(comp => {
-      if (comp.name.toLowerCase().includes(q)) {
-        results.push({ id: comp.id, title: comp.name, subtitle: `${comp.industry} · ${comp.status}`, category: 'Companies', link: `/admin/crm/companies/${comp.id}`, icon: <FiBriefcase size={16} /> })
-      }
-    })
-
-    const deals = store.getCollection<any>('deals')
-    deals.forEach(deal => {
-      if (deal.title.toLowerCase().includes(q) || deal.company?.toLowerCase().includes(q)) {
-        results.push({ id: deal.id, title: deal.title, subtitle: `₹${deal.value.toLocaleString()} · ${deal.stage}`, category: 'Deals', link: `/admin/crm/deals/${deal.id}`, icon: <FiBriefcase size={16} /> })
+      if (lead.firstName?.toLowerCase().includes(q) || lead.lastName?.toLowerCase().includes(q) || lead.company?.toLowerCase().includes(q)) {
+        results.push({ id: lead.id, title: `${lead.firstName} ${lead.lastName}`, subtitle: `${lead.company || ''}  ${lead.stage || ''}`, category: 'Leads', link: `/admin/crm/leads`, icon: <FiBriefcase size={16} /> })
       }
     })
 
@@ -146,7 +111,7 @@ export default function GlobalSearch() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Search employees, leads, projects, tasks..."
+                  placeholder="Search leads..."
                   className="flex-1 bg-transparent border-none outline-none text-base text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]"
                 />
                 <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-tertiary)]">

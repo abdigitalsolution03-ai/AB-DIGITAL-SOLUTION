@@ -2,13 +2,11 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FiHome, FiUsers, FiCalendar, FiCheckSquare, FiFolder, FiBriefcase,
-  FiDollarSign, FiBarChart2, FiFileText, FiMessageSquare, FiSettings,
+  FiHome, FiUsers, FiBriefcase, FiFileText, FiSettings,
   FiLogOut, FiBell, FiSearch, FiMenu, FiX, FiChevronDown, FiChevronRight,
-  FiUserCheck, FiClock, FiHeart, FiTrendingUp, FiCreditCard, FiGrid,
-  FiBookOpen, FiActivity, FiShield, FiMonitor, FiLayers, FiMapPin,
-  FiPieChart, FiSend, FiMail, FiStar, FiPaperclip, FiAward, FiGlobe,
-  FiCpu, FiDatabase, FiRefreshCw, FiUser,
+  FiTrendingUp, FiShield, FiMonitor, FiMapPin,
+  FiMail, FiStar, FiGlobe, FiUser, FiLayout, FiImage, FiNavigation,
+  FiSearch as FiSearch2, FiSliders, FiShield as FiShield2,
 } from 'react-icons/fi'
 import { getSession, logout, getCurrentUser } from '@/services/auth'
 import { seedAllData } from '@/services/seedData'
@@ -33,13 +31,26 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    label: 'DASHBOARD',
+    label: 'MAIN',
     items: [
       { label: 'Dashboard', path: '/admin', icon: <FiHome size={18} /> },
+      { label: 'Analytics', path: '/admin/analytics', icon: <FiTrendingUp size={18} /> },
     ],
   },
   {
-    label: 'CRM',
+    label: 'CONTENT',
+    items: [
+      { label: 'Site Content', path: '/admin/site-content', icon: <FiLayout size={18} /> },
+      { label: 'Pages', path: '/admin/pages', icon: <FiFileText size={18} /> },
+      { label: 'Services', path: '/admin/services', icon: <FiBriefcase size={18} /> },
+      { label: 'Blog', path: '/admin/blog', icon: <FiFileText size={18} /> },
+      { label: 'Portfolio', path: '/admin/portfolio', icon: <FiStar size={18} /> },
+      { label: 'Testimonials', path: '/admin/testimonials', icon: <FiUsers size={18} /> },
+      { label: 'FAQs', path: '/admin/faqs', icon: <FiSearch2 size={18} /> },
+    ],
+  },
+  {
+    label: 'LEADS',
     items: [
       { label: 'Leads', path: '/admin/crm/leads', icon: <FiStar size={18} /> },
       { label: 'Contacts', path: '/admin/crm/contacts', icon: <FiUsers size={18} /> },
@@ -49,91 +60,26 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: 'EMPLOYEES',
+    label: 'MEDIA',
     items: [
-      { label: 'Directory', path: '/admin/employees', icon: <FiUsers size={18} /> },
-      { label: 'Departments', path: '/admin/employees/departments', icon: <FiGrid size={18} /> },
-      { label: 'Designations', path: '/admin/employees/designations', icon: <FiAward size={18} /> },
+      { label: 'Media Library', path: '/admin/media', icon: <FiImage size={18} /> },
+      { label: 'Navigation', path: '/admin/navigation', icon: <FiNavigation size={18} /> },
     ],
   },
   {
-    label: 'ATTENDANCE',
+    label: 'MARKETING',
     items: [
-      { label: 'Dashboard', path: '/admin/attendance', icon: <FiClock size={18} /> },
-      { label: 'Calendar', path: '/admin/attendance/calendar', icon: <FiCalendar size={18} /> },
-      { label: 'Reports', path: '/admin/attendance/reports', icon: <FiBarChart2 size={18} /> },
-    ],
-  },
-  {
-    label: 'HRMS',
-    items: [
-      { label: 'Leave', path: '/admin/hrms/leave', icon: <FiSend size={18} /> },
-      { label: 'Holidays', path: '/admin/hrms/holidays', icon: <FiHeart size={18} /> },
-      { label: 'Policies', path: '/admin/hrms/policies', icon: <FiFileText size={18} /> },
-      { label: 'Performance', path: '/admin/hrms/performance', icon: <FiActivity size={18} /> },
-      { label: 'Payroll', path: '/admin/hrms/payroll', icon: <FiDollarSign size={18} /> },
-    ],
-  },
-  {
-    label: 'PROJECTS',
-    items: [
-      { label: 'All Projects', path: '/admin/projects', icon: <FiFolder size={18} /> },
-      { label: 'Kanban Board', path: '/admin/projects/kanban', icon: <FiLayers size={18} /> },
-    ],
-  },
-  {
-    label: 'TASKS',
-    items: [
-      { label: 'All Tasks', path: '/admin/tasks', icon: <FiCheckSquare size={18} /> },
-      { label: 'My Tasks', path: '/admin/tasks/my', icon: <FiUserCheck size={18} /> },
-    ],
-  },
-  {
-    label: 'CLIENTS',
-    items: [
-      { label: 'Client Portal', path: '/admin/clients', icon: <FiGlobe size={18} /> },
-    ],
-  },
-  {
-    label: 'FINANCE',
-    items: [
-      { label: 'Invoices', path: '/admin/invoices', icon: <FiFileText size={18} /> },
-      { label: 'Payments', path: '/admin/payments', icon: <FiCreditCard size={18} /> },
-    ],
-  },
-  {
-    label: 'REPORTS',
-    items: [
-      { label: 'Reports', path: '/admin/reports', icon: <FiPieChart size={18} /> },
-      { label: 'Analytics', path: '/admin/analytics', icon: <FiTrendingUp size={18} /> },
-    ],
-  },
-  {
-    label: 'DOCUMENTS',
-    items: [
-      { label: 'Documents', path: '/admin/documents', icon: <FiPaperclip size={18} /> },
-    ],
-  },
-  {
-    label: 'SUPPORT',
-    items: [
-      { label: 'Tickets', path: '/admin/tickets', icon: <FiMessageSquare size={18} /> },
-      { label: 'Knowledge Base', path: '/admin/knowledge', icon: <FiBookOpen size={18} /> },
-    ],
-  },
-  {
-    label: 'COMMUNICATION',
-    items: [
-      { label: 'Chat', path: '/admin/chat', icon: <FiMessageSquare size={18} /> },
+      { label: 'SEO', path: '/admin/seo', icon: <FiSliders size={18} /> },
+      { label: 'Subscribers', path: '/admin/subscribers', icon: <FiMail size={18} /> },
       { label: 'Announcements', path: '/admin/announcements', icon: <FiMail size={18} /> },
-      { label: 'Notifications', path: '/admin/notifications', icon: <FiBell size={18} /> },
     ],
   },
   {
     label: 'SETTINGS',
     items: [
-      { label: 'Settings', path: '/admin/settings', icon: <FiSettings size={18} /> },
-      { label: 'Security', path: '/admin/security', icon: <FiShield size={18} /> },
+      { label: 'General', path: '/admin/settings', icon: <FiSettings size={18} /> },
+      { label: 'Security', path: '/admin/security', icon: <FiShield2 size={18} /> },
+      { label: 'Users', path: '/admin/users', icon: <FiUsers size={18} /> },
       { label: 'Audit Logs', path: '/admin/audit', icon: <FiMonitor size={18} /> },
     ],
   },
@@ -230,7 +176,7 @@ export default function AdminLayout() {
               <h1 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
                 AB <span className="text-[var(--royal-500)]">DIGITAL</span>
               </h1>
-              <p className="text-[10px] font-medium text-[var(--text-tertiary)] tracking-wider uppercase">Enterprise CRM & HRMS</p>
+              <p className="text-[10px] font-medium text-[var(--text-tertiary)] tracking-wider uppercase">Enterprise CMS</p>
             </div>
           </Link>
         </div>
@@ -379,7 +325,7 @@ export default function AdminLayout() {
                   </button>
                 }
                 items={[
-                  { label: 'View All Notifications', icon: <FiBell size={16} />, onClick: () => navigate('/admin/notifications') },
+                  { label: 'View All', icon: <FiBell size={16} />, onClick: () => {} },
                 ]}
               />
 

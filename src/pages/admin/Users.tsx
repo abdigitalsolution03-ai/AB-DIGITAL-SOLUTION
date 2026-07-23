@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import PageTransition from '@/components/PageTransition'
 import {
   isSuperAdmin,
-  getUsers,
+  getUsersList as getUsers,
   createUser,
   updateUser,
   deleteUser,
