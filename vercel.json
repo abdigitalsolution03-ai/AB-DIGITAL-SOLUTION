@@ -1,7 +1,7 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "next build",
-  "outputDirectory": ".next",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "installCommand": "npm install",
   "regions": ["iad1"],
   "headers": [
@@ -28,21 +28,7 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/home",
-      "destination": "/",
-      "permanent": true
-    }
-  ],
   "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
