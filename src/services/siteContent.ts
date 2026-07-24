@@ -35,7 +35,7 @@ const defaultContent: SiteContent = {
   },
   hero: {
     badge: 'Premium Digital Agency',
-    headline1: 'WE ARE', headline2: 'AB DIGITAL SOLUTION', headlineHighlight: 'DIGITAL',
+    headline1: 'WE ARE', headline2: 'AB ', headlineHighlight: 'DIGITAL SOLUTION',
     description: 'We help businesses dominate online through SEO, Website Development, Google Ads, Meta Ads, Social Media Marketing, Branding, AI Automation and Lead Generation.',
     cta1: 'Get Free Consultation', cta1Link: '/contact',
     cta2: 'View Portfolio', cta2Link: '/portfolio',

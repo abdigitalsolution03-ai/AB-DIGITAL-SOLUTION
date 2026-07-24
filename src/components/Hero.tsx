@@ -24,7 +24,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white pt-20"
+      className="relative min-h-screen flex items-center justify-center overflow-x-hidden bg-white pt-16 md:pt-20"
     >
       {/* Floating decorative shapes */}
       {floatingShapes.map((shape, i) => (

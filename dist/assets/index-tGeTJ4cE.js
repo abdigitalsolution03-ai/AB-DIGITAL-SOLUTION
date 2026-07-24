@@ -1035,8 +1035,8 @@ const defaultContent = {
   hero: {
     badge: "Premium Digital Agency",
     headline1: "WE ARE",
-    headline2: "AB DIGITAL SOLUTION",
-    headlineHighlight: "DIGITAL",
+    headline2: "AB ",
+    headlineHighlight: "DIGITAL SOLUTION",
     description: "We help businesses dominate online through SEO, Website Development, Google Ads, Meta Ads, Social Media Marketing, Branding, AI Automation and Lead Generation.",
     cta1: "Get Free Consultation",
     cta1Link: "/contact",
@@ -2869,7 +2869,7 @@ function Hero() {
     {
       id: "home",
       ref: sectionRef,
-      className: "relative min-h-screen flex items-center justify-center overflow-hidden bg-white pt-20",
+      className: "relative min-h-screen flex items-center justify-center overflow-x-hidden bg-white pt-16 md:pt-20",
       children: [
         floatingShapes.map((shape, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           motion.div,
