@@ -42,7 +42,7 @@ export default function ForgotPassword() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="admin@abdigital.com"
+              placeholder="Enter your email"
               icon={<FiMail size={16} />}
               required
             />

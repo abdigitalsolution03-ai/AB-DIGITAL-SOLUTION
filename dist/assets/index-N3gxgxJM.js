@@ -1955,70 +1955,11 @@ function getDefaultUsers() {
   return [
     {
       id: "usr_001",
-      email: "admin@abdigital.com",
-      password: "Admin@123",
+      email: "admin@abdigitalsolution.com",
+      password: "Admin@123456",
       name: "Super Admin",
       role: "super_admin",
       phone: "+91 98765 43210",
-      department: "Management",
-      designation: "Chief Executive Officer",
-      employeeId: "EMP001",
-      isActive: true,
-      createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z"
-    },
-    {
-      id: "usr_002",
-      email: "hr@abdigital.com",
-      password: "Hr@123",
-      name: "Priya Sharma",
-      role: "hr_manager",
-      phone: "+91 98765 43211",
-      department: "Human Resources",
-      designation: "HR Manager",
-      employeeId: "EMP002",
-      isActive: true,
-      createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z"
-    },
-    {
-      id: "usr_003",
-      email: "leader@abdigital.com",
-      password: "Leader@123",
-      name: "Rahul Verma",
-      role: "team_leader",
-      phone: "+91 98765 43212",
-      department: "Engineering",
-      designation: "Tech Lead",
-      employeeId: "EMP003",
-      isActive: true,
-      createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z"
-    },
-    {
-      id: "usr_004",
-      email: "sales@abdigital.com",
-      password: "Sales@123",
-      name: "Amit Patel",
-      role: "sales_executive",
-      phone: "+91 98765 43213",
-      department: "Sales & Marketing",
-      designation: "Senior Sales Executive",
-      employeeId: "EMP004",
-      isActive: true,
-      createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z"
-    },
-    {
-      id: "usr_005",
-      email: "employee@abdigital.com",
-      password: "Employee@123",
-      name: "Sneha Gupta",
-      role: "employee",
-      phone: "+91 98765 43214",
-      department: "Design",
-      designation: "UI/UX Designer",
-      employeeId: "EMP005",
       isActive: true,
       createdAt: "2025-01-01T00:00:00.000Z",
       updatedAt: "2025-01-01T00:00:00.000Z"
@@ -6776,26 +6717,6 @@ function NotFound() {
     ] }) })
   ] });
 }
-const Input = reactExports.forwardRef(
-  ({ label, error, icon, className = "", ...props }, ref) => {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
-      label && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "form-label", children: label }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
-        icon && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]", children: icon }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            ref,
-            className: `form-input ${icon ? "pl-10" : ""} ${error ? "error" : ""} ${className}`,
-            ...props
-          }
-        )
-      ] }),
-      error && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "form-error", children: error })
-    ] });
-  }
-);
-Input.displayName = "Input";
 const sizeClasses$3 = {
   sm: "text-lg",
   md: "text-2xl",
@@ -6850,10 +6771,8 @@ const Button = reactExports.forwardRef(
 Button.displayName = "Button";
 function AdminLogin() {
   const navigate = useNavigate();
-  const { theme } = useTheme();
   const [email, setEmail] = reactExports.useState("");
   const [password, setPassword] = reactExports.useState("");
-  const [rememberMe, setRememberMe] = reactExports.useState(false);
   const [showPassword, setShowPassword] = reactExports.useState(false);
   const [error, setError] = reactExports.useState("");
   const [loading, setLoading] = reactExports.useState(false);
@@ -6878,154 +6797,100 @@ function AdminLogin() {
     }
     setLoading(false);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[var(--bg-primary)] flex", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden lg:flex w-1/2 relative overflow-hidden bg-gradient-to-br from-[var(--royal-800)] via-[var(--royal-700)] to-[var(--royal-900)] items-center justify-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 opacity-10", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-10 right-10 w-96 h-96 bg-gold-400 rounded-full blur-3xl" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-royal-300 rounded-full blur-3xl" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        motion.div,
-        {
-          initial: { opacity: 0, y: 30 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.8 },
-          className: "relative z-10 text-center px-12",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-3xl font-bold text-white", children: "AB" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-bold text-white mb-3", children: "AB Digital Solution" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg text-white/60 max-w-md mx-auto", children: "Enterprise CRM & HRMS Platform — Manage your entire business from one powerful dashboard." }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 flex items-center justify-center gap-6 text-white/40 text-sm", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1.5 h-1.5 rounded-full bg-emerald-400" }),
-                " CRM"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1.5 h-1.5 rounded-full bg-gold-400" }),
-                " HRMS"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1.5 h-1.5 rounded-full bg-royal-400" }),
-                " Projects"
-              ] })
-            ] })
-          ]
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full lg:w-1/2 flex items-center justify-center p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      motion.div,
-      {
-        initial: { opacity: 0, x: 30 },
-        animate: { opacity: 1, x: 0 },
-        transition: { duration: 0.6 },
-        className: "w-full max-w-md",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8 lg:hidden", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center text-white font-bold text-xl shadow-lg", children: "AB" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[var(--text-primary)]", children: "Welcome Back" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-[var(--text-tertiary)] mt-1", children: "Sign in to your enterprise account" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden lg:block text-center mb-8", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[var(--text-primary)]", children: "Welcome Back" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-[var(--text-tertiary)] mt-1", children: "Sign in to your enterprise account" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Input,
-              {
-                label: "Email Address",
-                type: "email",
-                value: email,
-                onChange: (e) => setEmail(e.target.value),
-                placeholder: "admin@abdigital.com",
-                icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FiMail, { size: 16 }),
-                required: true,
-                autoComplete: "email"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "form-label", children: "Password" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FiLock, { size: 16 }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: showPassword ? "text" : "password",
-                    value: password,
-                    onChange: (e) => setPassword(e.target.value),
-                    className: "form-input pl-10 pr-10",
-                    placeholder: "••••••••",
-                    required: true,
-                    autoComplete: "current-password"
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: () => setShowPassword(!showPassword),
-                    className: "absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]",
-                    children: showPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx(FiEyeOff, { size: 16 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FiEye, { size: 16 })
-                  }
-                )
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 cursor-pointer group", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "div",
-                  {
-                    onClick: () => setRememberMe(!rememberMe),
-                    className: `w-4 h-4 rounded border-2 flex items-center justify-center transition-all cursor-pointer ${rememberMe ? "bg-[var(--royal-500)] border-[var(--royal-500)]" : "border-[var(--border-secondary)] bg-transparent"}`,
-                    children: rememberMe && /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-2.5 h-2.5 text-white", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 13l4 4L19 7" }) })
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors cursor-pointer select-none", children: "Remember me" })
-              ] }),
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-[var(--bg-primary)] flex items-center justify-center p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 20 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.5 },
+      className: "w-full max-w-md",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/20", children: "AB" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[var(--text-primary)]", children: "Admin Login" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-[var(--text-tertiary)] mt-1", children: "Sign in to manage your website" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-[var(--text-primary)] mb-1.5", children: "Email" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FiMail, { size: 16 }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Link,
+                "input",
                 {
-                  to: "/admin/forgot-password",
-                  className: "text-xs font-semibold text-[var(--royal-500)] hover:text-[var(--royal-600)] transition-colors",
-                  children: "Forgot Password?"
+                  type: "email",
+                  value: email,
+                  onChange: (e) => setEmail(e.target.value),
+                  className: "w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm",
+                  placeholder: "Enter your email",
+                  required: true,
+                  autoComplete: "email"
                 }
               )
-            ] }),
-            error && /* @__PURE__ */ jsxRuntimeExports.jsx(
-              motion.p,
-              {
-                initial: { opacity: 0, y: -5 },
-                animate: { opacity: 1, y: 0 },
-                className: "text-sm text-red-500 font-medium text-center bg-red-50 dark:bg-red-500/10 px-4 py-2.5 rounded-xl",
-                children: error
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "submit", variant: "primary", size: "lg", loading, className: "w-full", children: "Sign In" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 p-4 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)]", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider mb-2", children: "Demo Credentials" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 text-xs text-[var(--text-secondary)]", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Admin:" }),
-                " admin@abdigital.com / Admin@123"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "HR:" }),
-                " hr@abdigital.com / Hr@123"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Employee:" }),
-                " employee@abdigital.com / Employee@123"
-              ] })
             ] })
-          ] })
-        ]
-      }
-    ) })
-  ] });
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-[var(--text-primary)] mb-1.5", children: "Password" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FiLock, { size: 16 }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: showPassword ? "text" : "password",
+                  value: password,
+                  onChange: (e) => setPassword(e.target.value),
+                  className: "w-full pl-10 pr-10 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm",
+                  placeholder: "Enter your password",
+                  required: true,
+                  autoComplete: "current-password"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => setShowPassword(!showPassword),
+                  className: "absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]",
+                  children: showPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx(FiEyeOff, { size: 16 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FiEye, { size: 16 })
+                }
+              )
+            ] })
+          ] }),
+          error && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            motion.p,
+            {
+              initial: { opacity: 0, y: -5 },
+              animate: { opacity: 1, y: 0 },
+              className: "text-sm text-red-500 font-medium text-center bg-red-50 dark:bg-red-500/10 px-4 py-2.5 rounded-xl",
+              children: error
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "submit", variant: "primary", size: "lg", loading, className: "w-full", children: "Sign In" })
+        ] })
+      ]
+    }
+  ) });
 }
+const Input = reactExports.forwardRef(
+  ({ label, error, icon, className = "", ...props }, ref) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
+      label && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "form-label", children: label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+        icon && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]", children: icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            ref,
+            className: `form-input ${icon ? "pl-10" : ""} ${error ? "error" : ""} ${className}`,
+            ...props
+          }
+        )
+      ] }),
+      error && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "form-error", children: error })
+    ] });
+  }
+);
+Input.displayName = "Input";
 function ForgotPassword() {
   const [email, setEmail] = reactExports.useState("");
   const [loading, setLoading] = reactExports.useState(false);
@@ -7057,7 +6922,7 @@ function ForgotPassword() {
               type: "email",
               value: email,
               onChange: (e) => setEmail(e.target.value),
-              placeholder: "admin@abdigital.com",
+              placeholder: "Enter your email",
               icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FiMail, { size: 16 }),
               required: true
             }
@@ -35305,7 +35170,7 @@ const stagger$1 = {
     transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
   })
 };
-const roles$1 = ["super_admin", "hr_manager", "team_leader", "sales_executive", "employee", "client"];
+const roles$1 = ["super_admin", "admin", "editor", "marketing"];
 function AnnouncementsPage() {
   const session = getSession();
   const [announcements, setAnnouncements] = reactExports.useState(() => store.getCollection("announcements"));
@@ -35666,7 +35531,7 @@ function SettingsPage() {
       )) }) }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
         activeTab === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { title: "General Settings", action: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FiSave, {}), onClick: () => handleSave("General"), children: "Save" }), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { label: "Company Name", value: settings.companyName || "", onChange: (v) => updateField("companyName", v), placeholder: "AB Digital Solution" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { label: "Company Name", value: settings.companyName || "", onChange: (v) => updateField("companyName", v), placeholder: "Your Company Name" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { label: "Company Email", value: settings.companyEmail || "", onChange: (v) => updateField("companyEmail", v), placeholder: "info@abdigital.com" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { label: "Company Phone", value: settings.companyPhone || "", onChange: (v) => updateField("companyPhone", v), placeholder: "+91 22 4123 4567" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { label: "Company Address", value: settings.companyAddress || "", onChange: (v) => updateField("companyAddress", v), placeholder: "42, Business Tower, Mumbai" }),

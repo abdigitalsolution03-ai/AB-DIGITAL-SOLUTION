@@ -21,7 +21,7 @@ const stagger = {
   })
 }
 
-const roles = ['super_admin', 'hr_manager', 'team_leader', 'sales_executive', 'employee', 'client']
+const roles = ['super_admin', 'admin', 'editor', 'marketing']
 
 export default function AnnouncementsPage() {
   const session = getSession()

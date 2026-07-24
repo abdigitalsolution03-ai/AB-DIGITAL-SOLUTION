@@ -99,7 +99,7 @@ export default function SettingsPage() {
           {activeTab === 0 && (
             <Card title="General Settings" action={<Button size="sm" icon={<FiSave />} onClick={() => handleSave('General')}>Save</Button>}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Company Name" value={settings.companyName || ''} onChange={v => updateField('companyName', v)} placeholder="AB Digital Solution" />
+                <Input label="Company Name" value={settings.companyName || ''} onChange={v => updateField('companyName', v)} placeholder="Your Company Name" />
                 <Input label="Company Email" value={settings.companyEmail || ''} onChange={v => updateField('companyEmail', v)} placeholder="info@abdigital.com" />
                 <Input label="Company Phone" value={settings.companyPhone || ''} onChange={v => updateField('companyPhone', v)} placeholder="+91 22 4123 4567" />
                 <Input label="Company Address" value={settings.companyAddress || ''} onChange={v => updateField('companyAddress', v)} placeholder="42, Business Tower, Mumbai" />

@@ -1,6 +1,6 @@
 import { store } from './store'
 
-export type Role = 'super_admin' | 'hr_manager' | 'team_leader' | 'sales_executive' | 'employee' | 'client'
+export type Role = 'super_admin' | 'admin' | 'editor' | 'marketing'
 
 export interface User {
   id: string
@@ -10,9 +10,6 @@ export interface User {
   role: Role
   phone?: string
   avatar?: string
-  department?: string
-  designation?: string
-  employeeId?: string
   isActive: boolean
   createdAt: string
   updatedAt: string
@@ -62,70 +59,11 @@ function getDefaultUsers(): User[] {
   return [
     {
       id: 'usr_001',
-      email: 'admin@abdigital.com',
-      password: 'Admin@123',
+      email: 'admin@abdigitalsolution.com',
+      password: 'Admin@123456',
       name: 'Super Admin',
       role: 'super_admin',
       phone: '+91 98765 43210',
-      department: 'Management',
-      designation: 'Chief Executive Officer',
-      employeeId: 'EMP001',
-      isActive: true,
-      createdAt: '2025-01-01T00:00:00.000Z',
-      updatedAt: '2025-01-01T00:00:00.000Z',
-    },
-    {
-      id: 'usr_002',
-      email: 'hr@abdigital.com',
-      password: 'Hr@123',
-      name: 'Priya Sharma',
-      role: 'hr_manager',
-      phone: '+91 98765 43211',
-      department: 'Human Resources',
-      designation: 'HR Manager',
-      employeeId: 'EMP002',
-      isActive: true,
-      createdAt: '2025-01-01T00:00:00.000Z',
-      updatedAt: '2025-01-01T00:00:00.000Z',
-    },
-    {
-      id: 'usr_003',
-      email: 'leader@abdigital.com',
-      password: 'Leader@123',
-      name: 'Rahul Verma',
-      role: 'team_leader',
-      phone: '+91 98765 43212',
-      department: 'Engineering',
-      designation: 'Tech Lead',
-      employeeId: 'EMP003',
-      isActive: true,
-      createdAt: '2025-01-01T00:00:00.000Z',
-      updatedAt: '2025-01-01T00:00:00.000Z',
-    },
-    {
-      id: 'usr_004',
-      email: 'sales@abdigital.com',
-      password: 'Sales@123',
-      name: 'Amit Patel',
-      role: 'sales_executive',
-      phone: '+91 98765 43213',
-      department: 'Sales & Marketing',
-      designation: 'Senior Sales Executive',
-      employeeId: 'EMP004',
-      isActive: true,
-      createdAt: '2025-01-01T00:00:00.000Z',
-      updatedAt: '2025-01-01T00:00:00.000Z',
-    },
-    {
-      id: 'usr_005',
-      email: 'employee@abdigital.com',
-      password: 'Employee@123',
-      name: 'Sneha Gupta',
-      role: 'employee',
-      phone: '+91 98765 43214',
-      department: 'Design',
-      designation: 'UI/UX Designer',
-      employeeId: 'EMP005',
       isActive: true,
       createdAt: '2025-01-01T00:00:00.000Z',
       updatedAt: '2025-01-01T00:00:00.000Z',
@@ -250,7 +188,7 @@ export function deleteUser(id: string): { success: boolean; error?: string } {
   return { success: true }
 }
 
-export function register(data: Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'role' | 'isActive'>): { success: boolean; error?: string } {
+export function register(data: Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'role' | 'isActive'> & { role?: Role }): { success: boolean; error?: string } {
   const users = getUsers()
   if (users.find(u => u.email.toLowerCase() === data.email.toLowerCase())) {
     return { success: false, error: 'Email already exists' }
@@ -258,7 +196,7 @@ export function register(data: Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'ro
   const now = new Date().toISOString()
   const newUser: User = {
     ...data,
-    role: 'employee',
+    role: data.role || 'editor',
     isActive: true,
     id: store.generateId(),
     createdAt: now,
