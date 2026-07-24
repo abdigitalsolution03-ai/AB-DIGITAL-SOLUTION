@@ -1,14 +1,61 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FiPlus, FiEdit2, FiTrash2, FiCopy, FiEye, FiChevronUp, FiChevronDown } from 'react-icons/fi'
+import { FiPlus, FiEdit2, FiTrash2, FiCopy, FiEye, FiChevronUp, FiChevronDown, FiExternalLink, FiSettings } from 'react-icons/fi'
 import { getAll, create, update, remove, type Page } from '@/services/cms'
 import { Card, Button, Modal, Input, EmptyState, ConfirmDialog } from '@/components/ui'
+
+interface BuiltInPage {
+  name: string
+  path: string
+  slug: string
+  description: string
+  editLink: string
+  sections: string[]
+}
+
+const builtInPages: BuiltInPage[] = [
+  { name: 'Home', path: '/', slug: '', description: 'Landing page with hero, services, testimonials, FAQ, etc.', editLink: '/admin/hero', sections: ['Hero', 'Services', 'Testimonials', 'FAQ', 'Team', 'Pricing'] },
+  { name: 'About', path: '/about', slug: 'about', description: 'Company info, stats, values, team, timeline', editLink: '/admin/team', sections: ['About Content (cms_about)', 'Team Members'] },
+  { name: 'Services', path: '/services', slug: 'services', description: 'All services listing', editLink: '/admin/services', sections: ['Services'] },
+  { name: 'Blog', path: '/blog', slug: 'blog', description: 'Blog posts listing', editLink: '/admin/blog', sections: ['Blog Posts'] },
+  { name: 'Portfolio', path: '/portfolio', slug: 'portfolio', description: 'Portfolio/gallery showcase', editLink: '/admin/media', sections: ['Portfolio Items (cms_portfolio_items)'] },
+  { name: 'Testimonials', path: '/testimonials', slug: 'testimonials', description: 'Client testimonials page', editLink: '/admin/testimonials', sections: ['Testimonials'] },
+  { name: 'Team', path: '/team', slug: 'team', description: 'Team members page', editLink: '/admin/team', sections: ['Team Members'] },
+  { name: 'Contact', path: '/contact', slug: 'contact', description: 'Contact form and info', editLink: '/admin/enquiries', sections: ['Enquiries'] },
+  { name: 'FAQ', path: '/faq', slug: 'faq', description: 'Frequently asked questions', editLink: '/admin/faq', sections: ['FAQs'] },
+  { name: 'Case Studies', path: '/case-studies', slug: 'case-studies', description: 'Case studies showcase', editLink: '/admin/pages', sections: ['Content'] },
+  { name: 'Clients', path: '/clients', slug: 'clients', description: 'Client logos and brands', editLink: '/admin/media', sections: ['Content'] },
+  { name: 'Awards', path: '/awards', slug: 'awards', description: 'Awards and recognition', editLink: '/admin/settings', sections: ['Content'] },
+  { name: 'Careers', path: '/careers', slug: 'careers', description: 'Job listings and applications', editLink: '/admin/settings', sections: ['Content'] },
+  { name: 'Privacy Policy', path: '/privacy-policy', slug: 'privacy-policy', description: 'Privacy policy page', editLink: '/admin/pages', sections: ['Content'] },
+  { name: 'Terms', path: '/terms', slug: 'terms', description: 'Terms and conditions', editLink: '/admin/pages', sections: ['Content'] },
+]
+
+const editSections = [
+  { label: 'Hero Section', path: '/admin/hero', desc: 'Homepage hero (title, subtitle, CTA, image)' },
+  { label: 'Header', path: '/admin/header', desc: 'Logo, navigation menu, CTA button, announcement bar' },
+  { label: 'Footer', path: '/admin/footer', desc: 'Footer columns, links, social, contact, copyright' },
+  { label: 'Services', path: '/admin/services', desc: 'Service cards with features and pricing' },
+  { label: 'Blog', path: '/admin/blog', desc: 'Blog posts with categories, tags, SEO' },
+  { label: 'Media Library', path: '/admin/media', desc: 'Upload images, videos, PDFs, documents' },
+  { label: 'Testimonials', path: '/admin/testimonials', desc: 'Client testimonials with ratings' },
+  { label: 'FAQ', path: '/admin/faq', desc: 'Frequently asked questions' },
+  { label: 'Team', path: '/admin/team', desc: 'Team members with social links' },
+  { label: 'Theme', path: '/admin/theme', desc: 'Colors, fonts, animations, custom CSS' },
+  { label: 'Branding', path: '/admin/branding', desc: 'Logos, company info, social links' },
+  { label: 'SEO', path: '/admin/seo', desc: 'Meta tags, analytics, custom head code' },
+  { label: 'Subscribers', path: '/admin/subscribers', desc: 'Newsletter email list' },
+  { label: 'Enquiries', path: '/admin/enquiries', desc: 'Contact form submissions' },
+  { label: 'Settings', path: '/admin/settings', desc: 'Maintenance mode, custom code, backup' },
+]
 
 export default function AdminPages() {
   const [pages, setPages] = useState<Page[]>([])
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState<Page | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [tab, setTab] = useState<'builtin' | 'custom' | 'sections'>('builtin')
   const [form, setForm] = useState({ title: '', slug: '', content: '', status: 'published' as const, seo: { title: '', description: '', keywords: '' } })
 
   useEffect(() => { setPages(getAll('pages')) }, [])
@@ -63,37 +110,102 @@ export default function AdminPages() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Pages</h1>
-          <p className="text-sm text-[var(--text-tertiary)] mt-1">Manage website pages</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Website Pages</h1>
+          <p className="text-sm text-[var(--text-tertiary)] mt-1">All pages across your website</p>
         </div>
-        <Button variant="primary" size="sm" icon={<FiPlus />} onClick={openCreate}>New Page</Button>
+        <Button variant="primary" size="sm" icon={<FiPlus />} onClick={openCreate}>New Custom Page</Button>
       </div>
-      <Card>
-        {pages.length === 0 ? (
-          <EmptyState title="No pages" description="Create your first page" action={<Button variant="primary" size="sm" onClick={openCreate}>Create Page</Button>} />
-        ) : (
-          <div className="space-y-2">
-            {pages.sort((a, b) => (a.order || 0) - (b.order || 0)).map(page => (
-              <div key={page.id} className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-secondary)] group">
-                <div className="flex flex-col gap-0.5">
-                  <button onClick={() => movePage(page.id, -1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"><FiChevronUp size={14} /></button>
-                  <button onClick={() => movePage(page.id, 1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"><FiChevronDown size={14} /></button>
+
+      <div className="flex gap-1.5 mb-6 overflow-x-auto">
+        <button onClick={() => setTab('builtin')} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${tab === 'builtin' ? 'bg-blue-500 text-white' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'}`}>Built-in Pages</button>
+        <button onClick={() => setTab('custom')} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${tab === 'custom' ? 'bg-blue-500 text-white' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'}`}>Custom Pages ({pages.length})</button>
+        <button onClick={() => setTab('sections')} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${tab === 'sections' ? 'bg-blue-500 text-white' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'}`}>All Edit Sections</button>
+      </div>
+
+      {tab === 'builtin' && (
+        <Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {builtInPages.map((bPage, i) => (
+              <motion.div
+                key={bPage.slug}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03 }}
+                className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-blue-500/30 transition-all group"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">{bPage.name}</h3>
+                  <div className="flex gap-1">
+                    <a href={bPage.path} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]">
+                      <FiExternalLink size={14} />
+                    </a>
+                    <Link to={bPage.editLink} className="w-7 h-7 rounded-lg flex items-center justify-center text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10">
+                      <FiEdit2 size={14} />
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[var(--text-primary)]">{page.title}</p>
-                  <p className="text-xs text-[var(--text-tertiary)]">/{page.slug} · {page.status}</p>
-                </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button variant="ghost" size="sm" icon={<FiEye />} onClick={() => window.open('/' + page.slug, '_blank')} />
-                  <Button variant="ghost" size="sm" icon={<FiCopy />} onClick={() => handleDuplicate(page)} />
-                  <Button variant="ghost" size="sm" icon={<FiEdit2 />} onClick={() => openEdit(page)} />
-                  <Button variant="ghost" size="sm" icon={<FiTrash2 />} onClick={() => setDeleteId(page.id)} className="text-red-500" />
-                </div>
-              </div>
+                <p className="text-xs text-[var(--text-tertiary)] mb-2">/{bPage.slug}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">{bPage.description}</p>
+                {bPage.sections.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {bPage.sections.map(s => (
+                      <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--bg-tertiary)] text-[var(--text-tertiary)]">{s}</span>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
             ))}
           </div>
-        )}
-      </Card>
+        </Card>
+      )}
+
+      {tab === 'custom' && (
+        <Card>
+          {pages.length === 0 ? (
+            <EmptyState title="No custom pages" description="Create a new page with the page builder" action={<Button variant="primary" size="sm" icon={<FiPlus />} onClick={openCreate}>Create Page</Button>} />
+          ) : (
+            <div className="space-y-2">
+              {pages.sort((a, b) => (a.order || 0) - (b.order || 0)).map(page => (
+                <div key={page.id} className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-secondary)] group">
+                  <div className="flex flex-col gap-0.5">
+                    <button onClick={() => movePage(page.id, -1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"><FiChevronUp size={14} /></button>
+                    <button onClick={() => movePage(page.id, 1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"><FiChevronDown size={14} /></button>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)]">{page.title}</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">/{page.slug} · {page.status}</p>
+                  </div>
+                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button variant="ghost" size="sm" icon={<FiEye />} onClick={() => window.open('/' + page.slug, '_blank')} />
+                    <Button variant="ghost" size="sm" icon={<FiCopy />} onClick={() => handleDuplicate(page)} />
+                    <Button variant="ghost" size="sm" icon={<FiEdit2 />} onClick={() => openEdit(page)} />
+                    <Button variant="ghost" size="sm" icon={<FiTrash2 />} onClick={() => setDeleteId(page.id)} className="text-red-500" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
+
+      {tab === 'sections' && (
+        <Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {editSections.map((sec, i) => (
+              <Link key={sec.path} to={sec.path}
+                className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-blue-500/30 hover:shadow-sm transition-all group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">{sec.label}</h3>
+                  <FiSettings size={14} className="text-[var(--text-tertiary)] group-hover:text-blue-500" />
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)]">{sec.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </Card>
+      )}
+
       <Modal open={showModal} onClose={() => setShowModal(false)} title={editing ? 'Edit Page' : 'New Page'}>
         <div className="space-y-4">
           <Input label="Page Title" value={form.title} onChange={v => { setForm({ ...form, title: v }); if (!editing && !form.slug) setForm(prev => ({ ...prev, title: v, slug: v.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') })) }} placeholder="Enter page title" />
