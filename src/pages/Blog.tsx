@@ -1,34 +1,37 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 
-const categories = ["All", "SEO", "Marketing", "Web Development", "Branding", "Business"];
-
 interface BlogPost {
-  slug: string;
+  id: string;
   title: string;
+  slug: string;
   excerpt: string;
-  category: string;
+  content: string;
+  featuredImage: string;
+  categories: string[];
+  tags: string[];
   author: string;
-  date: string;
-  readTime: string;
-  color: string;
+  status: "draft" | "published" | "scheduled";
+  seo?: { title?: string; description?: string; keywords?: string; ogImage?: string };
+  createdAt: string;
+  updatedAt: string;
 }
 
-const blogPosts: BlogPost[] = [
-  { slug: "seo-trends-2025", title: "SEO Trends to Dominate Search Rankings in 2025", excerpt: "Discover the latest SEO trends and strategies that will help your website rank higher in search results this year.", category: "SEO", author: "Vikram Singh", date: "Mar 15, 2025", readTime: "5 min read", color: "#FF4D4D" },
-  { slug: "social-media-marketing-strategy", title: "Building a Social Media Marketing Strategy That Works", excerpt: "Learn how to create a comprehensive social media strategy that drives engagement, builds community, and generates leads.", category: "Marketing", author: "Priya Sharma", date: "Mar 12, 2025", readTime: "6 min read", color: "#4D7AFF" },
-  { slug: "web-development-trends", title: "Modern Web Development: Frameworks and Best Practices for 2025", excerpt: "Explore the latest web development frameworks, tools, and best practices to build high-performance websites.", category: "Web Development", author: "Ananya Patel", date: "Mar 10, 2025", readTime: "7 min read", color: "#8B5CF6" },
-  { slug: "brand-identity-guide", title: "The Ultimate Guide to Building a Strong Brand Identity", excerpt: "From logo design to brand guidelines, learn everything you need to create a memorable brand identity.", category: "Branding", author: "Rahul Verma", date: "Mar 8, 2025", readTime: "8 min read", color: "#FF4D4D" },
-  { slug: "google-ads-optimization", title: "Google Ads Optimization: Tips for Higher ROAS", excerpt: "Proven strategies to optimize your Google Ads campaigns for better performance and higher return on ad spend.", category: "SEO", author: "Neha Gupta", date: "Mar 5, 2025", readTime: "5 min read", color: "#4D7AFF" },
-  { slug: "content-marketing-roi", title: "Measuring Content Marketing ROI: A Complete Framework", excerpt: "Learn how to track and measure the return on investment of your content marketing efforts effectively.", category: "Marketing", author: "Arjun Bhatia", date: "Mar 3, 2025", readTime: "6 min read", color: "#8B5CF6" },
-  { slug: "ecommerce-conversion-optimization", title: "Ecommerce Conversion Optimization: Turn Visitors into Customers", excerpt: "Actionable strategies to improve your ecommerce conversion rates and boost online sales.", category: "Business", author: "Priya Sharma", date: "Feb 28, 2025", readTime: "7 min read", color: "#FF4D4D" },
-  { slug: "local-seo-small-business", title: "Local SEO for Small Businesses: A Step-by-Step Guide", excerpt: "Dominate local search results and attract more customers with this comprehensive local SEO guide.", category: "SEO", author: "Vikram Singh", date: "Feb 25, 2025", readTime: "5 min read", color: "#4D7AFF" },
-  { slug: "react-website-performance", title: "Optimizing React Website Performance for Better UX", excerpt: "Tips and techniques to improve your React website's performance and deliver a better user experience.", category: "Web Development", author: "Ananya Patel", date: "Feb 22, 2025", readTime: "6 min read", color: "#8B5CF6" },
-  { slug: "email-marketing-best-practices", title: "Email Marketing Best Practices for Higher Engagement", excerpt: "Master the art of email marketing with these proven best practices for open rates and conversions.", category: "Marketing", author: "Neha Gupta", date: "Feb 20, 2025", readTime: "5 min read", color: "#FF4D4D" },
-];
+const categoryColors: Record<string, string> = {
+  SEO: "#FF4D4D",
+  Marketing: "#4D7AFF",
+  "Web Development": "#8B5CF6",
+  Branding: "#FF4D4D",
+  Business: "#10B981",
+};
+
+const getCategoryColor = (categories: string[]) => {
+  const cat = categories[0] || "";
+  return categoryColors[cat] || "#60A5FA";
+};
 
 const getColorClass = (color: string) => {
   if (color === "#FF4D4D") return "doodle-card-red";
@@ -37,11 +40,44 @@ const getColorClass = (color: string) => {
   return "doodle-card";
 };
 
+const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
+const estimateReadTime = (content: string) => {
+  const words = content.replace(/<[^>]*>/g, "").split(/\s+/).length;
+  const min = Math.max(1, Math.ceil(words / 200));
+  return `${min} min read`;
+};
+
+function getCMSData(): BlogPost[] {
+  try {
+    const raw = localStorage.getItem("cms_db");
+    if (!raw) return [];
+    const data = JSON.parse(raw);
+    return data.blog || [];
+  } catch {
+    return [];
+  }
+}
+
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filtered = blogPosts.filter(
-    (p) => activeCategory === "All" || p.category === activeCategory
+  const posts = useMemo(() => {
+    const all = getCMSData();
+    return all.filter((p) => p.status === "published");
+  }, []);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    posts.forEach((p) => p.categories.forEach((c) => set.add(c)));
+    return ["All", ...Array.from(set)];
+  }, [posts]);
+
+  const filtered = posts.filter(
+    (p) => activeCategory === "All" || p.categories.includes(activeCategory)
   );
 
   return (
@@ -63,73 +99,90 @@ export default function Blog() {
             </p>
           </AnimatedSection>
 
-          <AnimatedSection>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
-                    activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
-                  }`}
-                >
-                  {activeCategory === cat && (
-                    <motion.span
-                      layoutId="blogCategory"
-                      className="absolute inset-0 bg-[#60A5FA]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{cat}</span>
-                </button>
-              ))}
+          {posts.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-[#111] mb-2">No Blog Posts Yet</h3>
+              <p className="text-[#111]/60 max-w-md mx-auto">Blog posts will appear here once published. Check back soon for the latest insights and updates.</p>
             </div>
-          </AnimatedSection>
+          ) : (
+            <>
+              <AnimatedSection>
+                <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 border-3 border-[#111] ${
+                        activeCategory === cat ? "bg-[#60A5FA] text-[#111]" : "bg-white text-[#111] hover:bg-[#60A5FA]"
+                      }`}
+                    >
+                      {activeCategory === cat && (
+                        <motion.span
+                          layoutId="blogCategory"
+                          className="absolute inset-0 bg-[#60A5FA]"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10">{cat}</span>
+                    </button>
+                  ))}
+                </div>
+              </AnimatedSection>
 
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((post, i) => (
-                <motion.div
-                  key={post.slug}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                >
-                  <Link
-                    to={`/blog/${post.slug}`}
-                    className={`block ${getColorClass(post.color)} overflow-hidden h-full group`}
-                  >
-                    <div className="p-6" style={{ backgroundColor: post.color }}>
-                      <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
-                        {post.category}
-                      </span>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-[#111] font-bold text-lg group-hover:text-[#60A5FA] transition-colors duration-300 line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-[#111]/70 mt-2 leading-relaxed line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between mt-4 pt-4 border-t-3 border-[#111]">
-                        <div>
-                          <p className="text-[#111] text-xs font-bold">{post.author}</p>
-                          <p className="text-[#111]/40 text-[10px] mt-0.5">{post.date} - {post.readTime}</p>
-                        </div>
-                        <span className="text-[#111] group-hover:translate-x-1 transition-transform duration-300">
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+              <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {filtered.map((post, i) => {
+                    const color = getCategoryColor(post.categories);
+                    return (
+                      <motion.div
+                        key={post.slug}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        transition={{ duration: 0.4, delay: i * 0.05 }}
+                      >
+                        <Link
+                          to={`/blog/${post.slug}`}
+                          className={`block ${getColorClass(color)} overflow-hidden h-full group`}
+                        >
+                          <div className="p-6" style={{ backgroundColor: color }}>
+                            <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                              {post.categories[0] || "Uncategorized"}
+                            </span>
+                          </div>
+                          <div className="p-6">
+                            <h3 className="text-[#111] font-bold text-lg group-hover:text-[#60A5FA] transition-colors duration-300 line-clamp-2">
+                              {post.title}
+                            </h3>
+                            <p className="text-[#111]/70 mt-2 leading-relaxed line-clamp-3">
+                              {post.excerpt}
+                            </p>
+                            <div className="flex items-center justify-between mt-4 pt-4 border-t-3 border-[#111]">
+                              <div>
+                                <p className="text-[#111] text-xs font-bold">{post.author}</p>
+                                <p className="text-[#111]/40 text-[10px] mt-0.5">{formatDate(post.createdAt)} - {estimateReadTime(post.content)}</p>
+                              </div>
+                              <span className="text-[#111] group-hover:translate-x-1 transition-transform duration-300">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </motion.div>
+            </>
+          )}
 
           <AnimatedSection className="mt-16 text-center">
             <div className="doodle-card p-12 max-w-3xl mx-auto">
@@ -156,4 +209,3 @@ export default function Blog() {
     </>
   );
 }
-

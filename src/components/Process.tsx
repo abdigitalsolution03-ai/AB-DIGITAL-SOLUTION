@@ -1,26 +1,45 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { FaLightbulb, FaSearch, FaCode, FaRocket } from "react-icons/fa";
 import AnimatedSection from "./AnimatedSection";
-import { getSiteContent } from "@/services/siteContent";
+
+const iconMap: Record<string, JSX.Element> = {
+  lightbulb: <FaLightbulb className="w-6 h-6" />,
+  search: <FaSearch className="w-6 h-6" />,
+  code: <FaCode className="w-6 h-6" />,
+  rocket: <FaRocket className="w-6 h-6" />,
+};
 
 export default function Process() {
-  const [content, setContent] = useState(getSiteContent());
+  const [data, setData] = useState<{ title: string; steps: { title: string; description: string; icon?: string }[] } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("cms_process");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.title) setData(parsed);
+      }
+    } catch {}
+  }, []);
+
+  if (!data) return null;
+
   return (
     <section className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <AnimatedSection className="text-center mb-20">
-          <span className="section-label">{content.process.label}</span>
+          <span className="section-label">How We Work</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            {content.process.heading} <span className="text-[#60A5FA]">{content.process.headingHighlight}</span>
+            {data.title}
           </h2>
         </AnimatedSection>
 
         <div className="relative">
-          {/* Center connecting line */}
           <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[4px] bg-[#111111] -translate-x-1/2" style={{ opacity: 0.1 }} />
 
           <div className="space-y-20">
-            {content.process.steps.map((step, i) => (
+            {data.steps.map((step, i) => (
               <AnimatedSection
                 key={i}
                 direction={i % 2 === 0 ? "left" : "right"}
@@ -33,9 +52,13 @@ export default function Process() {
                 >
                   <div className="flex-1">
                     <div className="doodle-card p-8 lg:p-10">
-                      <span className="text-5xl font-bold text-[#60A5FA] opacity-50">
-                        {step.number}
-                      </span>
+                      <div className="w-12 h-12 flex items-center justify-center mb-4 bg-[#60A5FA] border-3 border-[#111111] text-[#111111]"
+                        style={{ borderRadius: "14px", boxShadow: "3px 3px 0px #111111" }}
+                      >
+                        {step.icon && iconMap[step.icon] ? iconMap[step.icon] : (
+                          <span className="text-lg font-bold">{i + 1}</span>
+                        )}
+                      </div>
                       <h3 className="text-2xl font-bold text-[#111111] mt-4">{step.title}</h3>
                       <p className="text-gray-500 mt-3 leading-relaxed">{step.description}</p>
                     </div>
@@ -62,4 +85,3 @@ export default function Process() {
     </section>
   );
 }
-

@@ -1,7 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import { FaChartLine, FaSmile, FaProjectDiagram, FaTrophy } from "react-icons/fa";
 import AnimatedSection from "./AnimatedSection";
-import { getSiteContent } from "@/services/siteContent";
+
+const iconMap: Record<string, JSX.Element> = {
+  chart: <FaChartLine className="w-6 h-6" />,
+  smile: <FaSmile className="w-6 h-6" />,
+  project: <FaProjectDiagram className="w-6 h-6" />,
+  trophy: <FaTrophy className="w-6 h-6" />,
+};
 
 function Counter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,44 +51,41 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
 }
 
 export default function About() {
-  const [content, setContent] = useState(getSiteContent());
+  const [data, setData] = useState<{ title: string; subtitle: string; description: string; image: string; stats: { label: string; value: number; suffix?: string; icon?: string }[] } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("cms_about");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.title) setData(parsed);
+      }
+    } catch {}
+  }, []);
+
+  if (!data) return null;
+
   return (
     <section id="about" className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection direction="left">
-            <span className="section-label">{content.about.label}</span>
+            <span className="section-label">{data.subtitle}</span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              {content.about.heading}{" "}
-              <span className="text-[#60A5FA]">{content.about.headingHighlight}</span>
+              {data.title}
             </h2>
             <p className="text-gray-500 mt-6 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
-              {content.about.paragraphs[0]}
+              {data.description}
             </p>
-            <p className="text-gray-400 mt-4 leading-relaxed text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-              {content.about.paragraphs[1]}
-            </p>
-            <a
-              href={content.about.ctaLink}
-              className="inline-flex items-center gap-2 mt-8 text-[#111111] font-bold text-sm group doodle-btn-accent"
-            >
-              {content.about.cta}
-              <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={3}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
+            {data.image && (
+              <img src={data.image} alt={data.title} className="mt-8 rounded-2xl w-full max-w-md shadow-xl" />
+            )}
           </AnimatedSection>
 
           <AnimatedSection direction="right">
             <div className="grid grid-cols-2 gap-6">
-              {content.about.stats.map((stat, i) => (
-                <Counter key={i} {...stat} />
+              {data.stats?.map((stat, i) => (
+                <Counter key={i} value={stat.value} suffix={stat.suffix || "+"} label={stat.label} />
               ))}
             </div>
           </AnimatedSection>
@@ -90,4 +94,3 @@ export default function About() {
     </section>
   );
 }
-

@@ -1,191 +1,82 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { getSiteContent } from "@/services/siteContent";
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { get } from '@/services/cms'
 
-const floatingShapes = [
-  { size: 80, x: "5%", y: "15%", duration: 6, rotation: 15 },
-  { size: 60, x: "90%", y: "25%", duration: 8, rotation: -10 },
-  { size: 100, x: "85%", y: "75%", duration: 7, rotation: 20 },
-  { size: 50, x: "10%", y: "80%", duration: 9, rotation: -5 },
-  { size: 70, x: "50%", y: "10%", duration: 10, rotation: 30 },
-];
-
-export default function Hero() {
-  const [content, setContent] = useState(getSiteContent());
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]});
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  return (
-    <section
-      id="home"
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-x-hidden bg-white pt-16 md:pt-20"
-    >
-      {/* Floating decorative shapes */}
-      {floatingShapes.map((shape, i) => (
-        <motion.div
-          key={i}
-          className="absolute pointer-events-none"
-          style={{
-            left: shape.x,
-            top: shape.y}}
-          animate={{
-            y: [0, -20, 10, -5, 0],
-            rotate: [0, shape.rotation, -shape.rotation, shape.rotation / 2, 0]}}
-          transition={{
-            duration: shape.duration,
-            repeat: Infinity,
-            ease: "easeInOut"}}
-        >
-          <svg width={shape.size} height={shape.size} viewBox="0 0 100 100">
-            <rect
-              x="5" y="5" width="90" height="90"
-              fill="none"
-              stroke="#111111"
-              strokeWidth="4"
-              rx="15"
-              style={{ opacity: 0.15 }}
-            />
-          </svg>
-        </motion.div>
-      ))}
-
-      {/* Paper airplane */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{ left: "75%", top: "20%" }}
-        animate={{
-          y: [0, -30, 10, -15, 0],
-          x: [0, 20, -10, 5, 0],
-          rotate: [0, 10, -5, 5, 0]}}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut"}}
-      >
-        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2 }}>
-          <path d="M22 2L11 13" />
-          <path d="M22 2L15 22L11 13L2 9L22 2Z" />
-        </svg>
-      </motion.div>
-
-      {/* Dashed flight path */}
-      <svg
-        className="absolute pointer-events-none"
-        style={{ left: "70%", top: "15%", width: "200px", height: "200px", opacity: 0.15 }}
-        viewBox="0 0 200 200"
-      >
-        <path
-          d="M10,180 Q50,20 120,40 Q180,60 170,120"
-          fill="none"
-          stroke="#111111"
-          strokeWidth="3"
-          strokeDasharray="8 8"
-          className="animate-dash-move"
-        />
-      </svg>
-
-      <motion.div style={{ y, opacity }} className="relative z-10 max-w-[1280px] mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-5 py-2 bg-[#60A5FA] border-3 border-[#111111] text-[#111111] text-xs font-bold tracking-widest uppercase mb-8"
-          style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111" }}
-        >
-          <span className="w-2 h-2 bg-[#111111]" style={{ borderRadius: "50%" }} />
-          {content.hero.badge}
-        </motion.div>
-
-        <h1 className="max-w-4xl mx-auto" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          <div className="overflow-hidden">
-            <motion.span
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-400 tracking-[0.3em]"
-            >
-              {content.hero.headline1}
-            </motion.span>
-          </div>
-          <div className="overflow-hidden mt-2">
-            <motion.span
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-[#111111] tracking-tight"
-            >
-              {content.hero.headline2}<span className="text-[#60A5FA]">{content.hero.headlineHighlight}</span>
-            </motion.span>
-          </div>
-        </h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-6 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          {content.hero.description}
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <a
-            href={content.hero.cta1Link}
-            className="doodle-btn-accent px-8 py-3.5 text-sm"
-          >
-            {content.hero.cta1}
-          </a>
-          <a
-            href={content.hero.cta2Link}
-            className="doodle-btn-outline px-8 py-3.5 text-sm"
-          >
-            {content.hero.cta2}
-          </a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12"
-        >
-          {content.hero.stats.map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{stat.value}{stat.suffix}</div>
-              <div className="text-xs text-gray-500 tracking-wider uppercase mt-1 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</div>
-            </div>
-          ))}
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 border-3 border-[#111111] flex items-start justify-center pt-2"
-          style={{ borderRadius: "12px" }}
-        >
-          <motion.div className="w-1.5 h-1.5 bg-[#60A5FA]" style={{ borderRadius: "50%" }} />
-        </motion.div>
-      </motion.div>
-    </section>
-  );
+interface HeroContent {
+  title: string
+  subtitle: string
+  description: string
+  ctaText: string
+  ctaUrl: string
+  secondaryCtaText: string
+  secondaryCtaUrl: string
+  image: string
+  background: string
 }
 
+export default function Hero() {
+  const [content, setContent] = useState<HeroContent>({
+    title: 'Welcome',
+    subtitle: 'Your Digital Partner',
+    description: 'We help businesses grow with modern digital solutions.',
+    ctaText: 'Get Started',
+    ctaUrl: '/contact',
+    secondaryCtaText: 'Learn More',
+    secondaryCtaUrl: '/about',
+    image: '',
+    background: '',
+  })
+
+  useEffect(() => {
+    const stored = localStorage.getItem('cms_hero')
+    if (stored) {
+      try { setContent(JSON.parse(stored)) } catch {}
+    }
+  }, [])
+
+  return (
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl" />
+      </div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            {content.subtitle && (
+              <span className="inline-block text-xs font-semibold text-blue-400 bg-blue-500/10 px-4 py-1.5 rounded-full mb-4">
+                {content.subtitle}
+              </span>
+            )}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              {content.title}
+            </h1>
+            {content.description && (
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed max-w-lg">
+                {content.description}
+              </p>
+            )}
+            <div className="flex flex-wrap gap-3 mt-8">
+              {content.ctaText && (
+                <Link to={content.ctaUrl} className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors text-sm">
+                  {content.ctaText}
+                </Link>
+              )}
+              {content.secondaryCtaText && (
+                <Link to={content.secondaryCtaUrl} className="px-6 py-3 rounded-xl border border-gray-700 text-gray-300 font-semibold hover:bg-gray-800 transition-colors text-sm">
+                  {content.secondaryCtaText}
+                </Link>
+              )}
+            </div>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:block">
+            {content.image && (
+              <img src={content.image} alt="Hero" className="w-full rounded-2xl shadow-2xl" />
+            )}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
