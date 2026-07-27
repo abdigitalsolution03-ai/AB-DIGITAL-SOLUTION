@@ -308,3 +308,103 @@ export function getMediaUrl(path: string): string {
   if (path.startsWith('http') || path.startsWith('data:')) return path
   return path
 }
+
+// Page & Section Data
+import { pageRegistry, getDefaultSectionContent, type SectionType, type PageRegistration } from './pageRegistry'
+
+export interface PageData {
+  route: string
+  slug: string
+  name: string
+  sections: Record<string, any>
+  seo: { title: string; description: string; keywords: string; ogImage: string; canonicalUrl: string; schema: string }
+  status: 'published' | 'draft'
+  updatedAt: string
+  revisions: { data: string; timestamp: string; label: string }[]
+}
+
+export function initAllPages(): void {
+  const existing = getAll<PageData>('pageData')
+  for (const reg of pageRegistry) {
+    if (!existing.find((p: PageData) => p.route === reg.route)) {
+      const sections: Record<string, any> = {}
+      for (const sec of reg.sections) {
+        sections[sec.type] = getDefaultSectionContent(sec.type)
+      }
+      const pageData: PageData = {
+        route: reg.route,
+        slug: reg.slug,
+        name: reg.name,
+        sections,
+        seo: { title: '', description: '', keywords: '', ogImage: '', canonicalUrl: '', schema: '' },
+        status: 'published',
+        updatedAt: now(),
+        revisions: [],
+      }
+      existing.push(pageData)
+    }
+  }
+  saveCollection('pageData', existing)
+}
+
+export function getPageData(route: string): PageData | undefined {
+  return getAll<PageData>('pageData').find((p: PageData) => p.route === route)
+}
+
+export function savePageSections(route: string, sections: Record<string, any>): void {
+  const all = getAll<PageData>('pageData')
+  const idx = all.findIndex((p: PageData) => p.route === route)
+  if (idx === -1) return
+  all[idx].sections = sections
+  all[idx].updatedAt = now()
+  saveCollection('pageData', all)
+}
+
+export function savePageSEO(route: string, seo: PageData['seo']): void {
+  const all = getAll<PageData>('pageData')
+  const idx = all.findIndex((p: PageData) => p.route === route)
+  if (idx === -1) return
+  all[idx].seo = seo
+  all[idx].updatedAt = now()
+  saveCollection('pageData', all)
+}
+
+export function savePageStatus(route: string, status: 'published' | 'draft'): void {
+  const all = getAll<PageData>('pageData')
+  const idx = all.findIndex((p: PageData) => p.route === route)
+  if (idx === -1) return
+  all[idx].status = status
+  all[idx].updatedAt = now()
+  saveCollection('pageData', all)
+}
+
+export function addRevision(route: string, label: string): void {
+  const all = getAll<PageData>('pageData')
+  const idx = all.findIndex((p: PageData) => p.route === route)
+  if (idx === -1) return
+  const rev = { data: JSON.stringify(all[idx].sections), timestamp: now(), label }
+  all[idx].revisions.unshift(rev)
+  if (all[idx].revisions.length > 20) all[idx].revisions.length = 20
+  saveCollection('pageData', all)
+}
+
+export function getAllPageData(): PageData[] {
+  return getAll<PageData>('pageData')
+}
+
+export function duplicatePageData(route: string): boolean {
+  const all = getAll<PageData>('pageData')
+  const src = all.find((p: PageData) => p.route === route)
+  if (!src) return false
+  const dup: PageData = {
+    ...src,
+    route: route + '-copy',
+    slug: src.slug + '-copy',
+    name: src.name + ' (Copy)',
+    revisions: [],
+    updatedAt: now(),
+  }
+  all.push(dup)
+  saveCollection('pageData', all)
+  return true
+}

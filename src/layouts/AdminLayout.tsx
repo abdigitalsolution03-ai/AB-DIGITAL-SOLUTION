@@ -1,89 +1,29 @@
-import { Outlet, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FiHome, FiFileText, FiMenu, FiX, FiChevronDown, FiChevronRight,
-  FiLogOut, FiImage, FiEdit3, FiSearch, FiSliders, FiSettings,
-  FiStar, FiHelpCircle, FiLayout, FiMail, FiUsers, FiShield,
-  FiGlobe, FiTrendingUp, FiBriefcase, FiMessageSquare, FiPenTool,
+  FiHome, FiFileText, FiLayout, FiMenu, FiX, FiChevronDown, FiChevronRight,
+  FiLogOut, FiGlobe,
 } from 'react-icons/fi'
-import { getSession, logout, isAuthenticated } from '@/services/auth'
-import { initCMS } from '@/services/cms'
-import { useTheme } from '@/context/ThemeContext'
+import { getSession, logout } from '@/services/auth'
 import ThemeToggle from '@/components/ThemeToggle'
 
-interface NavItem {
-  label: string
-  path: string
-  icon: React.ReactNode
-}
-
-interface NavGroup {
-  label: string
-  items: NavItem[]
-}
-
-const navGroups: NavGroup[] = [
-  {
-    label: 'Main',
-    items: [
-      { label: 'Dashboard', path: '/admin', icon: <FiHome size={16} /> },
-    ],
-  },
-  {
-    label: 'Content',
-    items: [
-      { label: 'Pages', path: '/admin/pages', icon: <FiFileText size={16} /> },
-      { label: 'Blog', path: '/admin/blog', icon: <FiEdit3 size={16} /> },
-      { label: 'Services', path: '/admin/services', icon: <FiBriefcase size={16} /> },
-      { label: 'Media', path: '/admin/media', icon: <FiImage size={16} /> },
-      { label: 'Testimonials', path: '/admin/testimonials', icon: <FiStar size={16} /> },
-      { label: 'FAQ', path: '/admin/faq', icon: <FiHelpCircle size={16} /> },
-    ],
-  },
-  {
-    label: 'Design',
-    items: [
-      { label: 'Hero', path: '/admin/hero', icon: <FiLayout size={16} /> },
-      { label: 'Header', path: '/admin/header', icon: <FiMenu size={16} /> },
-      { label: 'Footer', path: '/admin/footer', icon: <FiLayout size={16} /> },
-      { label: 'Theme', path: '/admin/theme', icon: <FiSliders size={16} /> },
-      { label: 'Branding', path: '/admin/branding', icon: <FiPenTool size={16} /> },
-    ],
-  },
-  {
-    label: 'Marketing',
-    items: [
-      { label: 'SEO', path: '/admin/seo', icon: <FiTrendingUp size={16} /> },
-      { label: 'Subscribers', path: '/admin/subscribers', icon: <FiMail size={16} /> },
-    ],
-  },
-  {
-    label: 'People',
-    items: [
-      { label: 'Team', path: '/admin/team', icon: <FiUsers size={16} /> },
-      { label: 'Enquiries', path: '/admin/enquiries', icon: <FiMessageSquare size={16} /> },
-    ],
-  },
-  {
-    label: 'System',
-    items: [
-      { label: 'Settings', path: '/admin/settings', icon: <FiSettings size={16} /> },
-    ],
-  },
+const navItems = [
+  { label: 'Dashboard', path: '/admin', icon: <FiHome size={16} /> },
+  { label: 'Pages', path: '/admin/pages', icon: <FiFileText size={16} /> },
+  { label: 'Content Manager', path: '/admin/content', icon: <FiLayout size={16} /> },
 ]
 
 export default function AdminLayout() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [session, setSession] = useState(getSession())
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
+  const [session, setSession] = useState(getSession())
 
   useEffect(() => {
-    initCMS()
-    if (!getSession()) { navigate('/admin/login', { replace: true }); return }
-    setSession(getSession())
+    const s = getSession()
+    if (!s) { navigate('/admin/login', { replace: true }); return }
+    setSession(s)
   }, [navigate])
 
   const handleLogout = () => {
@@ -94,10 +34,6 @@ export default function AdminLayout() {
   const isActive = (path: string) => {
     if (path === '/admin') return location.pathname === '/admin'
     return location.pathname.startsWith(path)
-  }
-
-  const toggleGroup = (label: string) => {
-    setCollapsedGroups(prev => ({ ...prev, [label]: !prev[label] }))
   }
 
   return (
@@ -133,48 +69,22 @@ export default function AdminLayout() {
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto scrollbar-thin py-2 px-2">
-          {navGroups.map(group => {
-            const isCollapsed = collapsedGroups[group.label]
-            return (
-              <div key={group.label} className="mb-1">
-                <button
-                  onClick={() => toggleGroup(group.label)}
-                  className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest hover:text-[var(--text-secondary)] transition-colors"
-                >
-                  {group.label}
-                  {isCollapsed ? <FiChevronRight size={10} /> : <FiChevronDown size={10} />}
-                </button>
-                <AnimatePresence>
-                  {!isCollapsed && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="overflow-hidden"
-                    >
-                      {group.items.map(item => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          onClick={() => setIsSidebarOpen(false)}
-                          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors mb-0.5 ${
-                            isActive(item.path)
-                              ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium'
-                              : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
-                          }`}
-                        >
-                          <span className={isActive(item.path) ? 'text-blue-500' : ''}>{item.icon}</span>
-                          {item.label}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )
-          })}
+        <nav className="flex-1 overflow-y-auto py-2 px-2">
+          {navItems.map(item => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setIsSidebarOpen(false)}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors mb-0.5 ${
+                isActive(item.path)
+                  ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
+              }`}
+            >
+              <span className={isActive(item.path) ? 'text-blue-500' : ''}>{item.icon}</span>
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="p-3 border-t border-[var(--border-primary)] space-y-1">
@@ -195,7 +105,7 @@ export default function AdminLayout() {
                 {isSidebarOpen ? <FiX size={18} /> : <FiMenu size={18} />}
               </button>
               <span className="text-sm font-medium text-[var(--text-primary)] hidden sm:block">
-                {navGroups.flatMap(g => g.items).find(i => isActive(i.path))?.label || 'Dashboard'}
+                {navItems.find(i => isActive(i.path))?.label || 'Dashboard'}
               </span>
             </div>
             <div className="flex items-center gap-2">

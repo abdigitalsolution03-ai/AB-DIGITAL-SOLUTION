@@ -1,96 +1,121 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { get, create } from '@/services/cms'
-import type { FooterSettings } from '@/services/cms'
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Footer() {
-  const [settings, setSettings] = useState<FooterSettings>({
-    logo: '', description: '', copyright: '© 2025 All rights reserved.',
-    socialLinks: [], contact: { email: '', phone: '', address: '' },
-    columns: [], paymentIcons: [], newsletterEnabled: true,
-  })
-  const [email, setEmail] = useState('')
-
-  useEffect(() => {
-    const data = get<FooterSettings>('footer')
-    if (data) setSettings(data)
-  }, [])
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) return
-    create('subscribers', { email, subscribedAt: new Date().toISOString() })
-    setEmail('')
-    alert('Subscribed successfully!')
-  }
-
+  const [content, setContent] = useState(getSiteContent());
   return (
-    <footer className="bg-gray-900 dark:bg-black text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <footer className="relative border-t-4 border-[#111111] bg-white">
+      <div className="max-w-[1280px] mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            {settings.logo ? (
-              <img src={settings.logo} alt="Logo" className="h-8 mb-4" />
-            ) : (
-              <p className="text-white font-bold text-lg mb-4">Footer</p>
-            )}
-            {settings.description && <p className="text-sm leading-relaxed text-gray-400">{settings.description}</p>}
-            {settings.socialLinks?.length > 0 && (
-              <div className="flex gap-3 mt-4">
-                {settings.socialLinks.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors text-xs">
-                    {link.platform?.charAt(0).toUpperCase()}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {settings.columns?.map((col, i) => (
-            <div key={i}>
-              <h3 className="text-white font-semibold text-sm mb-4">{col.title}</h3>
-              <ul className="space-y-2.5">
-                {col.links?.map((link, j) => (
-                  <li key={j}>
-                    <Link to={link.url} className="text-sm text-gray-400 hover:text-white transition-colors">{link.label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          <div>
-            <h3 className="text-white font-semibold text-sm mb-4">Contact</h3>
-            <ul className="space-y-2.5 text-sm text-gray-400">
-              {settings.contact?.email && <li>{settings.contact.email}</li>}
-              {settings.contact?.phone && <li>{settings.contact.phone}</li>}
-              {settings.contact?.address && <li className="leading-relaxed">{settings.contact.address}</li>}
-            </ul>
-          </div>
-        </div>
-
-        {settings.newsletterEnabled && (
-          <div className="mt-12 p-6 rounded-2xl bg-gray-800/50 border border-gray-700/50">
-            <h3 className="text-white font-semibold text-sm mb-2">Stay Updated</h3>
-            <p className="text-sm text-gray-400 mb-4">Subscribe to our newsletter</p>
-            <form onSubmit={handleSubscribe} className="flex gap-2 max-w-md">
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email" required className="flex-1 px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-white text-sm outline-none focus:border-blue-500" />
-              <button type="submit" className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shrink-0">Subscribe</button>
-            </form>
-          </div>
-        )}
-
-        <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">{settings.copyright}</p>
-          {settings.paymentIcons?.length > 0 && (
-            <div className="flex gap-2">
-              {settings.paymentIcons.map((icon, i) => (
-                <span key={i} className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded">{icon}</span>
+            <Link to="/" className="text-xl font-bold text-[#111111] tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              {content.footer.logo} <span className="text-[#60A5FA]">{content.footer.logoHighlight}</span>
+            </Link>
+            <p className="text-gray-500 text-sm mt-3 leading-relaxed max-w-xs" style={{ fontFamily: "'Inter', sans-serif" }}>
+              {content.footer.description}
+            </p>
+            <p className="text-[#60A5FA] text-xs tracking-widest uppercase mt-4 font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              {content.footer.tagline}
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              {["Facebook", "Instagram", "LinkedIn", "Twitter"].map((social) => (
+                <a
+                  key={social}
+                  href="#"
+                  className="w-9 h-9 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#60A5FA] transition-all duration-300"
+                  style={{ borderRadius: "10px", boxShadow: "3px 3px 0px #111111" }}
+                  aria-label={social}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                  </svg>
+                </a>
               ))}
             </div>
-          )}
+          </div>
+
+          <div>
+            <h4 className="text-[#111111] font-bold text-sm uppercase tracking-wider mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              Quick Links
+            </h4>
+            <ul className="space-y-2.5">
+              {content.footer.quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-gray-500 text-sm hover:text-[#111111] transition-colors duration-300 animated-underline"
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[#111111] font-bold text-sm uppercase tracking-wider mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              Services
+            </h4>
+            <ul className="space-y-2.5">
+              {content.footer.services.map((service) => (
+                <li key={service}>
+                  <Link
+                    to="/services"
+                    className="text-gray-500 text-sm hover:text-[#111111] transition-colors duration-300 animated-underline"
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
+                    {service}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[#111111] font-bold text-sm uppercase tracking-wider mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              {content.footer.newsletterHeading}
+            </h4>
+            <p className="text-gray-500 text-sm mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
+              {content.footer.newsletterText}
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder={content.newsletter?.placeholder || "Your email"}
+                className="flex-1 px-4 py-2.5 bg-white border-3 border-[#111111] text-[#111111] text-sm focus:outline-none placeholder:text-gray-400"
+                style={{ borderRadius: "14px", fontFamily: "'Inter', sans-serif" }}
+              />
+              <motion.button
+                whileHover={{ translateX: -2, translateY: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-4 py-2.5 bg-[#60A5FA] text-[#111111] font-bold text-sm border-3 border-[#111111]"
+                style={{ borderRadius: "14px", boxShadow: "4px 4px 0px #111111", fontFamily: "'Inter', sans-serif" }}
+              >
+                {content.newsletter?.buttonText || "Subscribe"}
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[#111111] border-t-4 border-[#111111]">
+        <div className="max-w-[1280px] mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-400 text-xs" style={{ fontFamily: "'Inter', sans-serif" }}>
+            &copy; {new Date().getFullYear()} {content.footer.copyright}
+          </p>
+          <div className="flex items-center gap-6">
+            {content.footer.legalLinks.map((link) => (
+              <Link key={link.label} to={link.href} className="text-gray-400 text-xs hover:text-[#60A5FA] transition-colors duration-300" style={{ fontFamily: "'Inter', sans-serif" }}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
+

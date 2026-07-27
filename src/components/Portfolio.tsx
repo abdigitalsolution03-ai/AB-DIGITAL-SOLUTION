@@ -2,35 +2,68 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 
-interface PortfolioItem {
-  id: string | number;
-  title: string;
-  category: string;
-  image: string;
-  url: string;
-}
+const hardcodedCategories = ["All", "Website", "SEO", "Ads", "Branding"];
+
+const hardcodedProjects = [
+  {
+    title: "E-Commerce Platform",
+    category: "Website",
+    description: "Next-gen online store with seamless checkout experience",
+    gradient: "from-blue-200 to-blue-400"},
+  {
+    title: "Local SEO Campaign",
+    category: "SEO",
+    description: "Top 3 rankings across 50+ local search terms",
+    gradient: "from-blue-300 to-blue-500"},
+  {
+    title: "Google Ads Optimization",
+    category: "Ads",
+    description: "3.5x ROAS improvement through smart bidding",
+    gradient: "from-blue-300 to-blue-400"},
+  {
+    title: "Brand Identity Design",
+    category: "Branding",
+    description: "Complete brand overhaul for a fintech startup",
+    gradient: "from-blue-200 to-blue-400"},
+  {
+    title: "SaaS Dashboard",
+    category: "Website",
+    description: "Interactive analytics dashboard with real-time data",
+    gradient: "from-blue-200 to-blue-500"},
+  {
+    title: "Meta Ads Campaign",
+    category: "Ads",
+    description: "Scaled revenue 4x with targeted social advertising",
+    gradient: "from-blue-300 to-blue-400"},
+];
 
 export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [projects, setProjects] = useState(hardcodedProjects);
+  const [categories, setCategories] = useState(hardcodedCategories);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("cms_portfolio_items");
-      if (raw) {
-        const parsed = JSON.parse(raw);
+      const stored = localStorage.getItem("adminPortfolio");
+      if (stored) {
+        const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setItems(parsed);
+          const mapped = parsed.map((item) => ({
+            title: item.title,
+            category: item.category,
+            description: item.description,
+            gradient: item.color,
+          }));
+          setProjects(mapped);
+          const uniqueCats = ["All", ...new Set(mapped.map((p) => p.category))];
+          setCategories(uniqueCats);
         }
       }
     } catch {}
   }, []);
 
-  if (items.length === 0) return null;
-
-  const categories = ["All", ...new Set(items.map((item) => item.category))];
-  const filtered = items.filter(
-    (item) => activeCategory === "All" || item.category === activeCategory
+  const filtered = projects.filter(
+    (p) => activeCategory === "All" || p.category === activeCategory
   );
 
   return (
@@ -41,6 +74,9 @@ export default function Portfolio() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Featured <span className="text-[#60A5FA]">Projects</span>
           </h2>
+          <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Each project reflects our commitment to excellence and results-driven approach.
+          </p>
         </AnimatedSection>
 
         <AnimatedSection>
@@ -70,9 +106,9 @@ export default function Portfolio() {
 
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
-            {filtered.map((item, i) => (
+            {filtered.map((project, i) => (
               <motion.div
-                key={item.id}
+                key={project.title}
                 layout
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -82,14 +118,10 @@ export default function Portfolio() {
                 style={{ borderRadius: "20px" }}
               >
                 <div className="relative overflow-hidden">
-                  {item.image ? (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="aspect-[4/3] w-full object-cover"
-                    />
-                  ) : (
-                    <div className="aspect-[4/3] bg-gradient-to-br from-blue-200 to-blue-400 flex items-center justify-center">
+                  <div
+                    className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} relative`}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
                       <svg
                         className="w-16 h-16 text-[#111111] opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-110"
                         fill="none"
@@ -102,27 +134,15 @@ export default function Portfolio() {
                         <polyline points="21 15 16 10 5 21" />
                       </svg>
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+                  </div>
                 </div>
                 <div className="p-6">
                   <span className="text-[#60A5FA] text-xs font-bold tracking-widest uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    {item.category}
+                    {project.category}
                   </span>
-                  <h3 className="text-[#111111] text-lg font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{item.title}</h3>
-                  {item.url && (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-[#60A5FA] font-semibold mt-2 hover:underline"
-                    >
-                      View Project
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  )}
+                  <h3 className="text-[#111111] text-lg font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project.title}</h3>
+                  <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: "'Inter', sans-serif" }}>{project.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -132,3 +152,4 @@ export default function Portfolio() {
     </section>
   );
 }
+

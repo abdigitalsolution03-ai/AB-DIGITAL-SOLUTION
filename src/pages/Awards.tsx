@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+﻿﻿import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 
@@ -18,7 +18,7 @@ const awards: Award[] = [
     category: "Agency of the Year",
     description: "Recognized for outstanding performance in digital marketing strategy and execution across multiple client campaigns."},
   {
-    title: "Gold – Best Website Design",
+    title: "Gold ΓÇô Best Website Design",
     organization: "Web Design Awards International",
     year: "2025",
     category: "Web Development",
@@ -30,7 +30,7 @@ const awards: Award[] = [
     category: "SEO",
     description: "Honored for a groundbreaking SEO campaign that achieved top rankings for a highly competitive industry."},
   {
-    title: "Platinum – Social Media Excellence",
+    title: "Platinum ΓÇô Social Media Excellence",
     organization: "Social Media Marketing Awards",
     year: "2024",
     category: "Social Media",

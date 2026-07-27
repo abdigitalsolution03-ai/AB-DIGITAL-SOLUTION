@@ -4,33 +4,8 @@ import { motion } from 'framer-motion'
 import { FiPlus, FiEdit2, FiTrash2, FiCopy, FiEye, FiChevronUp, FiChevronDown, FiExternalLink, FiSettings } from 'react-icons/fi'
 import { getAll, create, update, remove, type Page } from '@/services/cms'
 import { Card, Button, Modal, Input, EmptyState, ConfirmDialog } from '@/components/ui'
-
-interface BuiltInPage {
-  name: string
-  path: string
-  slug: string
-  description: string
-  editLink: string
-  sections: string[]
-}
-
-const builtInPages: BuiltInPage[] = [
-  { name: 'Home', path: '/', slug: '', description: 'Landing page with hero, services, testimonials, FAQ, etc.', editLink: '/admin/hero', sections: ['Hero', 'Services', 'Testimonials', 'FAQ', 'Team', 'Pricing'] },
-  { name: 'About', path: '/about', slug: 'about', description: 'Company info, stats, values, team, timeline', editLink: '/admin/team', sections: ['About Content (cms_about)', 'Team Members'] },
-  { name: 'Services', path: '/services', slug: 'services', description: 'All services listing', editLink: '/admin/services', sections: ['Services'] },
-  { name: 'Blog', path: '/blog', slug: 'blog', description: 'Blog posts listing', editLink: '/admin/blog', sections: ['Blog Posts'] },
-  { name: 'Portfolio', path: '/portfolio', slug: 'portfolio', description: 'Portfolio/gallery showcase', editLink: '/admin/media', sections: ['Portfolio Items (cms_portfolio_items)'] },
-  { name: 'Testimonials', path: '/testimonials', slug: 'testimonials', description: 'Client testimonials page', editLink: '/admin/testimonials', sections: ['Testimonials'] },
-  { name: 'Team', path: '/team', slug: 'team', description: 'Team members page', editLink: '/admin/team', sections: ['Team Members'] },
-  { name: 'Contact', path: '/contact', slug: 'contact', description: 'Contact form and info', editLink: '/admin/enquiries', sections: ['Enquiries'] },
-  { name: 'FAQ', path: '/faq', slug: 'faq', description: 'Frequently asked questions', editLink: '/admin/faq', sections: ['FAQs'] },
-  { name: 'Case Studies', path: '/case-studies', slug: 'case-studies', description: 'Case studies showcase', editLink: '/admin/pages', sections: ['Content'] },
-  { name: 'Clients', path: '/clients', slug: 'clients', description: 'Client logos and brands', editLink: '/admin/media', sections: ['Content'] },
-  { name: 'Awards', path: '/awards', slug: 'awards', description: 'Awards and recognition', editLink: '/admin/settings', sections: ['Content'] },
-  { name: 'Careers', path: '/careers', slug: 'careers', description: 'Job listings and applications', editLink: '/admin/settings', sections: ['Content'] },
-  { name: 'Privacy Policy', path: '/privacy-policy', slug: 'privacy-policy', description: 'Privacy policy page', editLink: '/admin/pages', sections: ['Content'] },
-  { name: 'Terms', path: '/terms', slug: 'terms', description: 'Terms and conditions', editLink: '/admin/pages', sections: ['Content'] },
-]
+import { pageRegistry, getSectionDefinition } from '@/services/pageRegistry'
+import PageEditor from './PageEditor'
 
 const editSections = [
   { label: 'Hero Section', path: '/admin/hero', desc: 'Homepage hero (title, subtitle, CTA, image)' },
@@ -57,6 +32,7 @@ export default function AdminPages() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [tab, setTab] = useState<'builtin' | 'custom' | 'sections'>('builtin')
   const [form, setForm] = useState({ title: '', slug: '', content: '', status: 'published' as const, seo: { title: '', description: '', keywords: '' } })
+  const [editingPageRoute, setEditingPageRoute] = useState<string | null>(null)
 
   useEffect(() => { setPages(getAll('pages')) }, [])
 
@@ -125,36 +101,37 @@ export default function AdminPages() {
       {tab === 'builtin' && (
         <Card>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {builtInPages.map((bPage, i) => (
-              <motion.div
-                key={bPage.slug}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
-                className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-blue-500/30 transition-all group"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">{bPage.name}</h3>
-                  <div className="flex gap-1">
-                    <a href={bPage.path} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]">
-                      <FiExternalLink size={14} />
-                    </a>
-                    <Link to={bPage.editLink} className="w-7 h-7 rounded-lg flex items-center justify-center text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10">
-                      <FiEdit2 size={14} />
-                    </Link>
+            {pageRegistry.map((reg, i) => {
+              const sectionNames = reg.sections.map(s => getSectionDefinition(s.type).name)
+              return (
+                <motion.div
+                  key={reg.slug}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-blue-500/30 transition-all group"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">{reg.name}</h3>
+                    <div className="flex gap-1">
+                      <a href={reg.route} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]">
+                        <FiExternalLink size={14} />
+                      </a>
+                      <button onClick={() => setEditingPageRoute(reg.route)} className="w-7 h-7 rounded-lg flex items-center justify-center text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10">
+                        <FiEdit2 size={14} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <p className="text-xs text-[var(--text-tertiary)] mb-2">/{bPage.slug}</p>
-                <p className="text-xs text-[var(--text-tertiary)]">{bPage.description}</p>
-                {bPage.sections.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {bPage.sections.map(s => (
+                  <p className="text-xs text-[var(--text-tertiary)] mb-2">/{reg.route}</p>
+                  <p className="text-xs text-[var(--text-tertiary)] mb-2">{reg.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {sectionNames.map(s => (
                       <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--bg-tertiary)] text-[var(--text-tertiary)]">{s}</span>
                     ))}
                   </div>
-                )}
-              </motion.div>
-            ))}
+                </motion.div>
+              )
+            })}
           </div>
         </Card>
       )}
@@ -239,6 +216,9 @@ export default function AdminPages() {
         </div>
       </Modal>
       <ConfirmDialog open={!!deleteId} onConfirm={handleDelete} onCancel={() => setDeleteId(null)} title="Delete Page?" message="This cannot be undone." confirmLabel="Delete" variant="danger" />
+      {editingPageRoute && (
+        <PageEditor route={editingPageRoute} onClose={() => setEditingPageRoute(null)} />
+      )}
     </div>
   )
 }

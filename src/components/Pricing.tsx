@@ -1,34 +1,25 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
+import { getSiteContent } from "@/services/siteContent";
 
 export default function Pricing() {
-  const [data, setData] = useState<{ title: string; plans: { name: string; price: string; description: string; features: string[]; cta: string; popular: boolean }[] } | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("cms_pricing");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed?.title) setData(parsed);
-      }
-    } catch {}
-  }, []);
-
-  if (!data) return null;
-
+  const [content, setContent] = useState(getSiteContent());
   return (
     <section id="pricing" className="relative py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6">
         <AnimatedSection className="text-center mb-16">
-          <span className="section-label">Pricing</span>
+          <span className="section-label">{content.pricing.label}</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mt-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            {data.title}
+            {content.pricing.heading} <span className="text-[#60A5FA]">{content.pricing.headingHighlight}</span>
           </h2>
+          <p className="text-gray-500 mt-4 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
+            {content.pricing.subtext}
+          </p>
         </AnimatedSection>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-          {data.plans.map((plan, i) => (
+          {content.pricing.plans.map((plan, i) => (
             <AnimatedSection key={i} delay={i * 0.15}>
               <motion.div
                 whileHover={{ translateY: -4 }}
@@ -82,7 +73,7 @@ export default function Pricing() {
                   }`}
                   style={{ borderRadius: "14px" }}
                 >
-                  {plan.cta}
+                  Get Started
                 </motion.a>
               </motion.div>
             </AnimatedSection>
@@ -92,3 +83,4 @@ export default function Pricing() {
     </section>
   );
 }
+
