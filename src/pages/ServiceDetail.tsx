@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getAll } from '@/services/cms';
 
 interface ServiceData {
   id: string;
@@ -14,7 +16,7 @@ interface ServiceData {
   results: string[];
 }
 
-const servicesData: Record<string, ServiceData> = {
+const hardcodedServicesData: Record<string, ServiceData> = {
   "seo": {
     id: "seo", title: "SEO", description: "Data-driven SEO strategies that boost your organic rankings, increase visibility, and drive qualified traffic to your site.",
     longDescription: "Our SEO service combines technical expertise, strategic content creation, and authoritative link building to propel your website to the top of search results. We use advanced analytics and AI-powered tools to identify opportunities and optimize every aspect of your online presence.",
@@ -234,10 +236,13 @@ const defaultService: ServiceData = {
 
 export default function ServiceDetail() {
   const { service } = useParams<{ service: string }>();
-  const data = service ? servicesData[service] : undefined;
-  const serviceData = data || defaultService;
+  const [serviceData, setServiceData] = useState<ServiceData | null>(null);
 
-  return (
+  useEffect(() => {
+    if (service) setServiceData(loadService(service));
+  }, [service]);
+
+  if (!serviceData) return (
     <>
       <Helmet>
         <title>{serviceData.title} | AB DIGITAL SOLUTION</title>

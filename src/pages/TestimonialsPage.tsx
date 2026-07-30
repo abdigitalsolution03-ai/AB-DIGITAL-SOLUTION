@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
+import { getAll } from '@/services/cms';
 
 interface Testimonial {
   name: string;
@@ -11,7 +12,7 @@ interface Testimonial {
   category: string;
 }
 
-const testimonials: Testimonial[] = [
+const hardcodedTestimonials: Testimonial[] = [
   { name: "Sarah Mitchell", role: "CEO, TechVista Inc.", content: "AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.", rating: 5, category: "SEO" },
   { name: "James Chen", role: "Founder, GrowthLabs", content: "The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.", rating: 5, category: "Google Ads" },
   { name: "Emma Richards", role: "Marketing Director, StyleHub", content: "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our audience.", rating: 5, category: "Branding" },
@@ -26,7 +27,22 @@ const testimonials: Testimonial[] = [
   { name: "John Kim", role: "CEO, DynamicCo", content: "The lead generation campaigns they run for us consistently deliver high-quality prospects. Our sales team is busier than ever.", rating: 5, category: "Lead Generation" },
 ];
 
+function loadTestimonials(): Testimonial[] {
+  const cms = getAll('testimonials')
+  if (cms.length > 0) {
+    return cms.map((t: any) => ({
+      name: t.name,
+      role: [t.role, t.company].filter(Boolean).join(', '),
+      content: t.content,
+      rating: t.rating || 5,
+      category: t.category || 'SEO',
+    }))
+  }
+  return hardcodedTestimonials
+}
+
 export default function TestimonialsPage() {
+  const [testimonials] = useState(loadTestimonials);
   return (
     <>
       <Helmet>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getAll } from '@/services/cms';
 
 const categories = ["All", "Website", "SEO", "Ads", "Branding", "Design"];
 
@@ -13,7 +14,7 @@ interface Project {
   metrics: string[];
 }
 
-const projects: Project[] = [
+const hardcodedProjects: Project[] = [
   { title: "E-Commerce Platform", category: "Website", description: "Next-gen online store with seamless checkout experience", color: "#FF4D4D", metrics: ["150% sales increase", "40% faster load time", "3.2% conversion rate"] },
   { title: "Local SEO Campaign", category: "SEO", description: "Top 3 rankings across 50+ local search terms", color: "#4D7AFF", metrics: ["Top 3 for 50+ keywords", "300% traffic boost", "200% lead increase"] },
   { title: "Google Ads Optimization", category: "Ads", description: "3.5x ROAS improvement through smart bidding", color: "#8B5CF6", metrics: ["3.5x ROAS", "60% lower CPA", "250% more conversions"] },
@@ -28,7 +29,22 @@ const projects: Project[] = [
   { title: "Brand Guidelines & Collateral", category: "Branding", description: "Comprehensive brand system for a healthcare startup", color: "#8B5CF6", metrics: ["100% brand consistency", "2x brand awareness", "60% faster time-to-market"] },
 ];
 
+function loadProjects(): Project[] {
+  const cms = getAll('portfolio')
+  if (cms.length > 0) {
+    return cms.map((p: any) => ({
+      title: p.title,
+      category: p.category || 'Website',
+      description: p.description || '',
+      color: p.color || '#4D7AFF',
+      metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
+    }))
+  }
+  return hardcodedProjects
+}
+
 export default function Portfolio() {
+  const [projects] = useState(loadProjects);
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 

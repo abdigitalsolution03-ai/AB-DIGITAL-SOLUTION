@@ -2,8 +2,9 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import PageTransition from '@/components/PageTransition'
 import AnimatedSection from '@/components/AnimatedSection'
+import { getAll } from '@/services/cms'
 
-const teamMembers = [
+const hardcodedTeam = [
   { name: 'Arjun Mehta', role: 'Founder & CEO', bio: 'Visionary leader with 15+ years in digital strategy and brand transformation.', color: '#60A5FA' },
   { name: 'Priya Sharma', role: 'Creative Director', bio: 'Award-winning creative mind behind iconic brand campaigns and visual identities.', color: '#FF4D4D' },
   { name: 'Rohan Desai', role: 'Head of SEO', bio: 'Data-driven SEO specialist who has ranked 200+ sites on page one of Google.', color: '#4D7AFF' },
@@ -15,14 +16,31 @@ const teamMembers = [
   { name: 'Rahul Verma', role: 'Analytics Lead', bio: 'Conversion rate optimization expert with a data-first approach to growth.', color: '#8B5CF6' },
 ]
 
-const stats = [
+const hardcodedStats = [
   { value: '15+', label: 'Years Combined Experience' },
   { value: '200+', label: 'Happy Clients' },
   { value: '50+', label: 'Awards Won' },
   { value: '9', label: 'Core Team Members' },
 ]
 
+const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981']
+
+function loadTeam() {
+  const cms = getAll('team')
+  if (cms.length > 0) {
+    return cms.map((m: any, i: number) => ({
+      name: m.name,
+      role: m.role || '',
+      bio: m.bio || '',
+      color: colors[i % colors.length],
+    }))
+  }
+  return hardcodedTeam
+}
+
 export default function Team() {
+  const [teamMembers] = useState(loadTeam);
+  const stats = hardcodedStats;
   return (
     <PageTransition>
       <Helmet>

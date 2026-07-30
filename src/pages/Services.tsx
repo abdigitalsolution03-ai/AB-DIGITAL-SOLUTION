@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getAll } from '@/services/cms';
 
 interface Service {
   id: string;
@@ -14,7 +15,7 @@ interface Service {
 
 const categories = ["All", "Marketing", "Advertising", "Development", "Creative", "Other"];
 
-const services: Service[] = [
+const hardcodedServices: Service[] = [
   { id: "seo", title: "SEO", description: "Data-driven SEO strategies that boost your organic rankings, increase visibility, and drive qualified traffic to your site.", category: "Marketing", icon: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> },
   { id: "google-ads", title: "Google Ads", description: "High-ROI Google Ads campaigns optimized for conversions, with precise targeting and continuous performance refinement.", category: "Advertising", icon: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="18" r="2" /><circle cx="16" cy="16" r="2" /><circle cx="8" cy="12" r="2" /><circle cx="18" cy="9" r="2" /><circle cx="12" cy="5" r="2" /></svg> },
   { id: "meta-ads", title: "Meta Ads", description: "Social media advertising on Facebook & Instagram that reaches your ideal audience with compelling creative and messaging.", category: "Advertising", icon: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg> },
@@ -33,7 +34,22 @@ const services: Service[] = [
   { id: "youtube-marketing", title: "YouTube Marketing", description: "Comprehensive YouTube marketing from channel optimization to content strategy that grows your audience and revenue.", category: "Marketing", icon: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg> },
 ];
 
+function loadServices(): Service[] {
+  const cms = getAll('services')
+  if (cms.length > 0) {
+    return cms.map((s: any) => ({
+      id: s.slug || s.id,
+      title: s.title,
+      description: s.description,
+      category: s.category || 'Other',
+      icon: s.icon ? <span className="text-2xl">{s.icon}</span> : hardcodedServices.find(h => h.id === (s.slug || s.id))?.icon || <span className="w-8 h-8" />,
+    }))
+  }
+  return hardcodedServices
+}
+
 export default function Services() {
+  const [services] = useState(loadServices);
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 

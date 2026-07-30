@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getAll } from '@/services/cms';
 
 const categories = ["All", "SEO", "Marketing", "Web Development", "Branding", "Business"];
 
@@ -17,7 +18,7 @@ interface BlogPost {
   color: string;
 }
 
-const blogPosts: BlogPost[] = [
+const hardcodedPosts: BlogPost[] = [
   { slug: "seo-trends-2025", title: "SEO Trends to Dominate Search Rankings in 2025", excerpt: "Discover the latest SEO trends and strategies that will help your website rank higher in search results this year.", category: "SEO", author: "Vikram Singh", date: "Mar 15, 2025", readTime: "5 min read", color: "#FF4D4D" },
   { slug: "social-media-marketing-strategy", title: "Building a Social Media Marketing Strategy That Works", excerpt: "Learn how to create a comprehensive social media strategy that drives engagement, builds community, and generates leads.", category: "Marketing", author: "Priya Sharma", date: "Mar 12, 2025", readTime: "6 min read", color: "#4D7AFF" },
   { slug: "web-development-trends", title: "Modern Web Development: Frameworks and Best Practices for 2025", excerpt: "Explore the latest web development frameworks, tools, and best practices to build high-performance websites.", category: "Web Development", author: "Ananya Patel", date: "Mar 10, 2025", readTime: "7 min read", color: "#8B5CF6" },
@@ -30,6 +31,25 @@ const blogPosts: BlogPost[] = [
   { slug: "email-marketing-best-practices", title: "Email Marketing Best Practices for Higher Engagement", excerpt: "Master the art of email marketing with these proven best practices for open rates and conversions.", category: "Marketing", author: "Neha Gupta", date: "Feb 20, 2025", readTime: "5 min read", color: "#FF4D4D" },
 ];
 
+const colors = ["#FF4D4D", "#4D7AFF", "#8B5CF6"] as const;
+
+function loadPosts(): BlogPost[] {
+  const cms = getAll('blog')
+  if (cms.length > 0) {
+    return cms.map((p: any, i: number) => ({
+      slug: p.slug || p.id,
+      title: p.title,
+      excerpt: p.excerpt || '',
+      category: (p.categories?.[0]) || 'Marketing',
+      author: p.author || 'Admin',
+      date: p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
+      readTime: `${Math.ceil((p.content || '').split(' ').length / 200) || 3} min read`,
+      color: colors[i % colors.length],
+    }))
+  }
+  return hardcodedPosts
+}
+
 const getColorClass = (color: string) => {
   if (color === "#FF4D4D") return "doodle-card-red";
   if (color === "#4D7AFF") return "doodle-card-blue";
@@ -38,6 +58,7 @@ const getColorClass = (color: string) => {
 };
 
 export default function Blog() {
+  const [blogPosts] = useState(loadPosts);
   const [activeCategory, setActiveCategory] = useState("All");
 
   const filtered = blogPosts.filter(

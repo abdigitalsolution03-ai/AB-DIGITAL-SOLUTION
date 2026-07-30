@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
+import { getAll } from '@/services/cms';
 
 const hardcodedFaqs = [
   {
@@ -28,19 +29,10 @@ export default function FAQ() {
   const [faqs, setFaqs] = useState(hardcodedFaqs);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("adminFAQs");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const mapped = parsed.map((item) => ({
-            q: item.question,
-            a: item.answer,
-          }));
-          setFaqs(mapped);
-        }
-      }
-    } catch {}
+    const cms = getAll('faqs')
+    if (cms.length > 0) {
+      setFaqs(cms.map((f: any) => ({ q: f.question, a: f.answer })))
+    }
   }, []);
 
   const toggle = (index: number) => {

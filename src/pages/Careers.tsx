@@ -1,8 +1,9 @@
-﻿﻿import { useState } from "react";
+﻿import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getAll } from '@/services/cms';
 
 const departments = ["All", "Development", "Marketing", "Design", "Sales", "Operations"];
 
@@ -16,7 +17,7 @@ interface Job {
   requirements: string[];
 }
 
-const jobs: Job[] = [
+const hardcodedJobs: Job[] = [
   {
     id: "senior-react-developer",
     title: "Senior React Developer",
@@ -48,48 +49,48 @@ const jobs: Job[] = [
     location: "New York",
     type: "Full-time",
     description: "Manage and optimize paid advertising campaigns across Google, Meta, and other platforms.",
-    requirements: ["3+ years PPC experience", "Google Ads certification", "Meta Ads expertise", "Data analysis skills", "Budget management experience"]},
+    requirements: ["3+ years PPC experience", "Google Ads certification", "Meta Blueprint certified", "Strong analytical skills", "Experience with A/B testing"]},
   {
-    id: "content-writer",
-    title: "Content Writer & Strategist",
+    id: "content-strategist",
+    title: "Content Marketing Strategist",
     department: "Marketing",
     location: "Remote",
     type: "Full-time",
-    description: "Create compelling content that drives engagement and establishes thought leadership for our clients.",
-    requirements: ["3+ years content writing experience", "SEO content knowledge", "Excellent writing skills", "Research capabilities", "Content strategy experience"]},
+    description: "Develop and execute content strategies that drive traffic, engagement, and conversions for our clients.",
+    requirements: ["4+ years content marketing experience", "Exceptional writing skills", "SEO knowledge", "Content strategy expertise", "Analytics proficiency"]},
   {
-    id: "full-stack-developer",
-    title: "Full Stack Developer",
-    department: "Development",
-    location: "Remote / New York",
+    id: "brand-designer",
+    title: "Brand Identity Designer",
+    department: "Design",
+    location: "New York",
     type: "Full-time",
-    description: "Build scalable web applications using modern technologies across the full stack.",
-    requirements: ["4+ years full-stack experience", "React & Node.js expertise", "Database design skills", "API development experience", "Cloud platform knowledge"]},
+    description: "Create compelling brand identities that help our clients stand out in crowded markets.",
+    requirements: ["3+ years branding experience", "Strong portfolio", "Proficiency in Adobe Creative Suite", "Typography expertise", "Client presentation skills"]},
   {
     id: "account-manager",
     title: "Account Manager",
     department: "Sales",
     location: "New York",
     type: "Full-time",
-    description: "Manage client relationships and ensure the successful delivery of our digital marketing services.",
-    requirements: ["3+ years account management", "Digital marketing knowledge", "Excellent communication", "Project management skills", "Client relationship experience"]},
-  {
-    id: "graphic-designer",
-    title: "Graphic Designer",
-    department: "Design",
-    location: "Remote",
-    type: "Contract",
-    description: "Create stunning visual assets for digital and print marketing materials.",
-    requirements: ["2+ years graphic design experience", "Adobe Creative Suite proficiency", "Brand identity experience", "Strong typography skills", "Motion design is a plus"]},
-  {
-    id: "operations-coordinator",
-    title: "Operations Coordinator",
-    department: "Operations",
-    location: "New York",
-    type: "Full-time",
-    description: "Support daily operations and help streamline processes across the organization.",
-    requirements: ["2+ years operations experience", "Project management tools", "Organizational skills", "Process improvement mindset", "Data entry and analysis"]},
+    description: "Build and maintain strong client relationships while ensuring the successful delivery of our services.",
+    requirements: ["3+ years account management", "Excellent communication skills", "Digital marketing knowledge", "Project management experience", "CRM proficiency"]},
 ];
+
+function loadJobs(): Job[] {
+  const cms = getAll('careers')
+  if (cms.length > 0) {
+    return cms.map((j: any) => ({
+      id: j.id,
+      title: j.title,
+      department: j.department || 'Operations',
+      location: j.location || 'Remote',
+      type: j.type || 'Full-time',
+      description: j.description || '',
+      requirements: (j.requirements || '').split('\n').filter(Boolean).map((r: string) => r.trim()),
+    }))
+  }
+  return hardcodedJobs
+}
 
 const perks = [
   { title: "Remote-First Culture", description: "Work from anywhere. We believe in flexibility and trust.", icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6h16.5M3.75 12h16.5m-16.5 6h16.5" /></svg> },
@@ -99,6 +100,7 @@ const perks = [
 ];
 
 export default function Careers() {
+  const [jobs] = useState(loadJobs);
   const [activeDepartment, setActiveDepartment] = useState("All");
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
 
