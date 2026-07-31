@@ -59,7 +59,7 @@ export default function Portfolio() {
           setCategories(uniqueCats);
         }
       }
-    } catch {}
+    } catch { /* ignore */ }
   }, []);
 
   const filtered = projects.filter(

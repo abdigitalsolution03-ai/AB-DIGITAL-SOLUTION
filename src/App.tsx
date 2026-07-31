@@ -1,9 +1,10 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import MainLayout from './layouts/MainLayout'
 import AdminLayout from './layouts/AdminLayout'
 import PageTransition from './components/PageTransition'
-import { isAuthenticated } from './services/auth'
+import { isAuthenticated, refreshSession } from './services/auth'
 
 import Home from './pages/Home'
 import About from './pages/About'
@@ -27,8 +28,22 @@ import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminPages from './pages/admin/Pages'
 import AdminManager from './pages/admin/AdminManager'
+import AdminSecurity from './pages/admin/Security'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    refreshSession().finally(() => {
+      if (!cancelled) setChecking(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  if (checking) return null
   if (!isAuthenticated()) return <Navigate to="/admin/login" replace />
   return <>{children}</>
 }
@@ -45,6 +60,7 @@ export default function App() {
           <Route index element={<PageTransition><AdminDashboard /></PageTransition>} />
           <Route path="pages" element={<PageTransition><AdminPages /></PageTransition>} />
           <Route path="content" element={<PageTransition><AdminManager /></PageTransition>} />
+          <Route path="security" element={<PageTransition><AdminSecurity /></PageTransition>} />
         </Route>
       </Routes>
     )

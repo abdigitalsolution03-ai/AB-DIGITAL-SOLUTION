@@ -170,7 +170,9 @@ function loadContent(): SiteContent {
       const parsed = JSON.parse(stored)
       return { ...defaultContent, ...parsed }
     }
-  } catch {}
+    } catch {
+      // fall through to defaults
+    }
 
   const result = JSON.parse(JSON.stringify(defaultContent)) as SiteContent
 
@@ -232,7 +234,9 @@ function loadContent(): SiteContent {
       if (b.phone) result.contact.info.phone = b.phone
       if (b.address) result.contact.info.location = b.address
     }
-  } catch {}
+  } catch {
+    // fall through to defaults
+  }
 
   return result
 }

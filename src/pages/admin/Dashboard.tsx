@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiUsers, FiFileText, FiMessageSquare, FiMail, FiEye, FiTrendingUp, FiStar, FiBriefcase } from 'react-icons/fi'
-import { getAll, getSession } from '@/services/cms'
+import { getAll } from '@/services/cms'
 import { getSession as getAuthSession } from '@/services/auth'
 import type { BlogPost, Testimonial, FAQ, Page } from '@/services/cms'
 

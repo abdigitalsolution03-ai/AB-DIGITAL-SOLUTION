@@ -13,7 +13,7 @@ export default function AdminHero() {
   useEffect(() => {
     const stored = localStorage.getItem('cms_hero')
     if (stored) {
-      try { setForm(JSON.parse(stored)) } catch {}
+      try { setForm(JSON.parse(stored)) } catch { /* ignore */ }
     }
   }, [])
 

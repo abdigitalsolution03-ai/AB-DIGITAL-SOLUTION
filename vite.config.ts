@@ -6,18 +6,18 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          animations: ['framer-motion'],
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-router')) return 'vendor'
+          if (id.includes('node_modules/framer-motion')) return 'animations'
         },
       },
     },
-    minify: 'esbuild',
+    minify: 'oxc',
   },
 })

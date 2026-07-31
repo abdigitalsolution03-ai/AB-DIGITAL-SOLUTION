@@ -49,7 +49,7 @@ export default function Testimonials() {
           setTestimonials(parsed);
         }
       }
-    } catch {}
+    } catch { /* ignore */ }
   }, []);
 
   useEffect(() => {

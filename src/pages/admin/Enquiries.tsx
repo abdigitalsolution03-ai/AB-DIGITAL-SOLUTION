@@ -1,18 +1,42 @@
-import { useState, useEffect } from 'react'
-import { FiTrash2, FiDownload, FiMail } from 'react-icons/fi'
-import { getAll, remove } from '@/services/cms'
-import { Card, Button, Badge, EmptyState, ConfirmDialog } from '@/components/ui'
+import { useState, useEffect, useCallback } from 'react'
+import { FiTrash2, FiDownload, FiMail, FiRefreshCw } from 'react-icons/fi'
+import { Card, Button, EmptyState, ConfirmDialog } from '@/components/ui'
+import { getEnquiries, removeEnquiry } from '@/services/auth'
 
 export default function AdminEnquiries() {
   const [items, setItems] = useState<any[]>([])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selected, setSelected] = useState<any | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  useEffect(() => { setItems(getAll('enquiries')) }, [])
-  const refresh = () => setItems(getAll('enquiries'))
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      setItems(await getEnquiries())
+    } catch (err: any) {
+      setError(err?.message || 'Could not load enquiries')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { refresh() }, [refresh])
+
+  const handleDelete = async () => {
+    if (!deleteId) return
+    try {
+      await removeEnquiry(deleteId)
+      setItems(prev => prev.filter(i => i.id !== deleteId))
+    } catch (err: any) {
+      setError(err?.message || 'Could not delete enquiry')
+    }
+    setDeleteId(null)
+  }
 
   const exportCSV = () => {
-    const csv = 'Name,Email,Phone,Company,Message,Date\n' + items.map(s => `${s.name},${s.email},${s.phone||''},${s.company||''},"${(s.message||'').replace(/"/g,'""')}",${new Date(s.createdAt).toLocaleDateString()}`).join('\n')
+    const csv = 'Name,Email,Phone,Service,Message,Date\n' + items.map(s => `${s.name},${s.email},${s.phone||''},${s.service||''},"${(s.message||'').replace(/"/g,'""')}",${new Date(s.createdAt).toLocaleDateString()}`).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a'); a.href = url; a.download = 'enquiries.csv'; a.click()
@@ -26,10 +50,20 @@ export default function AdminEnquiries() {
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">Enquiries</h1>
           <p className="text-sm text-[var(--text-tertiary)] mt-1">Contact form submissions</p>
         </div>
-        {items.length > 0 && <Button variant="outline" size="sm" icon={<FiDownload />} onClick={exportCSV}>Export CSV</Button>}
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" icon={<FiRefreshCw />} onClick={refresh}>Refresh</Button>
+          {items.length > 0 && <Button variant="outline" size="sm" icon={<FiDownload />} onClick={exportCSV}>Export CSV</Button>}
+        </div>
       </div>
+      {error && (
+        <p className="text-sm text-red-500 bg-red-50 dark:bg-red-500/10 px-4 py-2.5 rounded-xl mb-4">{error}</p>
+      )}
       <Card>
-        {items.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : items.length === 0 ? (
           <EmptyState title="No enquiries" description="Contact form submissions will appear here" />
         ) : (
           <div className="space-y-2">
@@ -55,7 +89,7 @@ export default function AdminEnquiries() {
             <div className="space-y-2 text-sm">
               <p><span className="font-medium text-[var(--text-primary)]">Email:</span> <span className="text-[var(--text-tertiary)]">{selected.email}</span></p>
               {selected.phone && <p><span className="font-medium text-[var(--text-primary)]">Phone:</span> <span className="text-[var(--text-tertiary)]">{selected.phone}</span></p>}
-              {selected.company && <p><span className="font-medium text-[var(--text-primary)]">Company:</span> <span className="text-[var(--text-tertiary)]">{selected.company}</span></p>}
+              {selected.service && <p><span className="font-medium text-[var(--text-primary)]">Service:</span> <span className="text-[var(--text-tertiary)]">{selected.service}</span></p>}
               <p><span className="font-medium text-[var(--text-primary)]">Date:</span> <span className="text-[var(--text-tertiary)]">{new Date(selected.createdAt).toLocaleString()}</span></p>
               <div className="pt-3 border-t border-[var(--border-primary)]">
                 <p className="font-medium text-[var(--text-primary)] mb-1">Message:</p>
@@ -67,7 +101,7 @@ export default function AdminEnquiries() {
         </div>
       )}
 
-      <ConfirmDialog open={!!deleteId} onConfirm={() => { if (deleteId) { remove('enquiries', deleteId); setDeleteId(null); refresh() } }} onCancel={() => setDeleteId(null)} title="Delete Enquiry?" message="This cannot be undone." confirmLabel="Delete" variant="danger" />
+      <ConfirmDialog open={!!deleteId} onConfirm={handleDelete} onCancel={() => setDeleteId(null)} title="Delete Enquiry?" message="This cannot be undone." confirmLabel="Delete" variant="danger" />
     </div>
   )
 }

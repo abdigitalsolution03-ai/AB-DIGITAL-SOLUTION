@@ -145,7 +145,7 @@ export default function Services() {
           );
         }
       }
-    } catch {}
+    } catch { /* ignore */ }
   }, []);
 
   return (

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { getSiteContent } from "@/services/siteContent";
 import { sanitize, validateEmail, validatePhone, stripHtml } from "@/services/sanitize";
+import { submitContact } from "@/services/auth";
 
 export default function Contact() {
   const [content, setContent] = useState(getSiteContent());
@@ -14,20 +15,21 @@ export default function Contact() {
     service: "",
     message: ""});
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     const { name, email, phone, service, message } = formData;
     if (!name.trim() || !email.trim() || !validateEmail(email)) return;
     if (phone && !validatePhone(phone)) return;
 
-    const leads = JSON.parse(localStorage.getItem('adminLeads') || '[]');
-    const newLead = {
+    const localLead = {
       id: Date.now().toString(),
       name: sanitize(stripHtml(name.trim())),
       email: sanitize(email.trim().toLowerCase()),
@@ -37,9 +39,29 @@ export default function Contact() {
       read: false,
       date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
     };
-    leads.unshift(newLead);
+
+    try {
+      await submitContact({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim() || undefined,
+        service: service || undefined,
+        message: message.trim(),
+      })
+    } catch (err: any) {
+      if (err?.status === 429) {
+        setError("Too many messages — please wait a few minutes and try again.")
+        return
+      }
+      setError(err?.message || "Message could not be sent. Please try again.")
+      return
+    }
+
+    const leads = JSON.parse(localStorage.getItem('adminLeads') || '[]');
+    leads.unshift(localLead);
     localStorage.setItem('adminLeads', JSON.stringify(leads.slice(0, 500)));
 
+    setFormData({ name: "", phone: "", email: "", business: "", service: "", message: "" });
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
   };
@@ -139,6 +161,11 @@ export default function Contact() {
                   required
                 />
               </div>
+              {error && (
+                <p className="text-sm text-red-600 bg-red-50 border-2 border-red-200 px-4 py-3" style={{ borderRadius: "12px", fontFamily: "'Inter', sans-serif" }}>
+                  {error}
+                </p>
+              )}
               <motion.button
                 type="submit"
                 whileHover={{ translateX: -2, translateY: -2 }}

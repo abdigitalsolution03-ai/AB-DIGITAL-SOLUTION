@@ -1,7 +1,8 @@
-﻿﻿import { useState } from "react";
+﻿import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
+import { submitContact } from "@/services/auth";
 
 const serviceOptions = [
   "Website Development", "SEO Optimization", "Google Ads", "Meta Ads",
@@ -14,13 +15,32 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "", phone: "", email: "", business: "", service: "", message: ""});
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    try {
+      await submitContact({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim() || undefined,
+        service: formData.service || undefined,
+        message: formData.message.trim(),
+      })
+    } catch (err: any) {
+      if (err?.status === 429) {
+        setError("Too many messages — please wait a few minutes and try again.")
+        return
+      }
+      setError(err?.message || "Message could not be sent. Please try again.")
+      return
+    }
+    setFormData({ name: "", phone: "", email: "", business: "", service: "", message: "" });
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
   };
@@ -87,6 +107,11 @@ export default function Contact() {
                     required
                   />
                 </div>
+                {error && (
+                  <p className="text-sm text-red-600 bg-red-50 border-2 border-red-200 px-4 py-3" style={{ borderRadius: "12px" }}>
+                    {error}
+                  </p>
+                )}
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.01 }}

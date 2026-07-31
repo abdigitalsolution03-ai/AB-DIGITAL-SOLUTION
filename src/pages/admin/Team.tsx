@@ -30,7 +30,7 @@ export default function AdminTeam() {
   const saveItems = (data: TeamMember[]) => {
     const stored = localStorage.getItem('cms_db')
     if (stored) {
-      try { const db = JSON.parse(stored); db.team = data; localStorage.setItem('cms_db', JSON.stringify(db)) } catch {}
+      try { const db = JSON.parse(stored); db.team = data; localStorage.setItem('cms_db', JSON.stringify(db)) } catch { /* ignore */ }
     }
     setItems(data)
   }

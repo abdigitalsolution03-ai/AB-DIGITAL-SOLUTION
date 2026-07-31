@@ -3,8 +3,10 @@ import Button from './Button'
 import { FiAlertTriangle } from 'react-icons/fi'
 
 interface ConfirmDialogProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen?: boolean
+  onClose?: () => void
+  open?: boolean
+  onCancel?: () => void
   onConfirm: () => void
   title: string
   message: string
@@ -23,6 +25,8 @@ const variantIcons = {
 export default function ConfirmDialog({
   isOpen,
   onClose,
+  open,
+  onCancel,
   onConfirm,
   title,
   message,
@@ -32,9 +36,11 @@ export default function ConfirmDialog({
   loading = false,
 }: ConfirmDialogProps) {
   const config = variantIcons[variant]
+  const isVisible = isOpen ?? open ?? false
+  const handleClose = onClose ?? onCancel ?? (() => {})
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm" showClose={false}>
+    <Modal isOpen={isVisible} onClose={handleClose} size="sm" showClose={false}>
       <div className="text-center">
         <div className={`w-14 h-14 rounded-2xl ${config.bg} flex items-center justify-center mx-auto mb-4`}>
           <config.icon className={config.color} size={28} />
@@ -42,7 +48,7 @@ export default function ConfirmDialog({
         <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">{title}</h3>
         <p className="text-sm text-[var(--text-tertiary)] mb-6">{message}</p>
         <div className="flex gap-3 justify-center">
-          <Button variant="ghost" size="md" onClick={onClose} disabled={loading}>
+          <Button variant="ghost" size="md" onClick={handleClose} disabled={loading}>
             {cancelLabel}
           </Button>
           <Button

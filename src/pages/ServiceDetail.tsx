@@ -234,9 +234,24 @@ const defaultService: ServiceData = {
   process: [],
   results: []};
 
+function loadService(slug: string): ServiceData {
+  const fallback = hardcodedServicesData[slug];
+  const cms = getAll<Partial<ServiceData>>('services').find(
+    (s) => s.id === slug || s.slug === slug
+  );
+  return {
+    ...defaultService,
+    ...fallback,
+    ...cms,
+    icon: fallback?.icon ?? defaultService.icon,
+  };
+}
+
 export default function ServiceDetail() {
   const { service } = useParams<{ service: string }>();
-  const [serviceData, setServiceData] = useState<ServiceData | null>(null);
+  const [serviceData, setServiceData] = useState<ServiceData | null>(() =>
+    service ? loadService(service) : null
+  );
 
   useEffect(() => {
     if (service) setServiceData(loadService(service));
@@ -245,24 +260,34 @@ export default function ServiceDetail() {
   if (!serviceData) return (
     <>
       <Helmet>
-        <title>{serviceData.title} | AB DIGITAL SOLUTION</title>
-        <meta name="description" content={serviceData.description} />
+        <title>Service Not Found | AB DIGITAL SOLUTION</title>
+        <meta name="description" content="The service you're looking for doesn't exist." />
       </Helmet>
 
       <section className="bg-white pt-36 pb-20">
         <div className="max-w-[1280px] mx-auto px-6">
-          {!data ? (
-            <div className="text-center py-20">
-              <span className="section-label">Error</span>
-              <h1 className="text-4xl md:text-5xl font-black text-[#111] mt-4">Service Not Found</h1>
-              <p className="text-[#111] mt-4">The service you're looking for doesn't exist.</p>
-              <Link to="/services" className="doodle-btn-accent inline-flex items-center gap-2 mt-8 px-6 py-3 text-sm">
-                View All Services
-              </Link>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+          <div className="text-center py-20">
+            <span className="section-label">Error</span>
+            <h1 className="text-4xl md:text-5xl font-black text-[#111] mt-4">Service Not Found</h1>
+            <p className="text-[#111] mt-4">The service you're looking for doesn't exist.</p>
+            <Link to="/services" className="doodle-btn-accent inline-flex items-center gap-2 mt-8 px-6 py-3 text-sm">
+              View All Services
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+
+  return (
+    <>
+      <Helmet>
+        <title>{serviceData.title} | AB DIGITAL SOLUTION</title>
+        <meta name="description" content={serviceData.description} />
+      </Helmet>
+      <section className="bg-white pt-36 pb-20">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
                 <AnimatedSection direction="left">
                   <Link to="/services" className="inline-flex items-center gap-2 text-[#111]/60 text-sm hover:text-[#60A5FA] transition-colors duration-300 mb-6">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -357,8 +382,6 @@ export default function ServiceDetail() {
                   </Link>
                 </div>
               </AnimatedSection>
-            </>
-          )}
         </div>
       </section>
     </>

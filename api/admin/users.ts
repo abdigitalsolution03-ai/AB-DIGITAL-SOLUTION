@@ -1,0 +1,111 @@
+import { z } from 'zod'
+import { withApi, ok, created, methodNotAllowed, readJson, HttpError, getClientIp } from '../_lib/http'
+import { requireAuth } from '../_lib/auth'
+import { listUsers, createUser, updateUser, deleteUser, getUserById, type Role } from '../_lib/store'
+import { audit } from '../_lib/audit'
+import { PASSWORD_MIN_LENGTH } from '../_lib/config'
+
+const createSchema = z.object({
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().email().max(254),
+  password: z.string().min(PASSWORD_MIN_LENGTH).max(128),
+  role: z.enum(['super_admin', 'admin']),
+})
+
+const updateSchema = z.object({
+  name: z.string().trim().min(2).max(100).optional(),
+  role: z.enum(['super_admin', 'admin']).optional(),
+  isActive: z.boolean().optional(),
+})
+
+function toPublicUser(u: {
+  id: string
+  email: string
+  name: string
+  role: Role
+  isActive: boolean
+  totpEnabled: boolean
+  createdAt: string
+  updatedAt: string
+  lastLoginAt?: string
+}) {
+  return {
+    id: u.id,
+    email: u.email,
+    name: u.name,
+    role: u.role,
+    isActive: u.isActive,
+    totpEnabled: u.totpEnabled,
+    createdAt: u.createdAt,
+    updatedAt: u.updatedAt,
+    lastLoginAt: u.lastLoginAt,
+  }
+}
+
+export default withApi(async (req: Request) => {
+  const ip = getClientIp(req)
+  const { user: actor } = await requireAuth(req, 'super_admin')
+
+  if (req.method === 'GET') {
+    const users = await listUsers()
+    return ok({ users: users.map((u) => toPublicUser(u)) })
+  }
+
+  if (req.method === 'POST') {
+    const body = await readJson(req)
+    const parsed = createSchema.safeParse(body)
+    if (!parsed.success) throw new HttpError(400, 'Invalid input', parsed.error.flatten())
+    try {
+      const user = await createUser(parsed.data)
+      await audit({ actor: actor.email, action: 'users.create', detail: `${user.email} (${user.role})`, ip })
+      return created({ user })
+    } catch (err) {
+      throw new HttpError(409, err instanceof Error ? err.message : 'Could not create user')
+    }
+  }
+
+  if (req.method === 'PATCH') {
+    const url = new URL(req.url)
+    const id = url.pathname.split('/').pop()
+    if (!id) throw new HttpError(400, 'Missing user id')
+    const body = await readJson(req)
+    const parsed = updateSchema.safeParse(body)
+    if (!parsed.success) throw new HttpError(400, 'Invalid input', parsed.error.flatten())
+
+    const target = await getUserById(id)
+    if (!target) throw new HttpError(404, 'User not found')
+
+    if (target.role === 'super_admin' && (parsed.data.role === 'admin' || parsed.data.isActive === false)) {
+      const superAdmins = (await listUsers()).filter((u) => u.role === 'super_admin')
+      if (superAdmins.length <= 1) {
+        throw new HttpError(400, 'Cannot demote or deactivate the last super admin')
+      }
+    }
+
+    const updated = await updateUser(id, parsed.data)
+    await audit({ actor: actor.email, action: 'users.update', detail: `${target.email}: ${JSON.stringify(parsed.data)}`, ip })
+    return ok({ user: updated ? toPublicUser(updated) : null })
+  }
+
+  if (req.method === 'DELETE') {
+    const url = new URL(req.url)
+    const id = url.pathname.split('/').pop()
+    if (!id) throw new HttpError(400, 'Missing user id')
+
+    const target = await getUserById(id)
+    if (!target) throw new HttpError(404, 'User not found')
+    if (target.id === actor.id) throw new HttpError(400, 'You cannot delete your own account')
+    if (target.role === 'super_admin') {
+      const superAdmins = (await listUsers()).filter((u) => u.role === 'super_admin')
+      if (superAdmins.length <= 1) {
+        throw new HttpError(400, 'Cannot delete the last super admin')
+      }
+    }
+
+    await deleteUser(id)
+    await audit({ actor: actor.email, action: 'users.delete', detail: target.email, ip })
+    return ok({ success: true })
+  }
+
+  return methodNotAllowed(['GET', 'POST', 'PATCH', 'DELETE'])
+})

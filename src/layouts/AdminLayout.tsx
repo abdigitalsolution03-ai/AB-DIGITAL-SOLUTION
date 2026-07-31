@@ -3,15 +3,16 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiHome, FiFileText, FiLayout, FiMenu, FiX, FiChevronDown, FiChevronRight,
-  FiLogOut, FiGlobe,
+  FiLogOut, FiGlobe, FiShield,
 } from 'react-icons/fi'
-import { getSession, logout } from '@/services/auth'
+import { getSession, logout, setupIdleLogout } from '@/services/auth'
 import ThemeToggle from '@/components/ThemeToggle'
 
 const navItems = [
   { label: 'Dashboard', path: '/admin', icon: <FiHome size={16} /> },
   { label: 'Pages', path: '/admin/pages', icon: <FiFileText size={16} /> },
   { label: 'Content Manager', path: '/admin/content', icon: <FiLayout size={16} /> },
+  { label: 'Security', path: '/admin/security', icon: <FiShield size={16} /> },
 ]
 
 export default function AdminLayout() {
@@ -26,8 +27,15 @@ export default function AdminLayout() {
     setSession(s)
   }, [navigate])
 
-  const handleLogout = () => {
-    logout()
+  useEffect(() => {
+    const cleanup = setupIdleLogout(() => {
+      navigate('/admin/login', { replace: true })
+    })
+    return cleanup
+  }, [navigate])
+
+  const handleLogout = async () => {
+    await logout()
     navigate('/admin/login', { replace: true })
   }
 

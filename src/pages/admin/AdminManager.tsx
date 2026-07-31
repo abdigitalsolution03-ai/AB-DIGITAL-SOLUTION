@@ -22,10 +22,6 @@ export default function AdminManager() {
   const isSingle = schema?.single
   const mediaItems = getAll('media')
 
-  useEffect(() => {
-    loadItems()
-  }, [activeSchema])
-
   const loadItems = () => {
     if (isSingle) {
       setItems(get(activeSchema) ? [get(activeSchema)] : [])
@@ -33,6 +29,10 @@ export default function AdminManager() {
     }
     setItems(getAll(activeSchema))
   }
+
+  useEffect(() => {
+    loadItems()
+  }, [activeSchema])
 
   const openCreate = () => {
     setEditingItem(null)

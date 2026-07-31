@@ -20,7 +20,7 @@ export function validateEmail(email: string): boolean {
 }
 
 export function validatePhone(phone: string): boolean {
-  return /^[\d\s\-\+\(\)]{7,20}$/.test(phone)
+  return /^[\d\s\-+()]{7,20}$/.test(phone)
 }
 
 export function validateUrl(url: string): boolean {
