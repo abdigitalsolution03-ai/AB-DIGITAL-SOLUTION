@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { withApi, ok, methodNotAllowed, readJson, HttpError, getClientIp } from './_lib/http'
-import { addEnquiry } from './_lib/store'
-import { rateLimit, ipKey } from './_lib/ratelimit'
-import { CONTACT_RATE_LIMIT } from './_lib/config'
-import { validateEmail, validatePhone, sanitize } from './_lib/sanitize'
+import { withApi, ok, methodNotAllowed, readJson, HttpError, getClientIp } from '../lib/http'
+import { addEnquiry } from '../lib/store'
+import { rateLimit, ipKey } from '../lib/ratelimit'
+import { CONTACT_RATE_LIMIT } from '../lib/config'
+import { validateEmail, validatePhone, sanitize } from '../lib/sanitize'
 
 const schema = z.object({
   name: z.string().trim().min(2).max(100),

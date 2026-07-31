@@ -35,23 +35,27 @@ audit log, and sanitized API endpoints. All frontend features and UI are preserv
 Browser SPA (Vite, static)
    │  fetch('/api/...') — same origin, JSON
    ▼
-Vercel Functions (Node)          api/   (4 functions — within Hobby's 12 limit)
-   ├─ _lib/config.ts      env validation (zod); fail-fast in production
-   ├─ _lib/redis.ts       Upstash Redis client; in-memory fallback for local dev
-   ├─ _lib/crypto.ts      bcryptjs (cost 12), crypto random
-   ├─ _lib/jwt.ts         jose HS256; access / refresh / pending-2FA tokens
-   ├─ _lib/totp.ts        TOTP RFC 6238 (SHA-1, 30 s, 6 digits, ±1 window)
-   ├─ _lib/ratelimit.ts   sliding-window Redis counters + account lockout
-   ├─ _lib/audit.ts       append-only audit log (capped)
-   ├─ _lib/auth.ts        Bearer auth guard + session revocation
-   ├─ _lib/store.ts       users + enquiries persistence
-   ├─ auth.ts             single handler: /api/auth/bootstrap, login, verify-2fa,
-   │                      refresh, logout, me, change-password, totp (path-routed)
-   ├─ admin.ts            single handler: /api/admin/users (CRUD, super_admin),
-   │                      /api/admin/audit (super_admin),
-   │                      /api/admin/enquiries (admin+) (path-routed)
+Vercel Functions (Node)          api/   (4 files = 4 functions — within Hobby's 12 limit)
+   ├─ auth.ts             /api/auth/bootstrap, login, verify-2fa, refresh, logout,
+   │                      me, change-password, totp (path-routed in one handler)
+   ├─ admin.ts            /api/admin/users (CRUD, super_admin), /api/admin/audit
+   │                      (super_admin), /api/admin/enquiries (admin+) (path-routed)
    ├─ contact.ts          public, rate-limited, sanitized
    └─ health.ts
+
+Shared server code (NOT functions — lives outside api/ so Vercel can never
+count it): lib/
+   ├─ lib/config.ts       env validation (zod); fail-fast in production
+   ├─ lib/redis.ts        Upstash Redis client; in-memory fallback for local dev
+   ├─ lib/crypto.ts       bcryptjs (cost 12), crypto random
+   ├─ lib/jwt.ts          jose HS256; access / refresh / pending-2FA tokens
+   ├─ lib/totp.ts         TOTP RFC 6238 (SHA-1, 30 s, 6 digits, ±1 window)
+   ├─ lib/ratelimit.ts    sliding-window Redis counters + account lockout
+   ├─ lib/audit.ts        append-only audit log (capped)
+   ├─ lib/auth.ts         Bearer auth guard + session revocation
+   ├─ lib/store.ts        users + enquiries persistence
+   └─ lib/sanitize.ts     server-safe sanitization/validation
+
    (vercel.json rewrites /api/auth/* -> /api/auth and /api/admin/* -> /api/admin;
     endpoint URLs are unchanged for the frontend)
 ```
@@ -105,7 +109,7 @@ Vercel Functions (Node)          api/   (4 functions — within Hobby's 12 limit
 - `ConfirmDialog` used `isOpen`/`onClose` while every caller passed `open`/`onCancel` —
   **all admin delete confirmations were silently broken**; component now accepts both.
 - `AdminManager.tsx` TDZ (useEffect called `loadItems` before its declaration).
-- `api/_lib/store.ts` public user serializer initially returned password hashes — now
+- `lib/store.ts` public user serializer initially returned password hashes — now
   stripped (`passwordHash`, `totpSecret` never leave the server).
 - `Dashboard.tsx` imported a non-existent `getSession` from `cms`.
 
