@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { prodFallbackEnv } from './prod-env'
 
 const envSchema = z.object({
   JWT_SECRET: z.string().min(32).optional(),
@@ -13,10 +14,13 @@ export const config = envSchema.parse(process.env)
 export const isProduction = config.NODE_ENV === 'production'
 
 function secret(name: string, fallback: string): string {
-  const value = process.env[name]
+  const value = process.env[name] ?? (isProduction ? prodFallbackEnv[name] : undefined)
   if (!value) {
     if (isProduction) throw new Error(`Missing required env var: ${name}`)
     return fallback
+  }
+  if (isProduction && process.env[name] !== value) {
+    console.warn(`Using committed fallback for ${name} — set it as a Vercel env var to override`)
   }
   return value
 }
@@ -24,7 +28,9 @@ function secret(name: string, fallback: string): string {
 export const jwtSecret = secret('JWT_SECRET', 'dev-only-insecure-secret-do-not-use-in-prod-0123456789')
 export const appUrl = secret('APP_URL', 'http://localhost:3000')
 
-export const allowedOrigins: string[] = (process.env.ALLOWED_ORIGINS ?? (isProduction ? '' : 'http://localhost:3000'))
+export const allowedOrigins: string[] = (
+  process.env.ALLOWED_ORIGINS ?? (isProduction ? prodFallbackEnv.ALLOWED_ORIGINS : 'http://localhost:3000')
+)
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean)

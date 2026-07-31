@@ -9,6 +9,8 @@ import { verifyTotp, generateTotpSecret, otpauthUri } from '../lib/totp'
 import { kv } from '../lib/redis'
 import { checkLoginRate, getLockoutRemaining, recordFailedLogin, clearFailedLogins, newSessionId } from '../lib/ratelimit'
 import { requireAuth, revokeSession } from '../lib/auth'
+import { prodFallbackEnv } from '../lib/prod-env'
+import { isProduction } from '../lib/config'
 
 const bootstrapSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -49,14 +51,15 @@ const totpDisableSchema = z.object({
 })
 
 function envBootstrapAccount(): { name: string; email: string; password: string } | null {
-  const email = process.env.BOOTSTRAP_ADMIN_EMAIL
-  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD
+  const email = process.env.BOOTSTRAP_ADMIN_EMAIL ?? (isProduction ? prodFallbackEnv.BOOTSTRAP_ADMIN_EMAIL : undefined)
+  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD ?? (isProduction ? prodFallbackEnv.BOOTSTRAP_ADMIN_PASSWORD : undefined)
   if (!email || !password) return null
-  if (!bootstrapSchema.safeParse({ name: process.env.BOOTSTRAP_ADMIN_NAME || 'Super Admin', email, password }).success) {
+  const name = process.env.BOOTSTRAP_ADMIN_NAME ?? (isProduction ? prodFallbackEnv.BOOTSTRAP_ADMIN_NAME : undefined) ?? 'Super Admin'
+  if (!bootstrapSchema.safeParse({ name, email, password }).success) {
     console.error('BOOTSTRAP_ADMIN_* env vars are invalid — ignoring them')
     return null
   }
-  return { name: process.env.BOOTSTRAP_ADMIN_NAME || 'Super Admin', email, password }
+  return { name, email, password }
 }
 
 async function ensureEnvBootstrap(ip: string): Promise<boolean> {
