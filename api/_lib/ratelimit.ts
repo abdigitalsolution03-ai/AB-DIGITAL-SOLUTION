@@ -36,20 +36,26 @@ export async function checkApiRate(ip: string): Promise<RateResult> {
 }
 
 export async function getLockoutRemaining(email: string): Promise<number> {
-  return kv.get(`lockout:${email.toLowerCase()}`).then((v) => Number(v ?? 0))
+  const ttl = await kv.ttl(`lockout:${email.toLowerCase()}`)
+  return ttl > 0 ? ttl : 0
 }
 
 export async function recordFailedLogin(email: string): Promise<{ locked: boolean; retryAfterSec: number }> {
-  const key = `lockout:${email.toLowerCase()}`
-  const attempts = await kv.incr(key)
-  if (attempts === 1) await kv.expire(key, LOGIN_LOCKOUT_SEC)
-  await kv.expire(key, LOGIN_LOCKOUT_SEC)
-  if (attempts >= LOGIN_MAX_ATTEMPTS) return { locked: true, retryAfterSec: await kv.expire(key, LOGIN_LOCKOUT_SEC) }
+  const emailKey = email.toLowerCase()
+  const counterKey = `fail:${emailKey}`
+  const attempts = await kv.incr(counterKey)
+  if (attempts === 1) await kv.expire(counterKey, LOGIN_LOCKOUT_SEC)
+  if (attempts >= LOGIN_MAX_ATTEMPTS) {
+    await kv.set(`lockout:${emailKey}`, '1', { ex: LOGIN_LOCKOUT_SEC })
+    await kv.del(counterKey)
+    return { locked: true, retryAfterSec: LOGIN_LOCKOUT_SEC }
+  }
   return { locked: false, retryAfterSec: 0 }
 }
 
 export async function clearFailedLogins(email: string): Promise<void> {
-  await kv.del(`lockout:${email.toLowerCase()}`)
+  const emailKey = email.toLowerCase()
+  await kv.del(`fail:${emailKey}`, `lockout:${emailKey}`)
 }
 
 export function newSessionId(): string {

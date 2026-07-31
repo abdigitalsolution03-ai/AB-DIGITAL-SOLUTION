@@ -7,6 +7,7 @@ interface KeyValueLike {
   del(...keys: string[]): Promise<number>
   incr(key: string): Promise<number>
   expire(key: string, seconds: number): Promise<number>
+  ttl(key: string): Promise<number>
   lpush(key: string, value: string): Promise<number>
   lrange(key: string, start: number, stop: number): Promise<string[]>
   ltrim(key: string, start: number, stop: number): Promise<unknown>
@@ -46,8 +47,15 @@ function createInMemoryStore(): KeyValueLike {
     },
     async expire(key, seconds) {
       if (!alive(key)) return 0
-      map.get(key)!.expiresAt = now() + seconds * 1000
-      return 1
+      const entry = map.get(key)!
+      entry.expiresAt = now() + seconds * 1000
+      return Math.max(1, Math.round((entry.expiresAt - now()) / 1000))
+    },
+    async ttl(key) {
+      if (!alive(key)) return -2
+      const entry = map.get(key)!
+      if (!entry.expiresAt) return -1
+      return Math.max(1, Math.round((entry.expiresAt - now()) / 1000))
     },
     async lpush(key, value) {
       const list = alive(key) ? JSON.parse(map.get(key)!.value) : []

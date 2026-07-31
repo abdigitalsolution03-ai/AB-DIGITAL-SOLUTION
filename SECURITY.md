@@ -35,7 +35,7 @@ audit log, and sanitized API endpoints. All frontend features and UI are preserv
 Browser SPA (Vite, static)
    │  fetch('/api/...') — same origin, JSON
    ▼
-Vercel Functions (Node)          api/
+Vercel Functions (Node)          api/   (4 functions — within Hobby's 12 limit)
    ├─ _lib/config.ts      env validation (zod); fail-fast in production
    ├─ _lib/redis.ts       Upstash Redis client; in-memory fallback for local dev
    ├─ _lib/crypto.ts      bcryptjs (cost 12), crypto random
@@ -45,12 +45,15 @@ Vercel Functions (Node)          api/
    ├─ _lib/audit.ts       append-only audit log (capped)
    ├─ _lib/auth.ts        Bearer auth guard + session revocation
    ├─ _lib/store.ts       users + enquiries persistence
-   ├─ auth/*              bootstrap, login, verify-2fa, refresh, logout, me,
-   │                      change-password, totp
-   ├─ admin/*             users CRUD (super_admin), audit (super_admin),
-   │                      enquiries (admin+)
+   ├─ auth.ts             single handler: /api/auth/bootstrap, login, verify-2fa,
+   │                      refresh, logout, me, change-password, totp (path-routed)
+   ├─ admin.ts            single handler: /api/admin/users (CRUD, super_admin),
+   │                      /api/admin/audit (super_admin),
+   │                      /api/admin/enquiries (admin+) (path-routed)
    ├─ contact.ts          public, rate-limited, sanitized
    └─ health.ts
+   (vercel.json rewrites /api/auth/* -> /api/auth and /api/admin/* -> /api/admin;
+    endpoint URLs are unchanged for the frontend)
 ```
 
 ## 3. Auth model
