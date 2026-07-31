@@ -1,4 +1,4 @@
-﻿﻿import { Helmet } from "react-helmet-async";
+﻿import { Helmet } from "react-helmet-async";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
 
@@ -29,7 +29,7 @@ const sections = [
     content: "Either party may terminate the service agreement with written notice as specified in the individual agreement. Upon termination, client shall pay for all services rendered up to the termination date. Any materials or work in progress will be delivered to the client upon full payment."},
   {
     title: "Governing Law",
-    content: "These terms shall be governed by and construed in accordance with the laws of the State of New York, without regard to its conflict of law provisions. Any disputes arising from these terms shall be resolved in the courts of New York County."},
+    content: "These terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions. Any disputes arising from these terms shall be resolved in the courts of Noida, Uttar Pradesh."},
 ];
 
 export default function Terms() {

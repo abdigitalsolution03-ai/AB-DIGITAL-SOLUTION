@@ -67,7 +67,7 @@ export default function Contact() {
           <AnimatedSection>
             <div className="doodle-card overflow-hidden mb-12">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.914770972!2d-74.119763!3d40.697403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1"
+                src="https://www.google.com/maps?q=Noida%2C%20Uttar%20Pradesh%2C%20India&z=12&output=embed"
                 width="100%" height="300" style={{ border: 0 }} allowFullScreen loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="AB DIGITAL SOLUTION Location"
@@ -137,7 +137,7 @@ export default function Contact() {
                   />
                   <ContactInfo
                     icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-                    label="Location" value="New York, NY 10001"
+                    label="Location" value="Noida, Uttar Pradesh, India"
                   />
                 </div>
               </div>

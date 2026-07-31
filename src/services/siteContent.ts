@@ -66,12 +66,12 @@ const defaultContent: SiteContent = {
   contact: {
     heading: "Let's Work Together", subtext: 'Ready to take your digital presence to the next level? Get in touch with us today.',
     serviceOptions: ['Website Development', 'SEO Optimization', 'Google Ads', 'Meta Ads', 'Social Media Marketing', 'Content Marketing', 'Branding', 'AI Automation', 'Lead Generation'],
-    info: { email: 'abdigitalsolution03@gmail.com', phone: '+91 81785-26092', location: 'New York, NY 10001', whatsapp: 'https://wa.me/918178526092' },
+    info: { email: 'abdigitalsolution03@gmail.com', phone: '+91 81785-26092', location: 'Noida, Uttar Pradesh, India', whatsapp: 'https://wa.me/918178526092' },
     socialLinks: [
       { platform: 'Facebook', url: '#' }, { platform: 'Instagram', url: '#' },
       { platform: 'LinkedIn', url: '#' }, { platform: 'Twitter', url: '#' },
     ],
-    mapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.914770972!2d-74.119763!3d40.697403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY!5e0!3m2!1sen!2sus!4v1',
+    mapsEmbed: 'https://www.google.com/maps?q=Noida%2C%20Uttar%20Pradesh%2C%20India&z=12&output=embed',
   },
   whyChooseUs: {
     label: 'Why Choose Us', heading: 'Built for', headingHighlight: 'Excellence',
