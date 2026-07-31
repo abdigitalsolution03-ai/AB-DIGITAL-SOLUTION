@@ -11,10 +11,33 @@ const schema = z.object({
   role: z.enum(['super_admin', 'admin']).optional(),
 })
 
+function envBootstrapAccount(): { name: string; email: string; password: string } | null {
+  const email = process.env.BOOTSTRAP_ADMIN_EMAIL
+  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD
+  if (!email || !password) return null
+  if (!schema.safeParse({ name: process.env.BOOTSTRAP_ADMIN_NAME || 'Super Admin', email, password }).success) {
+    console.error('BOOTSTRAP_ADMIN_* env vars are invalid — ignoring them')
+    return null
+  }
+  return { name: process.env.BOOTSTRAP_ADMIN_NAME || 'Super Admin', email, password }
+}
+
+async function ensureEnvBootstrap(ip: string): Promise<boolean> {
+  if ((await countUsers()) > 0) return false
+  const account = envBootstrapAccount()
+  if (!account) return false
+  const existing = await getUserByEmail(account.email)
+  if (existing) return false
+  await createUser({ ...account, role: 'super_admin' })
+  await audit({ actor: account.email, action: 'auth.bootstrap', detail: 'Created first admin from environment', ip })
+  return true
+}
+
 export default withApi(async (req: Request) => {
   const ip = getClientIp(req)
 
   if (req.method === 'GET') {
+    await ensureEnvBootstrap(ip)
     const exists = (await countUsers()) > 0
     return ok({
       needsBootstrap: !exists,
