@@ -1,7 +1,7 @@
-import { kv } from './redis'
-import { randomToken } from './crypto'
-import { hashPassword } from './crypto'
-import { ENQUIRIES_MAX } from './config'
+import { kv } from './redis.js'
+import { randomToken } from './crypto.js'
+import { hashPassword } from './crypto.js'
+import { ENQUIRIES_MAX } from './config.js'
 
 export type Role = 'super_admin' | 'admin'
 

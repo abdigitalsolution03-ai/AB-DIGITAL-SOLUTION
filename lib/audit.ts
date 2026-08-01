@@ -1,5 +1,5 @@
-import { kv } from './redis'
-import { AUDIT_LOG_MAX } from './config'
+import { kv } from './redis.js'
+import { AUDIT_LOG_MAX } from './config.js'
 
 export interface AuditEntry {
   ts: string

@@ -1,5 +1,5 @@
 import { Redis } from '@upstash/redis'
-import { isProduction } from './config'
+import { isProduction } from './config.js'
 
 interface KeyValueLike {
   get(key: string): Promise<string | null>

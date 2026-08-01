@@ -1,5 +1,5 @@
-import { kv } from './redis'
-import { allowedOrigins } from './config'
+import { kv } from './redis.js'
+import { allowedOrigins } from './config.js'
 
 function applyCors(headers: Headers, origin: string | null): void {
   if (origin && allowedOrigins.includes(origin)) {

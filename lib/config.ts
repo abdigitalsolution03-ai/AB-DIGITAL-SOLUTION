@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { prodFallbackEnv } from './prod-env'
+import { prodFallbackEnv } from './prod-env.js'
 
 const envSchema = z.object({
   JWT_SECRET: z.string().min(32).optional(),

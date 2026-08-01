@@ -1,7 +1,7 @@
-import { verifyAccessToken } from './jwt'
-import { getUserById, type AdminUser } from './store'
-import { HttpError } from './http'
-import { kv } from './redis'
+import { verifyAccessToken } from './jwt.js'
+import { getUserById, type AdminUser } from './store.js'
+import { HttpError } from './http.js'
+import { kv } from './redis.js'
 
 export interface AuthContext {
   user: AdminUser

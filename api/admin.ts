@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { withApi, ok, created, json, methodNotAllowed, readJson, HttpError, getClientIp } from '../lib/http'
-import { requireAuth } from '../lib/auth'
-import { listUsers, createUser, updateUser, deleteUser, getUserById, listEnquiries, deleteEnquiry, type Role } from '../lib/store'
-import { audit, getAuditLog } from '../lib/audit'
-import { PASSWORD_MIN_LENGTH } from '../lib/config'
+import { withApi, ok, created, json, methodNotAllowed, readJson, HttpError, getClientIp } from '../lib/http.js'
+import { requireAuth } from '../lib/auth.js'
+import { listUsers, createUser, updateUser, deleteUser, getUserById, listEnquiries, deleteEnquiry, type Role } from '../lib/store.js'
+import { audit, getAuditLog } from '../lib/audit.js'
+import { PASSWORD_MIN_LENGTH } from '../lib/config.js'
 
 const createSchema = z.object({
   name: z.string().trim().min(2).max(100),

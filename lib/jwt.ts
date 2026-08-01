@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose'
-import { jwtSecret, ACCESS_TOKEN_TTL_SEC, REFRESH_TOKEN_TTL_SEC, PENDING_2FA_TTL_SEC } from './config'
+import { jwtSecret, ACCESS_TOKEN_TTL_SEC, REFRESH_TOKEN_TTL_SEC, PENDING_2FA_TTL_SEC } from './config.js'
 
 const secretKey = new TextEncoder().encode(jwtSecret)
 const accessAlg = 'HS256'

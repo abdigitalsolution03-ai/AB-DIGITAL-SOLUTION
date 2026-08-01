@@ -1,6 +1,6 @@
 import { createHmac, randomBytes } from 'crypto'
-import { kv } from './redis'
-import { LOGIN_MAX_ATTEMPTS, LOGIN_LOCKOUT_SEC, LOGIN_RATE_LIMIT, API_RATE_LIMIT } from './config'
+import { kv } from './redis.js'
+import { LOGIN_MAX_ATTEMPTS, LOGIN_LOCKOUT_SEC, LOGIN_RATE_LIMIT, API_RATE_LIMIT } from './config.js'
 
 export interface RateResult {
   ok: boolean

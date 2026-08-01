@@ -1,4 +1,4 @@
-import { withApi, ok, methodNotAllowed } from '../lib/http'
+import { withApi, ok, methodNotAllowed } from '../lib/http.js'
 export default withApi(async (req: Request) => {
   if (req.method !== 'GET') return methodNotAllowed(['GET'])
   return ok({
