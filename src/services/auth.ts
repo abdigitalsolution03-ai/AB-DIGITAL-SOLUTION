@@ -45,6 +45,29 @@ const API_BASE = '/api'
 const REFRESH_KEY = 'ab_crm_refresh'
 const PROFILE_KEY = 'ab_crm_session'
 const IDLE_TIMEOUT_MS = 15 * 60 * 1000
+const FETCH_TIMEOUT_MS = 15_000
+
+async function fetchWithTimeout(url: string, options: RequestInit = {}): Promise<Response> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+function describeFetchError(err: unknown, status?: number): string {
+  if (err instanceof ApiError) return err.message
+  if (err instanceof DOMException && err.name === 'AbortError') {
+    return 'The server took too long to respond. Please try again.'
+  }
+  if (typeof status === 'number') {
+    if (status >= 500) return 'Server error. Please try again later.'
+    if (status === 0 || status === undefined) return 'Cannot reach the server. Check your connection and try again.'
+  }
+  return 'Network error. Cannot reach the server. Please try again.'
+}
 
 let accessToken: string | null = null
 let accessExpiresAt = 0
@@ -80,7 +103,7 @@ async function parseResponse(res: Response): Promise<any> {
     // non-JSON response
   }
   if (!res.ok) {
-    const message = body?.error || 'Request failed'
+    const message = body?.error || describeFetchError(undefined, res.status)
     const retryAfterSec = typeof body?.retryAfterSec === 'number' ? body.retryAfterSec : undefined
     if (res.status === 401) throw new ApiError(401, message, retryAfterSec)
     throw new ApiError(res.status, message, retryAfterSec)
@@ -97,7 +120,7 @@ export async function refreshAccessToken(): Promise<boolean> {
       return false
     }
     try {
-      const res = await fetch(`${API_BASE}/auth/refresh`, {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/refresh`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken: refresh }),
@@ -127,14 +150,14 @@ export async function apiFetch<T = any>(path: string, options: RequestInit = {},
     headers.set('Authorization', `Bearer ${accessToken}`)
   }
 
-  let res = await fetch(`${API_BASE}${path}`, { ...options, headers })
+  let res = await fetchWithTimeout(`${API_BASE}${path}`, { ...options, headers })
 
   if (res.status === 401 && retry && accessToken) {
     const refreshed = await refreshAccessToken()
     if (refreshed) {
       const retryHeaders = new Headers(headers)
       retryHeaders.set('Authorization', `Bearer ${accessToken}`)
-      res = await fetch(`${API_BASE}${path}`, { ...options, headers: retryHeaders })
+      res = await fetchWithTimeout(`${API_BASE}${path}`, { ...options, headers: retryHeaders })
     }
   }
 
@@ -179,7 +202,7 @@ export async function login(email: string, password: string): Promise<LoginResul
     if (err instanceof ApiError) {
       return { success: false, error: err.message, retryAfterSec: err.retryAfterSec }
     }
-    return { success: false, error: 'Unable to reach the server. Please try again.' }
+    return { success: false, error: describeFetchError(err) }
   }
 }
 
@@ -197,7 +220,7 @@ export async function verify2FA(pendingToken: string, code: string): Promise<Log
     return { success: true, user: body.user }
   } catch (err) {
     if (err instanceof ApiError) return { success: false, error: err.message }
-    return { success: false, error: 'Unable to reach the server. Please try again.' }
+    return { success: false, error: describeFetchError(err) }
   }
 }
 

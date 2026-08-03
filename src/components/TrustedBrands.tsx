@@ -17,12 +17,12 @@ export default function TrustedBrands() {
         </h2>
       </div>
 
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+      <div className="relative w-full overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
         <motion.div
-          className="flex gap-6 items-center"
+          className="flex gap-4 md:gap-6 items-center"
           animate={{
             x: [0, -1920]}}
           transition={{
@@ -34,10 +34,10 @@ export default function TrustedBrands() {
           {[...brands, ...brands, ...brands].map((brand, i) => (
             <div
               key={i}
-              className="shrink-0 px-6 py-3 bg-white border-3 border-[#111111]"
+              className="shrink-0 px-4 md:px-6 py-2 md:py-3 bg-white border-3 border-[#111111]"
               style={{ borderRadius: "20px", boxShadow: "4px 4px 0px #111111" }}
             >
-              <span className="text-lg md:text-xl font-bold text-[#111111] whitespace-nowrap" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              <span className="text-base md:text-lg lg:text-xl font-bold text-[#111111] whitespace-nowrap" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 {brand}
               </span>
             </div>

@@ -239,7 +239,7 @@ export default function Contact() {
         href={content.contact.info.whatsapp}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-24 right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+10rem)] right-4 md:right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
         style={{ borderRadius: "50%", backgroundColor: "#25D366", boxShadow: "4px 4px 0px #111111" }}
         aria-label="WhatsApp"
         whileHover={{ scale: 1.1 }}
@@ -252,7 +252,7 @@ export default function Contact() {
 
       <motion.a
         href={`tel:${content.contact.info.phone}`}
-        className="fixed bottom-8 right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+6rem)] right-4 md:right-8 z-[9997] w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-3 border-[#111111]"
         style={{ borderRadius: "50%", backgroundColor: "#60A5FA", boxShadow: "4px 4px 0px #111111" }}
         aria-label="Call us"
         whileHover={{ scale: 1.1 }}
