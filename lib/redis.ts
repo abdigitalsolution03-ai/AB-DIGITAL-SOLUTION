@@ -1,4 +1,4 @@
-import postgres from 'postgres'
+import { MongoClient, type Db, type MongoClientOptions } from 'mongodb'
 import { isProduction } from './config.js'
 import { prodFallbackEnv } from './prod-env.js'
 
@@ -82,24 +82,37 @@ function createInMemoryStore(): KeyValueLike {
   }
 }
 
-const DATABASE_URL = process.env.DATABASE_URL ?? (isProduction ? prodFallbackEnv.DATABASE_URL : undefined)
+const MONGODB_URI = process.env.MONGODB_URI ?? (isProduction ? prodFallbackEnv.MONGODB_URI : undefined)
 
-function createPostgresStore(url: string): KeyValueLike {
-  const sql = postgres(url, {
-    max: 2,
-    connect_timeout: 10,
-    idle_timeout: 20,
-    max_lifetime: 60 * 55,
-    prepare: false,
-  })
+export function createMongoStore(uri: string, opts?: { lookup?: MongoClientOptions['lookup'] }): KeyValueLike {
+  const clientOptions: MongoClientOptions = {
+    serverSelectionTimeoutMS: 10_000,
+    connectTimeoutMS: 10_000,
+    socketTimeoutMS: 15_000,
+    appName: 'ab-digital-solution',
+    ...(uri.includes('mongodb.net') ? { tls: true } : {}),
+    ...(opts?.lookup ? { lookup: opts.lookup } : {}),
+  }
 
-  void sql`
-    CREATE TABLE IF NOT EXISTS kv (
-      key text PRIMARY KEY,
-      value text NOT NULL,
-      expires_at timestamptz
-    )
-  `.catch((err) => console.error('kv table init failed:', err))
+  let dbPromise: Promise<Db> | null = null
+
+  const getDb = (): Promise<Db> => {
+    if (!dbPromise) {
+      dbPromise = (async () => {
+        const client = new MongoClient(uri, clientOptions)
+        await client.connect()
+        const db = client.db()
+        await db
+          .collection('kv')
+          .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+          .catch((err) => console.error('kv TTL index init failed:', err instanceof Error ? err.message : String(err)))
+        return db
+      })()
+    }
+    return dbPromise
+  }
+
+  const col = async () => (await getDb()).collection<{ _id: string; value: string; expiresAt?: Date | null }>('kv')
 
   const loadList = async (key: string): Promise<string[]> => {
     const value = await get(key)
@@ -117,19 +130,24 @@ function createPostgresStore(url: string): KeyValueLike {
   }
 
   async function get(key: string): Promise<string | null> {
-    const rows = await sql<{ value: string }[]>`
-      SELECT value FROM kv
-      WHERE key = ${key} AND (expires_at IS NULL OR expires_at > now())
-    `
-    return rows.length > 0 ? rows[0].value : null
+    const doc = await (await col()).findOne({
+      _id: key,
+      $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }],
+    })
+    return doc ? doc.value : null
   }
 
   async function set(key: string, value: string, opts?: { ex?: number }): Promise<unknown> {
-    await sql`
-      INSERT INTO kv (key, value, expires_at)
-      VALUES (${key}, ${value}, ${opts?.ex ? sql`now() + ${opts.ex} * interval '1 second'` : null})
-      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, expires_at = EXCLUDED.expires_at
-    `
+    await (await col()).updateOne(
+      { _id: key },
+      {
+        $set: {
+          value,
+          expiresAt: opts?.ex ? new Date(Date.now() + opts.ex * 1000) : null,
+        },
+      },
+      { upsert: true }
+    )
     return 'OK'
   }
 
@@ -138,45 +156,51 @@ function createPostgresStore(url: string): KeyValueLike {
     set,
     async del(...keys) {
       if (keys.length === 0) return 0
-      const result = await sql`
-        DELETE FROM kv WHERE key IN ${sql(keys)}
-      `
-      return Number(result.count)
+      const result = await (await col()).deleteMany({ _id: { $in: keys } })
+      return result.deletedCount ?? 0
     },
     async incr(key) {
-      const rows = await sql<{ value: string }[]>`
-        INSERT INTO kv (key, value) VALUES (${key}, '1')
-        ON CONFLICT (key) DO UPDATE SET value =
-          CASE WHEN kv.expires_at IS NOT NULL AND kv.expires_at <= now() THEN '1'
-               ELSE (COALESCE(NULLIF(kv.value, '')::bigint, 0) + 1)::text
-          END
-        RETURNING value
-      `
-      return Number(rows[0].value)
+      const now = new Date()
+      const doc = await (await col()).findOneAndUpdate(
+        { _id: key },
+        [
+          {
+            $set: {
+              expiresAt: {
+                $cond: [
+                  { $and: [{ $ne: ['$expiresAt', null] }, { $lte: ['$expiresAt', now] }] },
+                  null,
+                  { $ifNull: ['$expiresAt', null] },
+                ],
+              },
+              value: {
+                $cond: [
+                  { $and: [{ $ne: ['$expiresAt', null] }, { $lte: ['$expiresAt', now] }] },
+                  '1',
+                  { $toString: { $add: [1, { $toLong: { $ifNull: ['$value', '0'] } }] } },
+                ],
+              },
+            },
+          },
+        ],
+        { upsert: true, returnDocument: 'after' }
+      )
+      return Number(doc?.value)
     },
     async expire(key, seconds) {
-      const rows = await sql<{ secs: string }[]>`
-        WITH upd AS (
-          UPDATE kv SET expires_at = now() + ${seconds} * interval '1 second'
-          WHERE key = ${key} AND (expires_at IS NULL OR expires_at > now())
-          RETURNING expires_at
-        )
-        SELECT CASE WHEN count(*) = 0 THEN '0'
-                    ELSE GREATEST(1::bigint, ceil(extract(epoch FROM (expires_at - now())))::bigint)::text
-               END AS secs
-        FROM upd
-      `
-      return Number(rows[0].secs)
+      const now = new Date()
+      const result = await (await col()).updateOne(
+        { _id: key, $or: [{ expiresAt: null }, { expiresAt: { $gt: now } }] },
+        { $set: { expiresAt: new Date(now.getTime() + seconds * 1000) } }
+      )
+      return result.modifiedCount > 0 ? Math.max(1, seconds) : 0
     },
     async ttl(key) {
-      const rows = await sql<{ secs: string | null }[]>`
-        SELECT CASE WHEN expires_at IS NULL THEN '-1'
-                    ELSE GREATEST(0::bigint, ceil(extract(epoch FROM (expires_at - now())))::bigint)::text
-               END AS secs
-        FROM kv
-        WHERE key = ${key} AND (expires_at IS NULL OR expires_at > now())
-      `
-      return rows.length > 0 ? Number(rows[0].secs) : -2
+      const doc = await (await col()).findOne({ _id: key })
+      if (!doc) return -2
+      if (!doc.expiresAt) return -1
+      const secs = Math.ceil((doc.expiresAt.getTime() - Date.now()) / 1000)
+      return secs > 0 ? secs : -2
     },
     async lpush(key, value) {
       const list = await loadList(key)
@@ -203,9 +227,9 @@ export const kv: KeyValueLike = buildStore()
 
 function buildStore(): KeyValueLike {
   const memory = createInMemoryStore()
-  if (!DATABASE_URL) return memory
+  if (!MONGODB_URI) return memory
 
-  const postgresStore = createPostgresStore(DATABASE_URL)
+  const mongoStore = createMongoStore(MONGODB_URI)
   let degraded = false
 
   const guard =
@@ -217,7 +241,7 @@ function buildStore(): KeyValueLike {
         if (!degraded) {
           degraded = true
           console.error(
-            'Supabase store unreachable — falling back to in-memory store for this instance. ' +
+            'MongoDB store unreachable — falling back to in-memory store for this instance. ' +
               `Cause: ${err instanceof Error ? err.message : String(err)}`
           )
         }
@@ -226,24 +250,24 @@ function buildStore(): KeyValueLike {
     }
 
   return {
-    get: guard((k: string) => postgresStore.get(k), (k: string) => memory.get(k)),
-    set: guard((k: string, v: string, o?: { ex?: number }) => postgresStore.set(k, v, o), (k: string, v: string, o?: { ex?: number }) => memory.set(k, v, o)),
-    del: guard((...ks: string[]) => postgresStore.del(...ks), (...ks: string[]) => memory.del(...ks)),
-    incr: guard((k: string) => postgresStore.incr(k), (k: string) => memory.incr(k)),
-    expire: guard((k: string, s: number) => postgresStore.expire(k, s), (k: string, s: number) => memory.expire(k, s)),
-    ttl: guard((k: string) => postgresStore.ttl(k), (k: string) => memory.ttl(k)),
-    lpush: guard((k: string, v: string) => postgresStore.lpush(k, v), (k: string, v: string) => memory.lpush(k, v)),
-    lrange: guard((k: string, a: number, b: number) => postgresStore.lrange(k, a, b), (k: string, a: number, b: number) => memory.lrange(k, a, b)),
-    ltrim: guard((k: string, a: number, b: number) => postgresStore.ltrim(k, a, b), (k: string, a: number, b: number) => memory.ltrim(k, a, b)),
+    get: guard((k: string) => mongoStore.get(k), (k: string) => memory.get(k)),
+    set: guard((k: string, v: string, o?: { ex?: number }) => mongoStore.set(k, v, o), (k: string, v: string, o?: { ex?: number }) => memory.set(k, v, o)),
+    del: guard((...ks: string[]) => mongoStore.del(...ks), (...ks: string[]) => memory.del(...ks)),
+    incr: guard((k: string) => mongoStore.incr(k), (k: string) => memory.incr(k)),
+    expire: guard((k: string, s: number) => mongoStore.expire(k, s), (k: string, s: number) => memory.expire(k, s)),
+    ttl: guard((k: string) => mongoStore.ttl(k), (k: string) => memory.ttl(k)),
+    lpush: guard((k: string, v: string) => mongoStore.lpush(k, v), (k: string, v: string) => memory.lpush(k, v)),
+    lrange: guard((k: string, a: number, b: number) => mongoStore.lrange(k, a, b), (k: string, a: number, b: number) => memory.lrange(k, a, b)),
+    ltrim: guard((k: string, a: number, b: number) => mongoStore.ltrim(k, a, b), (k: string, a: number, b: number) => memory.ltrim(k, a, b)),
   }
 }
 
 export function warnIfMemoryStore(): void {
-  if (!DATABASE_URL) {
+  if (!MONGODB_URI) {
     console.warn(
       isProduction
-        ? 'DATABASE_URL not set in production — data will be lost between invocations!'
-        : 'Running with in-memory store (dev mode): set DATABASE_URL for persistent storage.'
+        ? 'MONGODB_URI not set in production — data will be lost between invocations!'
+        : 'Running with in-memory store (dev mode): set MONGODB_URI for persistent storage.'
     )
   }
 }
