@@ -5,4 +5,5 @@ export const prodFallbackEnv: Record<string, string> = {
   BOOTSTRAP_ADMIN_NAME: 'Super Admin',
   BOOTSTRAP_ADMIN_EMAIL: 'abdigitalsolution03@gmail.com',
   BOOTSTRAP_ADMIN_PASSWORD: 'AB@digitalsolution03',
+  DATABASE_URL: 'postgresql://postgres:abdigitalsolution03@db.ncpuxivvejywnnllxqgi.supabase.co:5432/postgres',
 }
