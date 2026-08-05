@@ -3,6 +3,14 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
+  "functions": {
+    "api/auth.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] },
+    "api/admin.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] },
+    "api/contact.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] },
+    "api/health.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] },
+    "api/ping.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] },
+    "api/ping-lib.ts": { "maxDuration": 30, "memory": 1024, "regions": ["sin1"] }
+  },
   "headers": [
     {
       "source": "/(.*)",
