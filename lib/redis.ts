@@ -84,11 +84,23 @@ function createInMemoryStore(): KeyValueLike {
 
 const MONGODB_URI = process.env.MONGODB_URI ?? (isProduction ? prodFallbackEnv.MONGODB_URI : undefined)
 
+const STORE_OP_DEADLINE_MS = 3500
+
+function withDeadline<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`store operation exceeded ${ms}ms deadline`)), ms)
+    promise.then(
+      (value) => { clearTimeout(timer); resolve(value) },
+      (err) => { clearTimeout(timer); reject(err) }
+    )
+  })
+}
+
 export function createMongoStore(uri: string, opts?: { lookup?: MongoClientOptions['lookup'] }): KeyValueLike {
   const clientOptions: MongoClientOptions = {
-    serverSelectionTimeoutMS: 10_000,
-    connectTimeoutMS: 10_000,
-    socketTimeoutMS: 15_000,
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 5000,
+    socketTimeoutMS: 10_000,
     appName: 'ab-digital-solution',
     ...(uri.includes('mongodb.net') ? { tls: true } : {}),
     ...(opts?.lookup ? { lookup: opts.lookup } : {}),
@@ -236,7 +248,7 @@ function buildStore(): KeyValueLike {
     (primary: (...args: any[]) => Promise<any>, fallback: (...args: any[]) => Promise<any>) =>
     async (...args: any[]) => {
       try {
-        return await primary(...args)
+        return await withDeadline(primary(...args), STORE_OP_DEADLINE_MS)
       } catch (err) {
         if (!degraded) {
           degraded = true
