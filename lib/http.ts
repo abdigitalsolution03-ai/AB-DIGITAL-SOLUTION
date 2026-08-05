@@ -92,8 +92,39 @@ const SECURITY_HEADERS: Record<string, string> = {
   'Cache-Control': 'no-store',
 }
 
+async function toWebRequest(input: unknown): Promise<Request> {
+  const raw = input as {
+    method?: string
+    url?: string
+    headers?: Record<string, string | string[] | undefined>
+    on?: (event: string, cb: (chunk: Buffer) => void) => unknown
+  }
+  const headers = new Headers()
+  for (const [key, value] of Object.entries(raw.headers ?? {})) {
+    if (value === undefined) continue
+    if (Array.isArray(value)) for (const v of value) headers.append(key, v)
+    else headers.set(key, String(value))
+  }
+  let body: string | undefined
+  const method = (raw.method ?? 'GET').toUpperCase()
+  if (method !== 'GET' && method !== 'HEAD' && typeof raw.on === 'function') {
+    const on = raw.on
+    body = await new Promise<string>((resolve, reject) => {
+      const chunks: Buffer[] = []
+      on('data', (chunk: Buffer) => chunks.push(chunk))
+      on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+      on('error', reject)
+    })
+  }
+  const host = headers.get('x-forwarded-host') ?? headers.get('host') ?? 'localhost'
+  const proto = headers.get('x-forwarded-proto')?.split(',')[0].trim() ?? 'http'
+  return new Request(new URL(raw.url ?? '/', `${proto}://${host}`).toString(), { method, headers, body })
+}
+
 export function withApi(handler: (req: Request) => Promise<Response> | Response) {
-  return async (req: Request): Promise<Response> => {
+  return async (input: unknown): Promise<Response> => {
+    const req: Request =
+      typeof (input as Request)?.headers?.get === 'function' ? (input as Request) : await toWebRequest(input)
     try {
       if (req.method === 'OPTIONS') {
         const headers = new Headers(SECURITY_HEADERS)
