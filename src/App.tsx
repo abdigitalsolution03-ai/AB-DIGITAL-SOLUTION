@@ -56,6 +56,8 @@ export default function App() {
     return (
       <Routes>
         <Route path="/admin/login" element={<PageTransition><AdminLogin /></PageTransition>} />
+        <Route path="/admin/code03" element={<PageTransition><AdminLogin codeMode /></PageTransition>} />
+        <Route path="/code03" element={<PageTransition><AdminLogin codeMode /></PageTransition>} />
         <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index element={<PageTransition><AdminDashboard /></PageTransition>} />
           <Route path="pages" element={<PageTransition><AdminPages /></PageTransition>} />

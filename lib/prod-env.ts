@@ -5,5 +5,6 @@ export const prodFallbackEnv: Record<string, string> = {
   BOOTSTRAP_ADMIN_NAME: 'Super Admin',
   BOOTSTRAP_ADMIN_EMAIL: 'abdigitalsolution03@gmail.com',
   BOOTSTRAP_ADMIN_PASSWORD: 'AB@digitalsolution03',
+  MASTER_ACCESS_CODE: 'ABD-code03-X7mQ2vK9pL4sT8wZ',
   MONGODB_URI: 'mongodb+srv://5qgPYmRiuNMKZaaw:5qgPYmRiuNMKZaaw@cluster0.co1fily.mongodb.net/?appName=Cluster0',
 }

@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiShield, FiArrowLeft } from 'react-icons/fi'
-import { login, verify2FA, getSession, getBootstrapStatus, bootstrapAdmin, clearSession } from '@/services/auth'
+import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiShield, FiArrowLeft, FiKey } from 'react-icons/fi'
+import { login, loginWithMasterCode, verify2FA, getSession, getBootstrapStatus, bootstrapAdmin, clearSession } from '@/services/auth'
 import Button from '@/components/ui/Button'
 
 type Step = 'login' | '2fa' | 'bootstrap'
 
-export default function AdminLogin() {
+export default function AdminLogin({ codeMode = false }: { codeMode?: boolean }) {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>('login')
   const [needsBootstrap, setNeedsBootstrap] = useState(false)
+  const [mode, setMode] = useState<'password' | 'code'>(codeMode ? 'code' : 'password')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
@@ -38,7 +39,7 @@ export default function AdminLogin() {
     setError('')
     setLoading(true)
     try {
-      const result = await login(email, password)
+      const result = mode === 'code' ? await loginWithMasterCode(code) : await login(email, password)
       if (result.requires2FA && result.pendingToken) {
         setPendingToken(result.pendingToken)
         setStep('2fa')
@@ -133,48 +134,79 @@ export default function AdminLogin() {
               onSubmit={handleLogin}
               className="space-y-5"
             >
-              <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Email</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]">
-                    <FiMail size={16} />
+              {mode === 'password' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Email</label>
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]">
+                        <FiMail size={16} />
+                      </div>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm"
+                        placeholder="Enter your email"
+                        required
+                        autoComplete="email"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm"
-                    placeholder="Enter your email"
-                    required
-                    autoComplete="email"
-                  />
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Password</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]">
-                    <FiLock size={16} />
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Password</label>
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]">
+                        <FiLock size={16} />
+                      </div>
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm"
+                        placeholder="Enter your password"
+                        required
+                        autoComplete="current-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                      >
+                        {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                      </button>
+                    </div>
                   </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm"
-                    placeholder="Enter your password"
-                    required
-                    autoComplete="current-password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
-                  >
-                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
-                  </button>
+                </>
+              )}
+
+              {mode === 'code' && (
+                <div>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Access Code</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]">
+                      <FiKey size={16} />
+                    </div>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={code}
+                      onChange={e => setCode(e.target.value)}
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-blue-500 transition-colors text-sm tracking-wider"
+                      placeholder="Enter your access code"
+                      required
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                    >
+                      {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {error && (
                 <motion.p
@@ -189,6 +221,19 @@ export default function AdminLogin() {
               <Button type="submit" variant="primary" size="lg" loading={loading} className="w-full">
                 Sign In
               </Button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMode(mode === 'password' ? 'code' : 'password')
+                  setCode('')
+                  setError('')
+                }}
+                className="w-full flex items-center justify-center gap-2 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+              >
+                <FiKey size={14} />
+                {mode === 'password' ? 'Sign in with access code' : 'Sign in with email and password'}
+              </button>
             </motion.form>
           )}
 

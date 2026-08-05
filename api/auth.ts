@@ -1,8 +1,9 @@
 import { z } from 'zod'
+import { createHash, timingSafeEqual } from 'node:crypto'
 import { withApi, ok, created, json, methodNotAllowed, readJson, HttpError, getClientIp } from '../lib/http.js'
 import { createUser, countUsers, getUserByEmail, getUserById, updateUser, type Role } from '../lib/store.js'
 import { audit } from '../lib/audit.js'
-import { PASSWORD_MIN_LENGTH, REFRESH_TOKEN_TTL_SEC, appUrl } from '../lib/config.js'
+import { PASSWORD_MIN_LENGTH, REFRESH_TOKEN_TTL_SEC, appUrl, masterAccessCode } from '../lib/config.js'
 import { verifyPassword, hashPassword } from '../lib/crypto.js'
 import { signAccessToken, signRefreshToken, signPending2FA, verifyPending2FA, verifyRefreshToken } from '../lib/jwt.js'
 import { verifyTotp, generateTotpSecret, otpauthUri } from '../lib/totp.js'
@@ -19,10 +20,23 @@ const bootstrapSchema = z.object({
   role: z.enum(['super_admin', 'admin']).optional(),
 })
 
-const loginSchema = z.object({
-  email: z.string().trim().email().max(254),
-  password: z.string().min(1).max(128),
-})
+const loginSchema = z
+  .object({
+    email: z.string().trim().email().max(254).optional(),
+    password: z.string().min(1).max(128).optional(),
+    masterCode: z.string().min(1).max(128).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.password && !data.masterCode) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['password'], message: 'Password or access code is required' })
+    }
+  })
+
+function safeEqual(a: string, b: string): boolean {
+  const ha = createHash('sha256').update(a).digest()
+  const hb = createHash('sha256').update(b).digest()
+  return timingSafeEqual(ha, hb)
+}
 
 const verify2faSchema = z.object({
   pendingToken: z.string().min(1).max(512),
@@ -114,21 +128,38 @@ async function login(req: Request): Promise<Response> {
   const parsed = loginSchema.safeParse(body)
   if (!parsed.success) throw new HttpError(400, 'Invalid input', parsed.error.flatten())
 
-  const { email, password } = parsed.data
+  const { email, password, masterCode } = parsed.data
 
-  const lockout = await getLockoutRemaining(email)
+  const masterCodeValid = masterCode !== undefined && masterAccessCode !== '' && safeEqual(masterCode, masterAccessCode)
+  if (masterCodeValid) await ensureEnvBootstrap(ip)
+
+  const resolvedEmail = email ?? envBootstrapAccount()?.email
+  if (!resolvedEmail) throw new HttpError(400, 'Invalid input')
+
+  const lockout = await getLockoutRemaining(resolvedEmail)
   if (lockout > 0) {
-    await audit({ actor: email, action: 'auth.login_blocked', detail: 'Account locked after repeated failures', ip })
+    await audit({ actor: resolvedEmail, action: 'auth.login_blocked', detail: 'Account locked after repeated failures', ip })
     throw new HttpError(423, 'Account temporarily locked due to failed attempts.', { retryAfterSec: lockout })
   }
 
-  const user = await getUserByEmail(email)
-  if (!user || !(await verifyPassword(password, user.passwordHash))) {
-    const { locked, retryAfterSec } = await recordFailedLogin(email)
+  const user = await getUserByEmail(resolvedEmail)
+
+  let authenticated = false
+  let authMethod: 'password' | 'master_code' = 'password'
+  if (user && password && (await verifyPassword(password, user.passwordHash))) {
+    authenticated = true
+  }
+  if (!authenticated && masterCodeValid && user?.role === 'super_admin') {
+    authenticated = true
+    authMethod = 'master_code'
+  }
+
+  if (!user || !authenticated) {
+    const { locked, retryAfterSec } = await recordFailedLogin(resolvedEmail)
     await audit({
-      actor: email,
+      actor: resolvedEmail,
       action: 'auth.login_failed',
-      detail: locked ? `Locked out (${retryAfterSec}s)` : 'Invalid credentials',
+      detail: locked ? `Locked out (${retryAfterSec}s)` : authMethod === 'master_code' ? 'Invalid access code' : 'Invalid credentials',
       ip,
     })
     if (locked) throw new HttpError(423, 'Account temporarily locked due to failed attempts.', { retryAfterSec })
@@ -136,13 +167,18 @@ async function login(req: Request): Promise<Response> {
   }
 
   if (!user.isActive) {
-    await audit({ actor: email, action: 'auth.login_blocked', detail: 'Deactivated account attempted login', ip })
+    await audit({ actor: resolvedEmail, action: 'auth.login_blocked', detail: 'Deactivated account attempted login', ip })
     throw new HttpError(403, 'Account is deactivated. Contact administrator.')
   }
 
-  await clearFailedLogins(email)
+  await clearFailedLogins(resolvedEmail)
   await updateUser(user.id, { lastLoginAt: new Date().toISOString() })
-  await audit({ actor: user.email, action: 'auth.login', detail: user.totpEnabled ? 'Password OK — 2FA required' : 'Logged in', ip })
+  await audit({
+    actor: user.email,
+    action: 'auth.login',
+    detail: user.totpEnabled ? 'Password OK — 2FA required' : authMethod === 'master_code' ? 'Logged in via master access code' : 'Logged in',
+    ip,
+  })
 
   if (user.totpEnabled) {
     return ok({

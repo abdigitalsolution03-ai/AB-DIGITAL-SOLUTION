@@ -180,13 +180,14 @@ export async function refreshSession(): Promise<boolean> {
   return refreshAccessToken()
 }
 
-export async function login(email: string, password: string): Promise<LoginResult> {
+export async function login(email: string, password: string, masterCode?: string): Promise<LoginResult> {
   try {
+    const payload = masterCode ? { masterCode } : { email, password }
     const body = await apiFetch<{ accessToken?: string; refreshToken?: string; user?: User; requires2FA?: boolean; pendingToken?: string }>(
       '/auth/login',
       {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
       },
       false,
     )
@@ -204,6 +205,10 @@ export async function login(email: string, password: string): Promise<LoginResul
     }
     return { success: false, error: describeFetchError(err) }
   }
+}
+
+export async function loginWithMasterCode(masterCode: string): Promise<LoginResult> {
+  return login('', '', masterCode)
 }
 
 export async function verify2FA(pendingToken: string, code: string): Promise<LoginResult> {

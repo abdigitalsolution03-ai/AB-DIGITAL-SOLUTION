@@ -27,6 +27,7 @@ function secret(name: string, fallback: string): string {
 
 export const jwtSecret = secret('JWT_SECRET', 'dev-only-insecure-secret-do-not-use-in-prod-0123456789')
 export const appUrl = secret('APP_URL', 'http://localhost:3000')
+export const masterAccessCode = secret('MASTER_ACCESS_CODE', 'dev-master-code-change-me')
 
 export const allowedOrigins: string[] = (
   process.env.ALLOWED_ORIGINS ?? (isProduction ? prodFallbackEnv.ALLOWED_ORIGINS : 'http://localhost:3000')
