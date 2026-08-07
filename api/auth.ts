@@ -131,7 +131,7 @@ async function login(req: Request): Promise<Response> {
   const { email, password, masterCode } = parsed.data
 
   const masterCodeValid = masterCode !== undefined && masterAccessCode !== '' && safeEqual(masterCode, masterAccessCode)
-  if (masterCodeValid) await ensureEnvBootstrap(ip)
+  await ensureEnvBootstrap(ip)
 
   const resolvedEmail = email ?? envBootstrapAccount()?.email
   if (!resolvedEmail) throw new HttpError(400, 'Invalid input')
