@@ -9,6 +9,48 @@ function save(data: Record<string, any>): void {
   localStorage.setItem(DB_PREFIX + 'db', JSON.stringify(data))
 }
 
+const serverCollections = new Set([
+  'pages', 'header', 'footer', 'media', 'blog', 'seo', 'theme', 'branding',
+  'testimonials', 'faqs', 'homepageSections', 'enquiries', 'subscribers', 'leads',
+  'careers', 'jobs', 'popups', 'banners', 'team', 'gallery', 'portfolio',
+  'clients', 'services', 'settings', 'pageData',
+])
+
+export async function pullCMS(): Promise<boolean> {
+  try {
+    const res = await fetch('/api/cms', { headers: { Accept: 'application/json' } })
+    if (!res.ok) return false
+    const body = await res.json()
+    const collections = body?.collections
+    if (!collections || typeof collections !== 'object') return false
+    const data = db()
+    let changed = false
+    for (const [name, items] of Object.entries(collections)) {
+      if (serverCollections.has(name) && Array.isArray(items)) {
+        data[name] = items
+        changed = true
+      }
+    }
+    if (changed) save(data)
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function pushCollection(name: string, items: any[]): Promise<void> {
+  if (!serverCollections.has(name)) return
+  try {
+    const { apiFetch } = await import('./auth')
+    await apiFetch('/admin/cms', {
+      method: 'POST',
+      body: JSON.stringify({ name, items }),
+    })
+  } catch {
+    // server unreachable or not signed in — local-only changes stay in browser
+  }
+}
+
 function collection<T = any>(name: string): T[] {
   const data = db()
   return (data[name] || []) as T[]
@@ -18,6 +60,7 @@ function saveCollection(name: string, items: any[]): void {
   const data = db()
   data[name] = items
   save(data)
+  void pushCollection(name, items)
 }
 
 function generateId(): string {

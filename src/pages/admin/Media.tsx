@@ -17,16 +17,49 @@ export default function AdminMedia() {
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      const type = file.type.startsWith('image') ? 'image' : file.type.includes('pdf') ? 'pdf' : 'document'
-      create('media', {
-        name: file.name, url: reader.result, type,
-        alt: '', size: file.size, folder: 'root',
-      })
-      refresh()
+    const type = file.type.startsWith('image') ? 'image' : file.type.includes('pdf') ? 'pdf' : 'document'
+    if (file.type.startsWith('image')) {
+      const img = new Image()
+      const objectUrl = URL.createObjectURL(file)
+      img.onload = () => {
+        const MAX = 1600
+        let { width, height } = img
+        if (width > MAX || height > MAX) {
+          const ratio = Math.min(MAX / width, MAX / height)
+          width = Math.round(width * ratio)
+          height = Math.round(height * ratio)
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        URL.revokeObjectURL(objectUrl)
+        if (!ctx) {
+          saveFromFile(file, type)
+          return
+        }
+        ctx.drawImage(img, 0, 0, width, height)
+        saveMedia(file.name, canvas.toDataURL('image/jpeg', 0.82), type)
+      }
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl)
+        saveFromFile(file, type)
+      }
+      img.src = objectUrl
+    } else {
+      saveFromFile(file, type)
     }
-    reader.readAsDataURL(file)
+  }
+
+  function saveFromFile(file: File, type: string): void {
+    const r = new FileReader()
+    r.onload = () => saveMedia(file.name, r.result as string, type)
+    r.readAsDataURL(file)
+  }
+
+  function saveMedia(name: string, url: string, type: string): void {
+    create('media', { name, url, type, alt: '', size: url.length, folder: 'root' })
+    refresh()
   }
 
   const copyUrl = (url: string) => {

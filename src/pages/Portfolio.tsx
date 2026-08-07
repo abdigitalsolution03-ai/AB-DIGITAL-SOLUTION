@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
-import { getAll } from '@/services/cms';
+import { getAll, pullCMS } from '@/services/cms';
 
 const categories = ["All", "Website", "SEO", "Ads", "Branding", "Design"];
 
@@ -11,6 +11,7 @@ interface Project {
   category: string;
   description: string;
   color: string;
+  image?: string;
   metrics: string[];
 }
 
@@ -37,6 +38,7 @@ function loadProjects(): Project[] {
       category: p.category || 'Website',
       description: p.description || '',
       color: p.color || '#4D7AFF',
+      image: p.image || '',
       metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
     }))
   }
@@ -44,9 +46,17 @@ function loadProjects(): Project[] {
 }
 
 export default function Portfolio() {
-  const [projects] = useState(loadProjects);
+  const [projects, setProjects] = useState(loadProjects);
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    let active = true
+    void pullCMS().then(() => {
+      if (active) setProjects(loadProjects())
+    })
+    return () => { active = false }
+  }, [])
 
   const filtered = projects.filter(
     (p) => activeCategory === "All" || p.category === activeCategory
@@ -115,12 +125,18 @@ export default function Portfolio() {
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   <div className={`${getCardClass(project.color)} p-0 overflow-hidden cursor-pointer group`}>
-                    <div className="h-48 flex items-center justify-center border-b-3 border-[#111]" style={{ backgroundColor: project.color }}>
-                      <svg className="w-16 h-16 text-white/30 group-hover:text-white/50 transition-all duration-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <polyline points="21 15 16 10 5 21" />
-                      </svg>
+                    <div className="relative h-48 border-b-3 border-[#111] overflow-hidden" style={{ backgroundColor: project.color }}>
+                      {project.image ? (
+                        <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center group-hover:bg-black/5 transition-colors duration-500">
+                          <svg className="w-16 h-16 text-white/30 group-hover:text-white/50 transition-all duration-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <span className="text-[#111]/60 text-xs tracking-widest uppercase font-bold">{project.category}</span>

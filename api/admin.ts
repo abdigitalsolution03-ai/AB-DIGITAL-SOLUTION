@@ -4,6 +4,7 @@ import { requireAuth } from '../lib/auth.js'
 import { listUsers, createUser, updateUser, deleteUser, getUserById, listEnquiries, deleteEnquiry, type Role } from '../lib/store.js'
 import { audit, getAuditLog } from '../lib/audit.js'
 import { PASSWORD_MIN_LENGTH } from '../lib/config.js'
+import { getCollection, setCollection, CMS_COLLECTIONS } from '../lib/cms-store.js'
 
 const createSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -147,12 +148,42 @@ async function auditLog(req: Request): Promise<Response> {
   return ok({ entries })
 }
 
-const ADMIN_ROUTES = ['users', 'enquiries', 'audit']
+async function cmsSync(req: Request): Promise<Response> {
+  const ip = getClientIp(req)
+  const { user: actor } = await requireAuth(req, 'admin')
+
+  if (req.method === 'GET') {
+    const url = new URL(req.url)
+    const name = url.searchParams.get('collection')
+    if (name) {
+      if (!CMS_COLLECTIONS.includes(name)) throw new HttpError(404, 'Unknown collection')
+      return ok({ collection: name, items: await getCollection(name) })
+    }
+    const collections: Record<string, any[]> = {}
+    for (const c of CMS_COLLECTIONS) collections[c] = await getCollection(c)
+    return ok({ collections })
+  }
+
+  if (req.method === 'POST') {
+    const body = (await readJson(req)) as { name?: unknown; items?: unknown }
+    const name = typeof body?.name === 'string' ? body.name : ''
+    if (!CMS_COLLECTIONS.includes(name)) throw new HttpError(400, 'Unknown collection')
+    if (!Array.isArray(body?.items)) throw new HttpError(400, 'items must be an array')
+    await setCollection(name, body.items)
+    await audit({ actor: actor.email, action: 'cms.save', detail: `${name} (${body.items.length} items)`, ip })
+    return ok({ success: true, collection: name })
+  }
+
+  return methodNotAllowed(['GET', 'POST'])
+}
+
+const ADMIN_ROUTES = ['users', 'enquiries', 'audit', 'cms']
 
 const handlers: Record<string, (req: Request) => Promise<Response> | Response> = {
   users,
   enquiries,
   audit: auditLog,
+  cms: cmsSync,
 }
 
 function routeName(url: string): string | null {

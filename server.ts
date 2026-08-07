@@ -5,6 +5,7 @@ import { Readable } from 'node:stream'
 
 import authHandler from './api/auth.js'
 import adminHandler from './api/admin.js'
+import cmsHandler from './api/cms.js'
 import contactHandler from './api/contact.js'
 import healthHandler from './api/health.js'
 import pingHandler from './api/ping.js'
@@ -20,6 +21,7 @@ interface Route {
 const routes: Route[] = [
   { match: (p) => p.startsWith('/api/auth'), handler: authHandler },
   { match: (p) => p.startsWith('/api/admin'), handler: adminHandler },
+  { match: (p) => p.startsWith('/api/cms'), handler: cmsHandler },
   { match: (p) => p.startsWith('/api/contact'), handler: contactHandler },
   { match: (p) => p.startsWith('/api/health'), handler: healthHandler },
   { match: (p) => p.startsWith('/api/ping'), handler: pingHandler },
@@ -58,8 +60,8 @@ const server = createServer(async (req, res) => {
         method: req.method ?? 'GET',
         headers: req.headers as unknown as HeadersInit,
         body: req.method === 'GET' || req.method === 'HEAD' ? undefined : (Readable.toWeb(req) as unknown as BodyInit),
-        duplex: 'half' as unknown as undefined,
-      })
+        duplex: 'half',
+      } as RequestInit & { duplex?: string })
       const response = await route.handler(request)
       const body = Buffer.from(await response.arrayBuffer())
       const headers: Record<string, string> = { 'X-Content-Type-Options': 'nosniff' }
