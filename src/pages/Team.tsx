@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import PageTransition from '@/components/PageTransition'
 import AnimatedSection from '@/components/AnimatedSection'
-import { getAll } from '@/services/cms'
+import { getAll, pullCMS } from '@/services/cms'
+import YoutubeEmbed from '@/components/YoutubeEmbed'
 
 const hardcodedTeam = [
   { name: 'Arjun Mehta', role: 'Founder & CEO', bio: 'Visionary leader with 15+ years in digital strategy and brand transformation.', color: '#60A5FA' },
@@ -28,19 +30,31 @@ const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981']
 function loadTeam() {
   const cms = getAll('team')
   if (cms.length > 0) {
-    return cms.map((m: any, i: number) => ({
-      name: m.name,
-      role: m.role || '',
-      bio: m.bio || '',
-      color: colors[i % colors.length],
-    }))
+    return cms
+      .filter((m: any) => !m.status || m.status === 'published')
+      .map((m: any, i: number) => ({
+        name: m.name,
+        role: m.role || '',
+        bio: m.bio || '',
+        image: m.image || '',
+        videoUrl: m.videoUrl || '',
+        color: colors[i % colors.length],
+      }))
   }
   return hardcodedTeam
 }
 
 export default function Team() {
-  const [teamMembers] = useState(loadTeam);
+  const [teamMembers, setTeamMembers] = useState(loadTeam);
   const stats = hardcodedStats;
+
+  useEffect(() => {
+    let active = true
+    void pullCMS().then(() => {
+      if (active) setTeamMembers(loadTeam())
+    })
+    return () => { active = false }
+  }, [])
   return (
     <PageTransition>
       <Helmet>
@@ -67,15 +81,28 @@ export default function Team() {
                   whileHover={{ y: -6 }}
                   className="doodle-card p-8 text-center group"
                 >
-                  <div
-                    className="w-24 h-24 mx-auto rounded-full border-4 border-[#111] flex items-center justify-center text-3xl font-bold text-white mb-5"
-                    style={{ backgroundColor: member.color }}
-                  >
-                    {member.name.split(' ').map(n => n[0]).join('')}
-                  </div>
+                  {member.image ? (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-24 h-24 mx-auto rounded-full border-4 border-[#111] object-cover mb-5 group-hover:scale-105 transition-transform"
+                    />
+                  ) : (
+                    <div
+                      className="w-24 h-24 mx-auto rounded-full border-4 border-[#111] flex items-center justify-center text-3xl font-bold text-white mb-5"
+                      style={{ backgroundColor: member.color }}
+                    >
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                  )}
                   <h3 className="text-xl font-bold text-[#111] mb-1">{member.name}</h3>
                   <p className="text-sm font-semibold text-[#60A5FA] mb-3">{member.role}</p>
                   <p className="text-gray-500 text-sm">{member.bio}</p>
+                  {member.videoUrl && (
+                    <div className="mt-5">
+                      <YoutubeEmbed url={member.videoUrl} title={`${member.name} video`} />
+                    </div>
+                  )}
                 </motion.div>
               </AnimatedSection>
             ))}

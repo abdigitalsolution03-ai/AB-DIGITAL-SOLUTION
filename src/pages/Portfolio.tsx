@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getAll, pullCMS } from '@/services/cms';
+import YoutubeEmbed from '@/components/YoutubeEmbed';
 
 const categories = ["All", "Website", "SEO", "Ads", "Branding", "Design"];
 
@@ -12,6 +13,7 @@ interface Project {
   description: string;
   color: string;
   image?: string;
+  videoUrl?: string;
   metrics: string[];
 }
 
@@ -39,6 +41,7 @@ function loadProjects(): Project[] {
       description: p.description || '',
       color: p.color || '#4D7AFF',
       image: p.image || '',
+      videoUrl: p.videoUrl || '',
       metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
     }))
   }
@@ -157,6 +160,11 @@ export default function Portfolio() {
                         </span>
                       ))}
                     </motion.div>
+                    {project.videoUrl && (
+                      <div className="px-6 pb-6">
+                        <YoutubeEmbed url={project.videoUrl} title={project.title} />
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

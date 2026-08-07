@@ -314,6 +314,7 @@ async function me(req: Request): Promise<Response> {
       id: user.id,
       email: user.email,
       name: user.name,
+      avatar: user.avatar,
       role: user.role,
       totpEnabled: user.totpEnabled,
       createdAt: user.createdAt,
@@ -321,6 +322,32 @@ async function me(req: Request): Promise<Response> {
     },
     passwordPolicy: { minLength: 8 },
   })
+}
+
+const profileSchema = z.object({
+  name: z.string().trim().min(2).max(100).optional(),
+  avatar: z.string().max(5_000_000).optional(),
+}).refine((d) => d.name !== undefined || d.avatar !== undefined, { message: 'Nothing to update' })
+
+async function profile(req: Request): Promise<Response> {
+  const ip = getClientIp(req)
+  const { user } = await requireAuth(req)
+
+  if (req.method === 'GET') return ok({ user })
+
+  if (req.method === 'PATCH') {
+    const body = await readJson(req)
+    const parsed = profileSchema.safeParse(body)
+    if (!parsed.success) throw new HttpError(400, 'Invalid input', parsed.error.flatten())
+    const patch: { name?: string; avatar?: string } = {}
+    if (parsed.data.name !== undefined) patch.name = parsed.data.name
+    if (parsed.data.avatar !== undefined) patch.avatar = parsed.data.avatar
+    const updated = await updateUser(user.id, patch)
+    await audit({ actor: user.email, action: 'auth.profile_updated', detail: Object.keys(patch).join(', '), ip })
+    return ok({ user: updated })
+  }
+
+  return methodNotAllowed(['GET', 'PATCH'])
 }
 
 async function changePassword(req: Request): Promise<Response> {
@@ -396,7 +423,7 @@ async function totp(req: Request): Promise<Response> {
   return methodNotAllowed(['GET', 'POST', 'DELETE'])
 }
 
-const AUTH_ROUTES = ['bootstrap', 'login', 'verify-2fa', 'refresh', 'logout', 'me', 'change-password', 'totp']
+const AUTH_ROUTES = ['bootstrap', 'login', 'verify-2fa', 'refresh', 'logout', 'me', 'profile', 'change-password', 'totp']
 
 const handlers: Record<string, (req: Request) => Promise<Response> | Response> = {
   bootstrap,
@@ -405,6 +432,7 @@ const handlers: Record<string, (req: Request) => Promise<Response> | Response> =
   refresh,
   logout,
   me,
+  profile,
   'change-password': changePassword,
   totp,
 }

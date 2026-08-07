@@ -4,6 +4,7 @@ export interface User {
   id: string
   email: string
   name: string
+  avatar?: string
   role: Role
   isActive: boolean
   totpEnabled: boolean
@@ -327,6 +328,13 @@ export async function updateAdminUser(id: string, patch: { name?: string; role?:
 
 export async function deleteAdminUser(id: string): Promise<void> {
   await apiFetch(`/admin/users/${id}`, { method: 'DELETE' })
+}
+
+export async function updateProfile(input: { name?: string; avatar?: string }): Promise<User> {
+  const body = await apiFetch<{ user: User }>('/auth/profile', { method: 'PATCH', body: JSON.stringify(input) })
+  const session = getSession()
+  if (session && body.user) saveSession(body.user, session.token, session.expiresAt)
+  return body.user
 }
 
 export async function getEnquiries(): Promise<any[]> {

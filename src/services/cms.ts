@@ -12,7 +12,7 @@ function save(data: Record<string, any>): void {
 const serverCollections = new Set([
   'pages', 'header', 'footer', 'media', 'blog', 'seo', 'theme', 'branding',
   'testimonials', 'faqs', 'homepageSections', 'enquiries', 'subscribers', 'leads',
-  'careers', 'jobs', 'popups', 'banners', 'team', 'gallery', 'portfolio',
+  'careers', 'jobs', 'popups', 'banners', 'team', 'gallery', 'videos', 'portfolio',
   'clients', 'services', 'settings', 'pageData',
 ])
 
@@ -264,6 +264,7 @@ const defaults: Record<string, any[]> = {
   banners: [],
   team: [],
   gallery: [],
+  videos: [],
   portfolio: [],
   clients: [],
   services: [],

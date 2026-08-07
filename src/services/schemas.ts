@@ -280,6 +280,7 @@ export const schemas: Record<string, SchemaDefinition> = {
       { key: 'role', label: 'Position', type: 'text' },
       { key: 'bio', label: 'Bio', type: 'textarea' },
       { key: 'image', label: 'Photo', type: 'image' },
+      { key: 'videoUrl', label: 'YouTube URL (optional)', type: 'url', placeholder: 'https://www.youtube.com/watch?v=…' },
       { key: 'email', label: 'Email', type: 'email' },
       { key: 'socialLinks', label: 'Social Links (platform:url per line)', type: 'textarea' },
       { key: 'displayOrder', label: 'Display Order', type: 'number', defaultValue: 0 },
@@ -428,6 +429,34 @@ export const schemas: Record<string, SchemaDefinition> = {
       { key: 'email', label: 'Email', type: 'email' },
       { key: 'subscribedAt', label: 'Subscribed At', type: 'date' },
       { key: 'active', label: 'Active', type: 'boolean', defaultValue: true },
+    ],
+  },
+  gallery: {
+    name: 'gallery', label: 'Gallery', description: 'Photo gallery images shown on the website', icon: 'FiImage',
+    fields: [
+      { key: 'title', label: 'Title', type: 'text' },
+      { key: 'description', label: 'Description', type: 'textarea' },
+      { key: 'image', label: 'Photo', type: 'image', validation: { required: true } },
+      { key: 'link', label: 'Link (optional)', type: 'url' },
+      { key: 'displayOrder', label: 'Display Order', type: 'number', defaultValue: 0 },
+      { key: 'status', label: 'Status', type: 'select', defaultValue: 'published', options: [
+        { label: 'Published', value: 'published' },
+        { label: 'Draft', value: 'draft' },
+      ]},
+    ],
+  },
+  videos: {
+    name: 'videos', label: 'YouTube Videos', description: 'YouTube videos shown in a gallery on the website', icon: 'FiYoutube',
+    fields: [
+      { key: 'title', label: 'Video Title', type: 'text', validation: { required: true } },
+      { key: 'videoUrl', label: 'YouTube URL', type: 'url', placeholder: 'https://www.youtube.com/watch?v=…' },
+      { key: 'image', label: 'Cover / Thumbnail', type: 'image' },
+      { key: 'description', label: 'Description', type: 'textarea' },
+      { key: 'displayOrder', label: 'Display Order', type: 'number', defaultValue: 0 },
+      { key: 'status', label: 'Status', type: 'select', defaultValue: 'published', options: [
+        { label: 'Published', value: 'published' },
+        { label: 'Draft', value: 'draft' },
+      ]},
     ],
   },
 }

@@ -20,6 +20,7 @@ import BlogPost from './pages/BlogPost'
 import Careers from './pages/Careers'
 import Team from './pages/Team'
 import Contact from './pages/Contact'
+import Gallery from './pages/Gallery'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
@@ -29,6 +30,7 @@ import AdminDashboard from './pages/admin/Dashboard'
 import AdminPages from './pages/admin/Pages'
 import AdminManager from './pages/admin/AdminManager'
 import AdminSecurity from './pages/admin/Security'
+import AdminProfile from './pages/admin/Profile'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true)
@@ -62,6 +64,7 @@ export default function App() {
           <Route index element={<PageTransition><AdminDashboard /></PageTransition>} />
           <Route path="pages" element={<PageTransition><AdminPages /></PageTransition>} />
           <Route path="content" element={<PageTransition><AdminManager /></PageTransition>} />
+          <Route path="profile" element={<PageTransition><AdminProfile /></PageTransition>} />
           <Route path="security" element={<PageTransition><AdminSecurity /></PageTransition>} />
         </Route>
       </Routes>
@@ -77,6 +80,7 @@ export default function App() {
           <Route path="services" element={<PageTransition><Services /></PageTransition>} />
           <Route path="services/:service" element={<PageTransition><ServiceDetail /></PageTransition>} />
           <Route path="portfolio" element={<PageTransition><Portfolio /></PageTransition>} />
+          <Route path="gallery" element={<PageTransition><Gallery /></PageTransition>} />
           <Route path="case-studies" element={<PageTransition><CaseStudies /></PageTransition>} />
           <Route path="clients" element={<PageTransition><Clients /></PageTransition>} />
           <Route path="awards" element={<PageTransition><Awards /></PageTransition>} />

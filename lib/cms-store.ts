@@ -23,6 +23,7 @@ export const CMS_COLLECTIONS = [
   'banners',
   'team',
   'gallery',
+  'videos',
   'portfolio',
   'clients',
   'services',

@@ -9,6 +9,7 @@ export interface AdminUser {
   id: string
   email: string
   name: string
+  avatar?: string
   role: Role
   isActive: boolean
   passwordHash: string
@@ -23,6 +24,7 @@ export interface PublicUser {
   id: string
   email: string
   name: string
+  avatar?: string
   role: Role
   isActive: boolean
   totpEnabled: boolean
@@ -93,7 +95,7 @@ export async function createUser(input: {
   return toPublic(user)
 }
 
-export async function updateUser(id: string, patch: Partial<Pick<AdminUser, 'name' | 'role' | 'isActive' | 'totpEnabled' | 'totpSecret' | 'lastLoginAt' | 'passwordHash'>>): Promise<PublicUser | undefined> {
+export async function updateUser(id: string, patch: Partial<Pick<AdminUser, 'name' | 'avatar' | 'role' | 'isActive' | 'totpEnabled' | 'totpSecret' | 'lastLoginAt' | 'passwordHash'>>): Promise<PublicUser | undefined> {
   const users = await listUsers()
   const idx = users.findIndex((u) => u.id === id)
   if (idx === -1) return undefined
