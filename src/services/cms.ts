@@ -27,6 +27,10 @@ export async function pullCMS(): Promise<boolean> {
     let changed = false
     for (const [name, items] of Object.entries(collections)) {
       if (serverCollections.has(name) && Array.isArray(items)) {
+        const localItems = data[name]
+        if (items.length === 0 && Array.isArray(localItems) && localItems.length > 0) {
+          continue
+        }
         data[name] = items
         changed = true
       }

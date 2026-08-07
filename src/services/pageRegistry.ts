@@ -387,6 +387,13 @@ export const pageRegistry: PageRegistration[] = [
     ],
   },
   {
+    name: 'Gallery', slug: 'gallery', route: '/gallery', description: 'Photo gallery and YouTube videos',
+    sections: [
+      { type: 'gallery', name: 'Gallery & Videos' },
+      { type: 'cta', name: 'CTA' },
+    ],
+  },
+  {
     name: 'Blog', slug: 'blog', route: '/blog', description: 'Blog listing',
     sections: [
       { type: 'blog-posts', name: 'Blog Posts' },

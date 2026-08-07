@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiSave, FiEye, FiClock, FiX, FiChevronDown, FiChevronUp, FiPlus, FiTrash2, FiRefreshCw } from 'react-icons/fi'
 import { Button, Modal, Input, ConfirmDialog } from '@/components/ui'
-import { getPageData, savePageSections, savePageSEO, savePageStatus, addRevision, getAllPageData } from '@/services/cms'
+import { getPageData, savePageSections, savePageSEO, savePageStatus, addRevision, getAllPageData, initAllPages } from '@/services/cms'
 import { pageRegistry, getSectionDefinition, type SectionType } from '@/services/pageRegistry'
 
 interface PageEditorProps {
@@ -12,6 +12,7 @@ interface PageEditorProps {
 
 export default function PageEditor({ route, onClose }: PageEditorProps) {
   const reg = pageRegistry.find(p => p.route === route)
+  initAllPages()
   const [data, setData] = useState(getPageData(route))
   const [sections, setSections] = useState<Record<string, any>>({})
   const [seoOpen, setSeoOpen] = useState(false)
@@ -445,14 +446,14 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
           {tab === 'seo' && (
             <div className="rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] p-6 space-y-4">
               <h3 className="text-base font-bold text-[var(--text-primary)]">SEO & Meta Settings</h3>
-              <Input label="Meta Title" value={seoForm.title} onChange={v => setSeoForm({ ...seoForm, title: v })} placeholder="Page title for search engines" />
+              <Input label="Meta Title" value={seoForm.title} onChange={e => setSeoForm({ ...seoForm, title: e.target.value })} placeholder="Page title for search engines" />
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Meta Description</label>
                 <textarea value={seoForm.description} onChange={e => setSeoForm({ ...seoForm, description: e.target.value })} rows={3} className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm" placeholder="Page description for search results" />
               </div>
-              <Input label="Keywords" value={seoForm.keywords} onChange={v => setSeoForm({ ...seoForm, keywords: v })} placeholder="keyword1, keyword2, keyword3" />
-              <Input label="OG Image URL" value={seoForm.ogImage} onChange={v => setSeoForm({ ...seoForm, ogImage: v })} placeholder="https://..." />
-              <Input label="Canonical URL" value={seoForm.canonicalUrl} onChange={v => setSeoForm({ ...seoForm, canonicalUrl: v })} placeholder="https://yourdomain.com/page" />
+              <Input label="Keywords" value={seoForm.keywords} onChange={e => setSeoForm({ ...seoForm, keywords: e.target.value })} placeholder="keyword1, keyword2, keyword3" />
+              <Input label="OG Image URL" value={seoForm.ogImage} onChange={e => setSeoForm({ ...seoForm, ogImage: e.target.value })} placeholder="https://..." />
+              <Input label="Canonical URL" value={seoForm.canonicalUrl} onChange={e => setSeoForm({ ...seoForm, canonicalUrl: e.target.value })} placeholder="https://yourdomain.com/page" />
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">JSON-LD Schema</label>
                 <textarea value={seoForm.schema} onChange={e => setSeoForm({ ...seoForm, schema: e.target.value })} rows={6} className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm font-mono" placeholder="Paste structured data markup here" />
