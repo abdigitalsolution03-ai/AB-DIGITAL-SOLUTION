@@ -10,6 +10,7 @@ export interface SocialLink { platform: string; url: string }
 export interface ContactInfo { email: string; phone: string; location: string; whatsapp: string }
 export interface HeroContent { badge: string; headline1: string; headline2: string; headlineHighlight: string; description: string; cta1: string; cta1Link: string; cta2: string; cta2Link: string; stats: StatItem[] }
 export interface SiteContent {
+  version: number
   header: { logo: string; logoHighlight: string; navItems: NavItem[]; cta: string; ctaLink: string }
   hero: HeroContent
   footer: { logo: string; logoHighlight: string; description: string; tagline: string; quickLinks: NavItem[]; services: string[]; newsletterHeading: string; newsletterText: string; copyright: string; legalLinks: NavItem[] }
@@ -24,6 +25,7 @@ export interface SiteContent {
 }
 
 const defaultContent: SiteContent = {
+  version: 2,
   header: {
     logo: 'AB', logoHighlight: 'DIGITAL',
     navItems: [
@@ -85,12 +87,12 @@ const defaultContent: SiteContent = {
     ],
   },
   pricing: {
-    label: 'Pricing', heading: 'Transparent', headingHighlight: 'Plans',
-    subtext: 'Choose the plan that fits your needs. All plans include a free consultation.',
+    label: 'Premium Packages', heading: 'Premium Digital', headingHighlight: 'Marketing Packages',
+    subtext: 'We don\'t just manage social media. We build digital brands. Choose the package that fits your goals.',
     plans: [
-      { name: 'Starter', price: '999', description: 'Perfect for small businesses starting their digital journey.', features: ['Website Development (5 Pages)', 'Basic SEO Setup', 'Social Media Setup', 'Monthly Analytics Report', 'Email Support'], popular: false },
-      { name: 'Professional', price: '2,499', description: 'Ideal for growing businesses seeking comprehensive digital solutions.', features: ['Website Development (10 Pages)', 'Advanced SEO Strategy', 'Google Ads Management', 'Meta Ads Management', 'Content Marketing (4 posts/mo)', 'Priority Support', 'Monthly Strategy Call'], popular: true },
-      { name: 'Enterprise', price: 'Custom', description: 'Tailored solutions for large organizations with complex needs.', features: ['Custom Web Application', 'Enterprise SEO Suite', 'Multi-Platform Ad Management', 'AI Automation Integration', 'Full Branding Package', 'Dedicated Account Manager', '24/7 Priority Support', 'Quarterly Business Review'], popular: false },
+      { name: 'Silver', price: '20,000', description: 'For small & growing businesses', features: ['Instagram + Facebook Management', '6 Static Posts', '12 Reels', 'Captions + Hashtags', 'Content Calendar', 'Professional Reel Editing', '2 On-Site Visits / Month', 'Basic Graphic Designing', 'Monthly Performance Report', '1 Strategy Call / Month'], popular: false },
+      { name: 'Gold', price: '30,000', description: 'For growing businesses & content creators', features: ['Instagram + Facebook + YouTube Management', '8 Static Posts', '15 Reels', '3 Long-Form YouTube Videos', 'YouTube Video Thumbnails', 'Captions + Hashtags', 'Content Calendar & Strategy', 'Professional Reel Editing', '2 Meta Ads Campaigns', '1 Google Ads Campaign', '3 On-Site Visits / Month', 'YouTube SEO', 'Monthly Analytics Report', '2 Strategy Calls / Month'], popular: true },
+      { name: 'Platinum', price: '45,000', description: 'For established brands & personal brands', features: ['Instagram + Facebook + YouTube + LinkedIn Management', '10 Static Posts', '18 Reels', 'Reel Cover / Thumbnail for Every Reel', 'Daily Stories', '4 Long-Form YouTube Videos', 'YouTube Thumbnail for Every Long Video', 'Premium Content Strategy', 'Professional Video & Reel Editing', '4 On-Site Visits / Month', '2 Meta Ads Campaigns', '2 Google Ads Campaigns', 'YouTube SEO', 'Monthly Analytics & Performance Report', '2 Strategy Meetings / Month', 'Dedicated Account Management'], popular: false },
     ],
   },
   process: {
@@ -168,7 +170,9 @@ function loadContent(): SiteContent {
     const stored = localStorage.getItem(KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      return { ...defaultContent, ...parsed }
+      if (parsed.version === defaultContent.version) {
+        return { ...defaultContent, ...parsed }
+      }
     }
     } catch {
       // fall through to defaults
