@@ -7,22 +7,19 @@ import { getAll, pullCMS } from '@/services/cms'
 import YoutubeEmbed from '@/components/YoutubeEmbed'
 
 const hardcodedTeam = [
-  { name: 'Arjun Mehta', role: 'Founder & CEO', bio: 'Visionary leader with 15+ years in digital strategy and brand transformation.', color: '#60A5FA' },
-  { name: 'Priya Sharma', role: 'Creative Director', bio: 'Award-winning creative mind behind iconic brand campaigns and visual identities.', color: '#FF4D4D' },
-  { name: 'Rohan Desai', role: 'Head of SEO', bio: 'Data-driven SEO specialist who has ranked 200+ sites on page one of Google.', color: '#4D7AFF' },
-  { name: 'Ananya Patel', role: 'Lead Developer', bio: 'Full-stack engineer building high-performance websites and web applications.', color: '#8B5CF6' },
-  { name: 'Vikram Singh', role: 'Marketing Director', bio: 'Paid media expert managing $5M+ in annual ad spend across global markets.', color: '#10B981' },
-  { name: 'Neha Gupta', role: 'Social Media Head', bio: 'Social strategist who grew brand communities to 1M+ engaged followers.', color: '#60A5FA' },
-  { name: 'Karan Joshi', role: 'Content Strategist', bio: 'Storyteller crafting compelling narratives that drive conversions and brand love.', color: '#FF4D4D' },
-  { name: 'Divya Kumar', role: 'UI/UX Designer', bio: 'User-centric designer creating intuitive digital experiences that delight users.', color: '#4D7AFF' },
-  { name: 'Rahul Verma', role: 'Analytics Lead', bio: 'Conversion rate optimization expert with a data-first approach to growth.', color: '#8B5CF6' },
+  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.', color: '#60A5FA' },
+  { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.', color: '#FF4D4D' },
+  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.', color: '#4D7AFF' },
+  { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.', color: '#8B5CF6' },
+  { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.', color: '#10B981' },
+  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', color: '#60A5FA' },
 ]
 
 const hardcodedStats = [
   { value: '15+', label: 'Years Combined Experience' },
   { value: '200+', label: 'Happy Clients' },
   { value: '50+', label: 'Awards Won' },
-  { value: '9', label: 'Core Team Members' },
+  { value: '6', label: 'Core Team Members' },
 ]
 
 const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981']

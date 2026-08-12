@@ -129,12 +129,12 @@ const defaultContent: SiteContent = {
       { title: 'Results-Driven', description: 'Every strategy is data-backed and focused on delivering measurable ROI for your business.', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
     ],
     team: [
-      { name: 'Arjun Bhatia', role: 'Founder & CEO', bio: 'Visionary leader with 12+ years in digital marketing and technology.' },
-      { name: 'Priya Sharma', role: 'Head of Strategy', bio: 'Data-driven strategist specializing in growth marketing and analytics.' },
-      { name: 'Rahul Verma', role: 'Creative Director', bio: 'Award-winning designer passionate about brand storytelling.' },
-      { name: 'Ananya Patel', role: 'Technical Lead', bio: 'Full-stack developer with expertise in modern web technologies.' },
-      { name: 'Vikram Singh', role: 'SEO Director', bio: 'SEO specialist with track record of top rankings across industries.' },
-      { name: 'Neha Gupta', role: 'Head of Ads', bio: 'Paid media expert managing multi-million dollar ad budgets.' },
+      { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.' },
+      { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.' },
+      { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.' },
+      { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.' },
+      { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.' },
+      { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.' },
     ],
     timeline: [
       { year: '2020', title: 'The Beginning', desc: 'AB DIGITAL SOLUTION was founded with a vision to provide premium digital marketing services to businesses worldwide.' },

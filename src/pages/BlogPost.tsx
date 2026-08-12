@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+﻿import { Helmet } from "react-helmet-async";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -43,7 +43,7 @@ const blogPostsData: Record<string, BlogPostData> = {
       <p>Staying ahead of these trends requires continuous learning and adaptation. At AB DIGITAL SOLUTION, we help businesses navigate the ever-changing SEO landscape with data-driven strategies that deliver results.</p>
     `,
     category: "SEO",
-    author: "Vikram Singh",
+    author: "Ansh",
     authorRole: "SEO Director at AB DIGITAL SOLUTION",
     date: "Mar 15, 2025",
     readTime: "5 min read",
@@ -72,7 +72,7 @@ const blogPostsData: Record<string, BlogPostData> = {
       <p>Building an effective social media presence takes time and consistency. Our team at AB DIGITAL SOLUTION specializes in creating social media strategies that deliver real business results.</p>
     `,
     category: "Marketing",
-    author: "Priya Sharma",
+    author: "Ansh",
     authorRole: "Head of Strategy at AB DIGITAL SOLUTION",
     date: "Mar 12, 2025",
     readTime: "6 min read",
@@ -101,7 +101,7 @@ const blogPostsData: Record<string, BlogPostData> = {
       <p>At AB DIGITAL SOLUTION, we leverage the latest web technologies to build websites and applications that are fast, reliable, and conversion-optimized.</p>
     `,
     category: "Web Development",
-    author: "Ananya Patel",
+    author: "Deepanshu Singh Adhikari",
     authorRole: "Technical Lead at AB DIGITAL SOLUTION",
     date: "Mar 10, 2025",
     readTime: "7 min read",
@@ -216,4 +216,5 @@ export default function BlogPost() {
     </>
   );
 }
+
 
