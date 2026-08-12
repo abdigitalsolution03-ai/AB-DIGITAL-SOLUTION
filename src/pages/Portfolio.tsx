@@ -131,6 +131,10 @@ export default function Portfolio() {
                     <div className="relative h-48 border-b-3 border-[#111] overflow-hidden" style={{ backgroundColor: project.color }}>
                       {project.image ? (
                         <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ) : project.videoUrl ? (
+                        <div className="absolute inset-0">
+                          <YoutubeEmbed url={project.videoUrl} title={project.title} className="w-full h-full rounded-none" />
+                        </div>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center group-hover:bg-black/5 transition-colors duration-500">
                           <svg className="w-16 h-16 text-white/30 group-hover:text-white/50 transition-all duration-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -160,11 +164,6 @@ export default function Portfolio() {
                         </span>
                       ))}
                     </motion.div>
-                    {project.videoUrl && (
-                      <div className="px-6 pb-6">
-                        <YoutubeEmbed url={project.videoUrl} title={project.title} />
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               ))}
