@@ -1,12 +1,30 @@
 const DB_PREFIX = 'cms_'
+const MEDIA_KEY = 'cms_media'
 
 function db(): Record<string, any> {
-  try { return JSON.parse(localStorage.getItem(DB_PREFIX + 'db') || '{}') }
-  catch { return {} }
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DB_PREFIX + 'db') || '{}')
+    const rawMedia = localStorage.getItem(MEDIA_KEY)
+    if (rawMedia !== null) {
+      try {
+        const media = JSON.parse(rawMedia)
+        if (Array.isArray(media)) parsed.media = media
+      } catch { /* media key corrupt — keep db copy */ }
+    }
+    return parsed
+  } catch { return {} }
 }
 
 function save(data: Record<string, any>): void {
-  localStorage.setItem(DB_PREFIX + 'db', JSON.stringify(data))
+  const { media, ...rest } = data
+  let mediaStored = false
+  try {
+    localStorage.setItem(MEDIA_KEY, JSON.stringify(media ?? []))
+    mediaStored = true
+  } catch { /* media too large for its key — try inside main db below */ }
+  try {
+    localStorage.setItem(DB_PREFIX + 'db', JSON.stringify(mediaStored ? rest : data))
+  } catch { /* quota exceeded — state kept in memory for this session only */ }
 }
 
 const serverCollections = new Set([

@@ -8,11 +8,17 @@ export default function AdminMedia() {
   const [items, setItems] = useState<Media[]>([])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [preview, setPreview] = useState<Media | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { setItems(getAll('media')) }, [])
 
   const refresh = () => setItems(getAll('media'))
+
+  const notify = (msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3000)
+  }
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -58,8 +64,13 @@ export default function AdminMedia() {
   }
 
   function saveMedia(name: string, url: string, type: string): void {
-    create('media', { name, url, type, alt: '', size: url.length, folder: 'root' })
-    refresh()
+    try {
+      create('media', { name, url, type, alt: '', size: url.length, folder: 'root' })
+      refresh()
+      notify(`Uploaded "${name}"`)
+    } catch {
+      notify('Upload failed — storage quota exceeded. Delete some files and retry.')
+    }
   }
 
   const copyUrl = (url: string) => {
@@ -74,8 +85,13 @@ export default function AdminMedia() {
           <p className="text-sm text-[var(--text-tertiary)] mt-1">Upload and manage media files</p>
         </div>
         <Button variant="primary" size="sm" icon={<FiUpload />} onClick={() => fileRef.current?.click()}>Upload</Button>
-        <input ref={fileRef} type="file" accept="image/*,.pdf,.doc,.docx" className="hidden" onChange={handleUpload} />
+        <input ref={fileRef} type="file" accept="image/*,.pdf,.doc,.docx" className="hidden" onChange={(e) => { handleUpload(e); e.target.value = '' }} />
       </div>
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl text-sm font-medium bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] shadow-lg">
+          {toast}
+        </div>
+      )}
       <Card>
         {items.length === 0 ? (
           <EmptyState title="No media" description="Upload your first file" action={<Button variant="primary" size="sm" icon={<FiUpload />} onClick={() => fileRef.current?.click()}>Upload</Button>} />
