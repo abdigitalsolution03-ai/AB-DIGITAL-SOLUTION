@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiHome, FiFileText, FiLayout, FiMenu, FiX, FiChevronDown, FiChevronRight,
-  FiLogOut, FiGlobe, FiShield, FiUser,
+  FiLogOut, FiGlobe, FiShield, FiUser, FiImage,
 } from 'react-icons/fi'
 import { getSession, logout, setupIdleLogout } from '@/services/auth'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -12,6 +12,7 @@ const navItems = [
   { label: 'Dashboard', path: '/admin', icon: <FiHome size={16} /> },
   { label: 'Pages', path: '/admin/pages', icon: <FiFileText size={16} /> },
   { label: 'Content Manager', path: '/admin/content', icon: <FiLayout size={16} /> },
+  { label: 'Media Library', path: '/admin/media', icon: <FiImage size={16} /> },
   { label: 'Profile', path: '/admin/profile', icon: <FiUser size={16} /> },
   { label: 'Security', path: '/admin/security', icon: <FiShield size={16} /> },
 ]

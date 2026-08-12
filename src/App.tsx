@@ -31,6 +31,7 @@ import AdminPages from './pages/admin/Pages'
 import AdminManager from './pages/admin/AdminManager'
 import AdminSecurity from './pages/admin/Security'
 import AdminProfile from './pages/admin/Profile'
+import AdminMedia from './pages/admin/Media'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true)
@@ -64,8 +65,10 @@ export default function App() {
           <Route index element={<PageTransition><AdminDashboard /></PageTransition>} />
           <Route path="pages" element={<PageTransition><AdminPages /></PageTransition>} />
           <Route path="content" element={<PageTransition><AdminManager /></PageTransition>} />
+          <Route path="media" element={<PageTransition><AdminMedia /></PageTransition>} />
           <Route path="profile" element={<PageTransition><AdminProfile /></PageTransition>} />
           <Route path="security" element={<PageTransition><AdminSecurity /></PageTransition>} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Routes>
     )
