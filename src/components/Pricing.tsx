@@ -38,7 +38,7 @@ export default function Pricing() {
                   <h3 className="text-xl font-bold text-[#111111]">{plan.name}</h3>
                   <div className="mt-4">
                     <span className="text-4xl font-bold text-[#111111]">
-                      {plan.price === "Custom" ? "Custom" : `$${plan.price}`}
+                      {plan.price === "Custom" ? "Custom" : `₹${plan.price}`}
                     </span>
                     {plan.price !== "Custom" && (
                       <span className="text-gray-400 text-sm ml-1">/month</span>

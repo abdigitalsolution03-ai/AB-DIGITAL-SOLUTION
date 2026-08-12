@@ -29,6 +29,7 @@ export const CMS_COLLECTIONS = [
   'services',
   'settings',
   'pageData',
+  'templates',
 ]
 
 export async function getCollection(name: string): Promise<any[]> {

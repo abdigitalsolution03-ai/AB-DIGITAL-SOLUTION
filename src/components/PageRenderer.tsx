@@ -15,6 +15,10 @@ export default function PageRenderer({ route, children }: PageRendererProps) {
   if (!reg) return <>{children}</>
 
   const seo = data?.seo || { title: '', description: '', keywords: '', ogImage: '', canonicalUrl: '' }
+  const stored = (data?.sections as any) ?? undefined
+  const sections = Array.isArray(stored) && stored.length > 0
+    ? stored
+    : reg.sections.map((sec) => ({ id: `default-${sec.type}`, type: sec.type, data: data?.sections?.[sec.type] }))
 
   return (
     <>
@@ -31,8 +35,8 @@ export default function PageRenderer({ route, children }: PageRendererProps) {
           DRAFT MODE — This page is not published
         </div>
       )}
-      {reg.sections.map((sec) => (
-        <SectionRenderer key={sec.type} type={sec.type} data={data?.sections?.[sec.type]} />
+      {sections.map((sec) => (
+        <SectionRenderer key={sec.id ?? sec.type} type={sec.type} data={sec.data} />
       ))}
       {children}
     </>

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FiSave, FiEye, FiClock, FiX, FiChevronDown, FiChevronUp, FiPlus, FiTrash2, FiRefreshCw } from 'react-icons/fi'
+import { FiSave, FiEye, FiClock, FiX, FiChevronDown, FiChevronUp, FiPlus, FiTrash2, FiRefreshCw, FiCopy, FiArrowUp, FiArrowDown, FiMove, FiLayers } from 'react-icons/fi'
 import { Button, Modal, Input, ConfirmDialog } from '@/components/ui'
-import { getPageData, savePageSections, savePageSEO, savePageStatus, addRevision, getAllPageData, initAllPages } from '@/services/cms'
-import { pageRegistry, getSectionDefinition, type SectionType } from '@/services/pageRegistry'
+import { getPageData, getPageSections, savePageSections, savePageSEO, savePageStatus, addRevision, getAllPageData, initAllPages, listTemplates, saveTemplate, deleteEntry, type PageSections, type SectionInstance } from '@/services/cms'
+import { pageRegistry, getSectionDefinition, getDefaultSectionContent, sectionDefinitions, type SectionType } from '@/services/pageRegistry'
+import SectionRenderer from '@/components/SectionRenderer'
 
 interface PageEditorProps {
   route: string
@@ -14,7 +15,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
   const reg = pageRegistry.find(p => p.route === route)
   initAllPages()
   const [data, setData] = useState(getPageData(route))
-  const [sections, setSections] = useState<Record<string, any>>({})
+  const [sections, setSections] = useState<PageSections>([])
   const [seoOpen, setSeoOpen] = useState(false)
   const [seoForm, setSeoForm] = useState({ title: '', description: '', keywords: '', ogImage: '', canonicalUrl: '', schema: '' })
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -22,12 +23,18 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
   const [status, setStatus] = useState<string>('published')
   const [saved, setSaved] = useState(false)
   const [revisionLabel, setRevisionLabel] = useState('')
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [showTemplateModal, setShowTemplateModal] = useState(false)
+  const [previewMode, setPreviewMode] = useState(false)
+  const [draggingId, setDraggingId] = useState<string | null>(null)
+  const [templateName, setTemplateName] = useState('')
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null)
 
   useEffect(() => {
     const d = getPageData(route)
     setData(d)
     if (d) {
-      setSections(JSON.parse(JSON.stringify(d.sections)))
+      setSections(getPageSections(route))
       setSeoForm({ ...d.seo })
       setStatus(d.status)
     }
@@ -41,49 +48,96 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
     )
   }
 
-  const handleFieldChange = (sectionType: string, fieldKey: string, value: any) => {
-    setSections(prev => ({
-      ...prev,
-      [sectionType]: { ...prev[sectionType], [fieldKey]: value },
-    }))
+  const handleFieldChange = (sectionId: string, fieldKey: string, value: any) => {
+    setSections(prev => prev.map(s => s.id === sectionId ? { ...s, data: { ...s.data, [fieldKey]: value } } : s))
     setSaved(false)
   }
 
-  const handleRepeaterAdd = (sectionType: string, fieldKey: string) => {
-    const def = getSectionDefinition(sectionType as SectionType)
+  const handleRepeaterAdd = (sectionId: string, fieldKey: string) => {
+    const sec = sections.find(s => s.id === sectionId)
+    if (!sec) return
+    const def = getSectionDefinition(sec.type as SectionType)
     const field = def.fields.find(f => f.key === fieldKey)
     if (!field?.fields) return
     const item: Record<string, any> = {}
     for (const f of field.fields) {
       item[f.key] = f.default ?? ''
     }
-    setSections(prev => ({
-      ...prev,
-      [sectionType]: {
-        ...prev[sectionType],
-        [fieldKey]: [...(prev[sectionType]?.[fieldKey] || []), item],
-      },
-    }))
+    setSections(prev => prev.map(s => s.id === sectionId ? { ...s, data: { ...s.data, [fieldKey]: [...(s.data[fieldKey] || []), item] } } : s))
     setSaved(false)
   }
 
-  const handleRepeaterRemove = (sectionType: string, fieldKey: string, index: number) => {
-    setSections(prev => ({
-      ...prev,
-      [sectionType]: {
-        ...prev[sectionType],
-        [fieldKey]: prev[sectionType][fieldKey].filter((_: any, i: number) => i !== index),
-      },
-    }))
+  const handleRepeaterRemove = (sectionId: string, fieldKey: string, index: number) => {
+    setSections(prev => prev.map(s => s.id === sectionId ? { ...s, data: { ...s.data, [fieldKey]: s.data[fieldKey].filter((_: any, i: number) => i !== index) } } : s))
     setSaved(false)
   }
 
-  const handleRepeaterFieldChange = (sectionType: string, fieldKey: string, index: number, subKey: string, value: any) => {
-    setSections(prev => {
-      const items = [...(prev[sectionType]?.[fieldKey] || [])]
+  const handleRepeaterFieldChange = (sectionId: string, fieldKey: string, index: number, subKey: string, value: any) => {
+    setSections(prev => prev.map(s => {
+      if (s.id !== sectionId) return s
+      const items = [...(s.data[fieldKey] || [])]
       items[index] = { ...items[index], [subKey]: value }
-      return { ...prev, [sectionType]: { ...prev[sectionType], [fieldKey]: items } }
+      return { ...s, data: { ...s.data, [fieldKey]: items } }
+    }))
+    setSaved(false)
+  }
+
+  const addSection = (type: string) => {
+    const sec: SectionInstance = {
+      id: 'sec_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      type,
+      data: getDefaultSectionContent(type as SectionType),
+    }
+    setSections(prev => [...prev, sec])
+    setActiveSection(sec.id)
+    setShowAddModal(false)
+    setSaved(false)
+  }
+
+  const duplicateSection = (id: string) => {
+    setSections(prev => {
+      const idx = prev.findIndex(s => s.id === id)
+      if (idx === -1) return prev
+      const copy: SectionInstance = { ...prev[idx], id: 'sec_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), data: JSON.parse(JSON.stringify(prev[idx].data)) }
+      const next = [...prev]
+      next.splice(idx + 1, 0, copy)
+      return next
     })
+    setSaved(false)
+  }
+
+  const removeSection = (id: string) => {
+    setSections(prev => prev.filter(s => s.id !== id))
+    setActiveSection(null)
+    setConfirmRemoveId(null)
+    setSaved(false)
+  }
+
+  const moveSection = (id: string, dir: -1 | 1) => {
+    setSections(prev => {
+      const idx = prev.findIndex(s => s.id === id)
+      const to = idx + dir
+      if (idx === -1 || to < 0 || to >= prev.length) return prev
+      const next = [...prev]
+      const cur = next.splice(idx, 1)[0]
+      next.splice(to, 0, cur)
+      return next
+    })
+    setSaved(false)
+  }
+
+  const reorderDrop = (targetId: string) => {
+    if (!draggingId || draggingId === targetId) { setDraggingId(null); return }
+    setSections(prev => {
+      const next = [...prev]
+      const from = next.findIndex(s => s.id === draggingId)
+      const to = next.findIndex(s => s.id === targetId)
+      if (from === -1 || to === -1) return prev
+      const [moving] = next.splice(from, 1)
+      next.splice(to, 0, moving)
+      return next
+    })
+    setDraggingId(null)
     setSaved(false)
   }
 
@@ -108,8 +162,22 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
     setSaved(false)
   }
 
-  const renderField = (sectionType: string, field: any) => {
-    const value = sections[sectionType]?.[field.key]
+  const handleSaveTemplate = () => {
+    if (!templateName.trim()) return
+    saveTemplate(templateName, route, sections)
+    setTemplateName('')
+    setShowTemplateModal(false)
+  }
+
+  const applyTemplate = (id: string) => {
+    const tmpl = listTemplates().find((t: any) => t.id === id)
+    if (!tmpl) return
+    setSections(JSON.parse(JSON.stringify(tmpl.sections)))
+    setSaved(false)
+  }
+
+  const renderField = (sectionType: SectionInstance, field: any) => {
+    const value = sectionType.data?.[field.key]
 
     switch (field.type) {
       case 'text':
@@ -117,7 +185,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
           <Input
             label={field.label}
             value={value ?? ''}
-            onChange={v => handleFieldChange(sectionType, field.key, v)}
+            onChange={v => handleFieldChange(sectionType.id, field.key, v)}
             placeholder={field.placeholder}
           />
         )
@@ -128,7 +196,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">{field.label}</label>
             <textarea
               value={value ?? ''}
-              onChange={e => handleFieldChange(sectionType, field.key, e.target.value)}
+              onChange={e => handleFieldChange(sectionType.id, field.key, e.target.value)}
               rows={field.type === 'richtext' ? 8 : 3}
               className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm font-mono"
               placeholder={field.placeholder}
@@ -143,7 +211,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
               <input
                 type="text"
                 value={value ?? ''}
-                onChange={e => handleFieldChange(sectionType, field.key, e.target.value)}
+                onChange={e => handleFieldChange(sectionType.id, field.key, e.target.value)}
                 className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm"
                 placeholder="Image URL"
               />
@@ -161,13 +229,13 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
               <input
                 type="color"
                 value={value || '#000000'}
-                onChange={e => handleFieldChange(sectionType, field.key, e.target.value)}
+                onChange={e => handleFieldChange(sectionType.id, field.key, e.target.value)}
                 className="w-10 h-10 rounded-lg cursor-pointer"
               />
               <input
                 type="text"
                 value={value ?? ''}
-                onChange={e => handleFieldChange(sectionType, field.key, e.target.value)}
+                onChange={e => handleFieldChange(sectionType.id, field.key, e.target.value)}
                 className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm"
               />
             </div>
@@ -180,7 +248,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
             <input
               type="number"
               value={value ?? 0}
-              onChange={e => handleFieldChange(sectionType, field.key, parseFloat(e.target.value) || 0)}
+              onChange={e => handleFieldChange(sectionType.id, field.key, parseFloat(e.target.value) || 0)}
               className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm"
             />
           </div>
@@ -191,7 +259,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
             <input
               type="checkbox"
               checked={!!value}
-              onChange={e => handleFieldChange(sectionType, field.key, e.target.checked)}
+              onChange={e => handleFieldChange(sectionType.id, field.key, e.target.checked)}
               className="w-4 h-4 rounded border-[var(--border-primary)] text-blue-500 focus:ring-blue-500"
             />
             <span className="text-sm text-[var(--text-primary)]">{field.label}</span>
@@ -203,7 +271,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">{field.label}</label>
             <select
               value={value ?? ''}
-              onChange={e => handleFieldChange(sectionType, field.key, e.target.value)}
+              onChange={e => handleFieldChange(sectionType.id, field.key, e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none text-sm"
             >
               {field.options?.map((opt: { label: string; value: string }) => (
@@ -218,9 +286,9 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
             <div className="flex items-center justify-between mb-2">
               <label className="text-sm font-medium text-[var(--text-primary)]">{field.label}</label>
               <button
-                onClick={() => handleRepeaterAdd(sectionType, field.key)}
+onClick={() => handleRepeaterAdd(sectionType.id, field.key)}
                 className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-400"
-              >
+                >
                 <FiPlus size={12} /> Add {field.label}
               </button>
             </div>
@@ -230,7 +298,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-medium text-[var(--text-tertiary)]">Item {idx + 1}</span>
                     <button
-                      onClick={() => handleRepeaterRemove(sectionType, field.key, idx)}
+                      onClick={() => handleRepeaterRemove(sectionType.id, field.key, idx)}
                       className="text-red-500 hover:text-red-400"
                     >
                       <FiTrash2 size={14} />
@@ -239,7 +307,7 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
                   <div className="space-y-2">
                     {field.fields?.map((subField: any) => (
                       <div key={subField.key}>
-                        {renderRepeaterField(sectionType, field.key, idx, subField, item)}
+                        {renderRepeaterField(sectionType.id, field.key, idx, subField, item)}
                       </div>
                     ))}
                   </div>
@@ -392,54 +460,106 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-4 lg:p-6">
-          {tab === 'sections' && (
+{tab === 'sections' && (
             <div className="space-y-4">
-              {reg.sections.map((sec, i) => {
-                const def = getSectionDefinition(sec.type)
-                const isOpen = activeSection === sec.type
-                return (
-                  <motion.div
-                    key={sec.type}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03 }}
-                    className="rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] overflow-hidden"
-                  >
-                    <button
-                      onClick={() => setActiveSection(isOpen ? null : sec.type)}
-                      className="w-full flex items-center justify-between p-4 hover:bg-[var(--bg-tertiary)] transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 font-medium text-xs">
-                          {i + 1}
-                        </div>
-                        <div className="text-left">
-                          <h3 className="text-sm font-semibold text-[var(--text-primary)]">{def.name}</h3>
-                          <p className="text-xs text-[var(--text-tertiary)]">{def.description}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {isOpen ? <FiChevronUp size={16} className="text-[var(--text-tertiary)]" /> : <FiChevronDown size={16} className="text-[var(--text-tertiary)]" />}
-                      </div>
-                    </button>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: 'auto' }}
-                        className="border-t border-[var(--border-primary)]"
-                      >
-                        <div className="p-4 space-y-4">
-                          {def.fields.map(field => (
-                            <div key={field.key}>
-                              {renderField(sec.type, field)}
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)]">Page Sections</h3>
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="sm" icon={<FiCopy />} onClick={() => setShowTemplateModal(true)}>Templates</Button>
+                  <Button variant="secondary" size="sm" icon={<FiEye />} onClick={() => setPreviewMode(!previewMode)}>
+                    {previewMode ? 'Edit' : 'Preview'}
+                  </Button>
+                  <Button variant="primary" size="sm" icon={<FiPlus />} onClick={() => setShowAddModal(true)}>Add Section</Button>
+                </div>
+              </div>
+
+              {previewMode ? (
+                <div className="rounded-2xl border border-[var(--border-primary)] overflow-hidden">
+                  <div className="relative">
+                    {sections.map((sec) => (
+                      <SectionRenderer key={sec.id} type={sec.type} data={sec.data} />
+                    ))}
+                    {sections.length === 0 && (
+                      <div className="p-16 text-center text-sm text-[var(--text-tertiary)]">No sections yet.</div>
                     )}
-                  </motion.div>
-                )
-              })}
+                  </div>
+                </div>
+              ) : (
+                sections.map((sec, i) => {
+                  const def = getSectionDefinition(sec.type as SectionType)
+                  const isOpen = activeSection === sec.id
+                  const isDragging = draggingId === sec.id
+                  return (
+                    <motion.div
+                      key={sec.id}
+                      layout
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                      className={`rounded-xl bg-[var(--bg-secondary)] border overflow-hidden ${isDragging ? 'border-blue-500 ring-2 ring-blue-500/30' : 'border-[var(--border-primary)]'}`}
+                      draggable
+                      onDragStart={() => setDraggingId(sec.id)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => reorderDrop(sec.id)}
+                      onDragEnd={() => setDraggingId(null)}
+                    >
+                      <button
+                        onClick={() => setActiveSection(isOpen ? null : sec.id)}
+                        className="w-full flex items-center justify-between p-4 hover:bg-[var(--bg-tertiary)] transition-colors cursor-grab active:cursor-grabbing"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FiMove size={16} className="text-[var(--text-tertiary)] opacity-60" />
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 font-medium text-xs">
+                            {i + 1}
+                          </div>
+                          <div className="text-left">
+                            <h3 className="text-sm font-semibold text-[var(--text-primary)]">{def.name}</h3>
+                            <p className="text-xs text-[var(--text-tertiary)]">{def.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                          <button onClick={() => moveSection(sec.id, -1)} disabled={i === 0} className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-30">
+                            <FiArrowUp size={14} />
+                          </button>
+                          <button onClick={() => moveSection(sec.id, 1)} disabled={i === sections.length - 1} className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-30">
+                            <FiArrowDown size={14} />
+                          </button>
+                          <button onClick={() => duplicateSection(sec.id)} className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)] hover:text-blue-500">
+                            <FiCopy size={14} />
+                          </button>
+                          <button onClick={() => setConfirmRemoveId(sec.id)} className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-tertiary)] hover:text-red-500">
+                            <FiTrash2 size={14} />
+                          </button>
+                          {isOpen ? <FiChevronUp size={16} className="text-[var(--text-tertiary)]" /> : <FiChevronDown size={16} className="text-[var(--text-tertiary)]" />}
+                        </div>
+                      </button>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0 }}
+                          animate={{ height: 'auto' }}
+                          className="border-t border-[var(--border-primary)]"
+                        >
+                          <div className="p-4 space-y-4">
+                            {def.fields.map(field => (
+                              <div key={field.key}>
+                                {renderField(sec, field)}
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  )
+                })
+              )}
+
+              {!previewMode && sections.length === 0 && (
+                <div className="rounded-xl border border-dashed border-[var(--border-primary)] p-16 text-center">
+                  <FiLayers size={32} className="mx-auto text-[var(--text-tertiary)] mb-3" />
+                  <p className="text-sm text-[var(--text-tertiary)] mb-4">No sections yet. Add your first section to start building this page.</p>
+                  <Button variant="primary" size="sm" icon={<FiPlus />} onClick={() => setShowAddModal(true)}>Add Section</Button>
+                </div>
+              )}
             </div>
           )}
 
@@ -495,11 +615,95 @@ export default function PageEditor({ route, onClose }: PageEditorProps) {
                     </button>
                   </div>
                 ))}
-              </div>
+</div>
             </div>
           )}
         </div>
       </div>
+
+      {showAddModal && (
+        <div className="fixed inset-0 z-20 bg-black/50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border-primary)]">
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Add Section</h3>
+              <button onClick={() => setShowAddModal(false)} className="p-1.5 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                <FiX size={16} />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto grid grid-cols-2 md:grid-cols-3 gap-3">
+              {Object.values(sectionDefinitions).map((def) => {
+                const used = sections.some(s => s.type === def.type)
+                return (
+                  <button
+                    key={def.type}
+                    onClick={() => addSection(def.type)}
+                    className={`text-left p-4 rounded-xl border transition-colors ${used ? 'border-[var(--border-primary)] bg-[var(--bg-tertiary)]' : 'border-dashed border-[var(--border-primary)] hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10'}`}
+                  >
+                    <h4 className="text-sm font-semibold text-[var(--text-primary)]">{def.name}</h4>
+                    <p className="text-xs text-[var(--text-tertiary)] mt-1 line-clamp-2">{def.description}</p>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTemplateModal && (
+        <div className="fixed inset-0 z-20 bg-slate-50/80 dark:bg-slate-900/80 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border-primary)]">
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Section Templates</h3>
+              <button onClick={() => setShowTemplateModal(false)} className="p-1.5 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                <FiX size={16} />
+              </button>
+            </div>
+            <div className="p-4 border-b border-[var(--border-primary)] flex gap-2">
+              <input
+                type="text"
+                value={templateName}
+                onChange={e => setTemplateName(e.target.value)}
+                placeholder="Template name (e.g. Homepage v2)"
+                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm"
+              />
+              <Button variant="primary" size="sm" icon={<FiPlus />} onClick={handleSaveTemplate} disabled={!templateName.trim()}>Save current layout as template</Button>
+            </div>
+            <div className="p-4 space-y-2 overflow-y-auto">
+              {listTemplates().length === 0 && (
+                <p className="text-sm text-[var(--text-tertiary)] text-center py-6">No templates saved yet. Save your current layout to reuse it on other pages.</p>
+              )}
+              {listTemplates().map((tmpl: any) => (
+                <div key={tmpl.id} className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-tertiary)]">
+                  <div>
+                    <p className="text-sm font-medium text-[var(--text-primary)]">{tmpl.name}</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">{tmpl.route} · {tmpl.sections?.length || 0} sections</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => applyTemplate(tmpl.id)} className="px-3 py-1.5 rounded-lg text-xs text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10">
+                      Apply
+                    </button>
+                    <button onClick={() => { deleteEntry('templates', tmpl.id); setShowTemplateModal(false); }} className="px-2 py-1.5 rounded-lg text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
+                      <FiTrash2 size={12} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmRemoveId && (
+        <ConfirmDialog
+          open
+          title="Remove section?"
+          message="This will permanently remove this section from the page. You can restore it via a saved revision if you have one."
+          confirmLabel="Remove"
+          onConfirm={() => removeSection(confirmRemoveId)}
+          onCancel={() => setConfirmRemoveId(null)}
+        />
+      )}
     </div>
   )
 }
+

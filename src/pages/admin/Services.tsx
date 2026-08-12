@@ -105,7 +105,7 @@ export default function AdminServices() {
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Features (one per line)</label>
             <textarea value={form.features} onChange={e => setForm({ ...form, features: e.target.value })} rows={4} className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm" />
           </div>
-          <Input label="Price" value={form.price} onChange={v => setForm({ ...form, price: v })} placeholder="$999" />
+          <Input label="Price" value={form.price} onChange={v => setForm({ ...form, price: v })} placeholder="₹999" />
           <Input label="URL Slug" value={form.slug} onChange={v => setForm({ ...form, slug: v })} placeholder="web-development" />
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>

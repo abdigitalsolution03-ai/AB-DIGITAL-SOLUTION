@@ -17,7 +17,7 @@ const sections = [
     content: "Clients agree to provide timely access to necessary information, assets, and approvals required for project completion. Clients are responsible for ensuring they have the legal right to use any materials, trademarks, or content provided to AB DIGITAL SOLUTION for project execution."},
   {
     title: "Payment Terms",
-    content: "Payment terms are outlined in individual service agreements. Unless otherwise specified, payments are due within 30 days of invoice date. Late payments may result in service suspension and additional fees. All prices are in USD unless otherwise stated."},
+    content: "Payment terms are outlined in individual service agreements. Unless otherwise specified, payments are due within 30 days of invoice date. Late payments may result in service suspension and additional fees. All prices are in INR unless otherwise stated."},
   {
     title: "Confidentiality",
     content: "Both parties agree to maintain the confidentiality of proprietary information shared during the course of the business relationship. This includes but is not limited to business strategies, client data, financial information, and marketing plans. This obligation survives termination of the agreement."},

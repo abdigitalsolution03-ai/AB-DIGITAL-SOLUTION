@@ -317,7 +317,7 @@ export default function SectionRenderer({ type, data }: SectionRendererProps) {
                     </span>
                   )}
                   <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">{plan.name}</h3>
-                  <p className="text-3xl font-bold text-blue-500 mb-2">{plan.price}</p>
+                  <p className="text-3xl font-bold text-blue-500 mb-2">{plan.price === 'Custom' ? 'Custom' : `₹${String(plan.price).replace(/^[^0-9]/, '')}`}</p>
                   <p className="text-sm text-[var(--text-tertiary)] mb-4">{plan.description}</p>
                   <ul className="space-y-2 mb-6">
                     {plan.features?.split('\n').filter((f: string) => f.trim()).map((f: string, j: number) => (

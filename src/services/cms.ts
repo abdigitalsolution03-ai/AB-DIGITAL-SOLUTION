@@ -13,7 +13,7 @@ const serverCollections = new Set([
   'pages', 'header', 'footer', 'media', 'blog', 'seo', 'theme', 'branding',
   'testimonials', 'faqs', 'homepageSections', 'enquiries', 'subscribers', 'leads',
   'careers', 'jobs', 'popups', 'banners', 'team', 'gallery', 'videos', 'portfolio',
-  'clients', 'services', 'settings', 'pageData',
+  'clients', 'services', 'settings', 'pageData', 'templates',
 ])
 
 export async function pullCMS(): Promise<boolean> {
@@ -269,6 +269,7 @@ const defaults: Record<string, any[]> = {
   team: [],
   gallery: [],
   videos: [],
+  templates: [],
   portfolio: [],
   clients: [],
   services: [],
@@ -322,6 +323,10 @@ export function updateSingle(name: string, data: any): any {
   return data
 }
 
+export function deleteEntry(name: string, id: string): void {
+  saveCollection(name, collection(name).filter((item: any) => item.id !== id))
+}
+
 export function remove(name: string, id: string): boolean {
   const items = collection(name)
   const filtered = items.filter((item: any) => item.id !== id)
@@ -371,13 +376,42 @@ export interface PageData {
   revisions: { data: string; timestamp: string; label: string }[]
 }
 
+export interface SectionInstance {
+  id: string
+  type: string
+  data: Record<string, any>
+}
+
+export type PageSections = SectionInstance[]
+
+function makeSectionId(): string {
+  return 'sec_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
+}
+
+export function getPageSections(route: string): PageSections {
+  const page = getAll<PageData>('pageData').find((p: PageData) => p.route === route)
+  if (!page?.sections) return []
+  const sections = page.sections
+  if (Array.isArray(sections)) return sections as PageSections
+  const legacy = sections as Record<string, any>
+  const registry = pageRegistry.find((p) => p.route === route)
+  const types = registry?.sections.map((s) => s.type) ?? Object.keys(legacy)
+  return types
+    .filter((t) => legacy[t] !== undefined)
+    .map((t) => ({ id: makeSectionId(), type: t, data: legacy[t] }))
+}
+
 export function initAllPages(): void {
   const existing = getAll<PageData>('pageData')
   for (const reg of pageRegistry) {
     if (!existing.find((p: PageData) => p.route === reg.route)) {
-      const sections: Record<string, any> = {}
+      const sections: SectionInstance[] = []
       for (const sec of reg.sections) {
-        sections[sec.type] = getDefaultSectionContent(sec.type)
+        sections.push({
+          id: makeSectionId(),
+          type: sec.type,
+          data: getDefaultSectionContent(sec.type),
+        })
       }
       const pageData: PageData = {
         route: reg.route,
@@ -399,13 +433,21 @@ export function getPageData(route: string): PageData | undefined {
   return getAll<PageData>('pageData').find((p: PageData) => p.route === route)
 }
 
-export function savePageSections(route: string, sections: Record<string, any>): void {
+export function savePageSections(route: string, sections: PageSections): void {
   const all = getAll<PageData>('pageData')
   const idx = all.findIndex((p: PageData) => p.route === route)
   if (idx === -1) return
-  all[idx].sections = sections
+  all[idx].sections = sections as unknown as Record<string, any>
   all[idx].updatedAt = now()
   saveCollection('pageData', all)
+}
+
+export function listTemplates(): { id: string; name: string; route: string; sections: PageSections; createdAt: string }[] {
+  return getAll('templates')
+}
+
+export function saveTemplate(name: string, route: string, sections: PageSections): any {
+  return create('templates', { name, route, sections })
 }
 
 export function savePageSEO(route: string, seo: PageData['seo']): void {
