@@ -136,12 +136,9 @@ export default function Portfolio() {
                           <YoutubeEmbed url={project.videoUrl} title={project.title} className="w-full h-full rounded-none" />
                         </div>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center group-hover:bg-black/5 transition-colors duration-500">
-                          <svg className="w-16 h-16 text-white/30 group-hover:text-white/50 transition-all duration-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <circle cx="8.5" cy="8.5" r="1.5" />
-                            <polyline points="21 15 16 10 5 21" />
-                          </svg>
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-black/10 group-hover:bg-black/20 transition-colors duration-500">
+                          <span className="text-6xl font-black text-white/90 select-none">{project.title.charAt(0).toUpperCase()}</span>
+                          <span className="text-[10px] tracking-[0.3em] uppercase text-white/70 font-bold px-3 py-1 border-2 border-white/40">{project.category}</span>
                         </div>
                       )}
                     </div>
