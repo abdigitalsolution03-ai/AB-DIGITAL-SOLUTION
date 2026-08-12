@@ -13,18 +13,18 @@ interface Testimonial {
 }
 
 const hardcodedTestimonials: Testimonial[] = [
-  { name: "Sarah Mitchell", role: "CEO, TechVista Inc.", content: "AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.", rating: 5, category: "SEO" },
-  { name: "James Chen", role: "Founder, GrowthLabs", content: "The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.", rating: 5, category: "Google Ads" },
-  { name: "Emma Richards", role: "Marketing Director, StyleHub", content: "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our audience.", rating: 5, category: "Branding" },
-  { name: "David Park", role: "CTO, CloudSync", content: "From SEO to web development, every service has been top-notch. They truly understand digital strategy and execute flawlessly. Highly recommended.", rating: 5, category: "Web Development" },
-  { name: "Lisa Thompson", role: "Owner, BoutiqueLiving", content: "The Google Ads campaign they managed for us generated a 400% ROI in the first month alone. Their expertise in paid advertising is exceptional.", rating: 5, category: "Google Ads" },
-  { name: "Michael Torres", role: "CEO, NovaTech Solutions", content: "Their website development team built us a stunning platform that perfectly captures our brand essence. The attention to detail was incredible.", rating: 5, category: "Web Development" },
-  { name: "Rachel Green", role: "Marketing Manager, GreenLeaf Co.", content: "Our social media engagement has skyrocketed since partnering with AB DIGITAL SOLUTION. They truly understand how to build communities.", rating: 5, category: "Social Media" },
-  { name: "Tom Hardy", role: "Director, Quantum Solutions", content: "The SEO results have been phenomenal. We went from page 5 to page 1 for our key terms within 4 months. Outstanding work.", rating: 5, category: "SEO" },
-  { name: "Sophie Williams", role: "Founder, Bloom Cosmetics", content: "The branding package they created for us was beyond anything we imagined. Our customers love the new look and feel.", rating: 5, category: "Branding" },
-  { name: "Alex Chen", role: "VP Marketing, ApexSoft", content: "Their content marketing strategy helped us establish thought leadership in our industry. Our blog traffic increased by 500%.", rating: 5, category: "Content Marketing" },
-  { name: "Maria Garcia", role: "Owner, Casa Verde", content: "Local SEO services from AB DIGITAL SOLUTION put us on the map. We're now the top result for 'near me' searches in our area.", rating: 5, category: "Local SEO" },
-  { name: "John Kim", role: "CEO, DynamicCo", content: "The lead generation campaigns they run for us consistently deliver high-quality prospects. Our sales team is busier than ever.", rating: 5, category: "Lead Generation" },
+  { name: "Rahul Sharma", role: "Owner, Sharma Trading Co.", content: "AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.", rating: 5, category: "SEO" },
+  { name: "Priya Patel", role: "Founder, Patel Boutique", content: "The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.", rating: 5, category: "Google Ads" },
+  { name: "Amit Verma", role: "Owner, Verma Electronics", content: "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our customers.", rating: 5, category: "Branding" },
+  { name: "Neha Gupta", role: "Director, Gupta Garments", content: "From SEO to web development, every service has been top-notch. They truly understand digital strategy and execute flawlessly. Highly recommended.", rating: 5, category: "Web Development" },
+  { name: "Vikram Singh", role: "Owner, Singh Sweets & Snacks", content: "The Google Ads campaign they managed for us generated a 400% ROI in the first month alone. Their expertise in paid advertising is exceptional.", rating: 5, category: "Google Ads" },
+  { name: "Sunil Kumar", role: "Proprietor, Kumar Furniture", content: "Their website development team built us a stunning platform that perfectly captures our brand essence. The attention to detail was incredible.", rating: 5, category: "Web Development" },
+  { name: "Divya Nair", role: "Owner, Nair Spices", content: "Our social media engagement has skyrocketed since partnering with AB DIGITAL SOLUTION. They truly understand how to build communities.", rating: 5, category: "Social Media" },
+  { name: "Rajesh Yadav", role: "Owner, Yadav Hardware", content: "The SEO results have been phenomenal. We went from page 5 to page 1 for our key terms within 4 months. Outstanding work.", rating: 5, category: "SEO" },
+  { name: "Sneha Deshmukh", role: "Founder, Deshmukh Beauty Salon", content: "The branding package they created for us was beyond anything we imagined. Our customers love the new look and feel.", rating: 5, category: "Branding" },
+  { name: "Mohit Agarwal", role: "Partner, Agarwal Traders", content: "Their content marketing strategy helped us establish thought leadership in our industry. Our blog traffic increased by 500%.", rating: 5, category: "Content Marketing" },
+  { name: "Kavita Reddy", role: "Owner, Reddy Realty", content: "Local SEO services from AB DIGITAL SOLUTION put us on the map. We're now the top result for 'near me' searches in our area.", rating: 5, category: "Local SEO" },
+  { name: "Arjun Menon", role: "Owner, Menon Jewelry", content: "The lead generation campaigns they run for us consistently deliver high-quality prospects. Our sales team is busier than ever.", rating: 5, category: "Lead Generation" },
 ];
 
 function loadTestimonials(): Testimonial[] {

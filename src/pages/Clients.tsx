@@ -1,13 +1,13 @@
-﻿﻿import { Helmet } from "react-helmet-async";
+﻿import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
 
 const clientLogos = [
-  "TechVista", "GrowthLabs", "StyleHub", "CloudSync", "BoutiqueLiving",
-  "FashionForward", "EcoLiving", "Prestige", "GreenLeaf", "NovaTech",
-  "Quantum", "Zenith", "ApexSoft", "BrightPath", "CoreInnovate",
-  "DynamicCo", "EliteServe", "FusionLab", "GlobalPeak", "HorizonGroup",
+  "Sharma Trading", "Patel Boutique", "Verma Electronics", "Gupta Garments", "Singh Sweets",
+  "Kumar Furniture", "Nair Spices", "Yadav Hardware", "Deshmukh Salon", "Agarwal Traders",
+  "Reddy Realty", "Menon Jewelry", "Mehta Pharma", "Joshi Stationery", "Kapoor Textiles",
+  "Iyer Matrimony", "Chopra Foods", "Bhatia Travels", "Sawant Fitness", "Pillai Autos",
 ];
 
 const stats = [
@@ -19,33 +19,33 @@ const stats = [
 
 const testimonials = [
   {
-    name: "Sarah Mitchell",
-    role: "CEO, TechVista Inc.",
+    name: "Rahul Sharma",
+    role: "Owner, Sharma Trading Co.",
     content: "AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.",
     rating: 5},
   {
-    name: "James Chen",
-    role: "Founder, GrowthLabs",
+    name: "Priya Patel",
+    role: "Founder, Patel Boutique",
     content: "The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.",
     rating: 5},
   {
-    name: "Emma Richards",
-    role: "Marketing Director, StyleHub",
-    content: "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our audience.",
+    name: "Amit Verma",
+    role: "Owner, Verma Electronics",
+    content: "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our customers.",
     rating: 5},
   {
-    name: "David Park",
-    role: "CTO, CloudSync",
+    name: "Neha Gupta",
+    role: "Director, Gupta Garments",
     content: "From SEO to web development, every service has been top-notch. They truly understand digital strategy and execute flawlessly.",
     rating: 5},
   {
-    name: "Lisa Thompson",
-    role: "Owner, BoutiqueLiving",
+    name: "Vikram Singh",
+    role: "Owner, Singh Sweets & Snacks",
     content: "The Google Ads campaign they managed for us generated a 400% ROI in the first month alone. Their expertise in paid advertising is exceptional.",
     rating: 5},
   {
-    name: "Michael Torres",
-    role: "CEO, NovaTech Solutions",
+    name: "Sunil Kumar",
+    role: "Proprietor, Kumar Furniture",
     content: "Their website development team built us a stunning platform that perfectly captures our brand essence. The attention to detail was incredible.",
     rating: 5},
 ];
