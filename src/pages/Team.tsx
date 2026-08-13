@@ -15,10 +15,6 @@ const hardcodedTeam = [
   { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', color: '#60A5FA' },
 ]
 
-const hardcodedStats = [
-  { value: '6', label: 'Core Team Members' },
-]
-
 const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981']
 
 function loadTeam() {
@@ -40,7 +36,6 @@ function loadTeam() {
 
 export default function Team() {
   const [teamMembers, setTeamMembers] = useState(loadTeam);
-  const stats = hardcodedStats;
 
   useEffect(() => {
     let active = true
@@ -68,7 +63,7 @@ export default function Team() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, i) => (
               <AnimatedSection key={member.name} delay={i * 0.05}>
                 <motion.div
@@ -98,17 +93,6 @@ export default function Team() {
                     </div>
                   )}
                 </motion.div>
-              </AnimatedSection>
-            ))}
-          </div>
-
-          <div className={`grid gap-6 ${stats.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 md:grid-cols-4'}`}>
-            {stats.map((stat, i) => (
-              <AnimatedSection key={stat.label} delay={i * 0.1}>
-                <div className="doodle-card-accent p-6 text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-[#111]">{stat.value}</div>
-                  <div className="text-sm font-semibold text-[#111]/70 mt-1">{stat.label}</div>
-                </div>
               </AnimatedSection>
             ))}
           </div>
