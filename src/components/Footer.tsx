@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { getSiteContent } from "@/services/siteContent";
+import SocialIcon from "@/components/SocialIcon";
 
 export default function Footer() {
   const [content, setContent] = useState(getSiteContent());
@@ -20,17 +21,17 @@ export default function Footer() {
               {content.footer.tagline}
             </p>
             <div className="flex items-center gap-3 mt-6">
-              {["Facebook", "Instagram", "LinkedIn", "Twitter"].map((social) => (
+              {content.contact.socialLinks.map((social) => (
                 <a
-                  key={social}
-                  href="#"
+                  key={social.platform}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 flex items-center justify-center bg-white border-3 border-[#111111] text-[#111111] hover:bg-[#60A5FA] transition-all duration-300"
                   style={{ borderRadius: "10px", boxShadow: "3px 3px 0px #111111" }}
-                  aria-label={social}
+                  aria-label={social.platform}
                 >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                  </svg>
+                  <SocialIcon platform={social.platform} className="w-4 h-4" />
                 </a>
               ))}
             </div>
