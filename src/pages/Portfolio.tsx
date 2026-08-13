@@ -3,9 +3,9 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getAll, pullCMS } from '@/services/cms';
-import YoutubeEmbed from '@/components/YoutubeEmbed';
+import SocialIcon from '@/components/SocialIcon';
 
-const categories = ["All", "Website", "SEO", "Ads", "Branding", "Design"];
+const categories = ["All", "Social Media", "Video Editing", "Ads", "Design", "SEO"];
 
 interface Project {
   title: string;
@@ -14,22 +14,24 @@ interface Project {
   color: string;
   image?: string;
   videoUrl?: string;
+  instagramUrl?: string;
   metrics: string[];
 }
 
 const hardcodedProjects: Project[] = [
-  { title: "E-Commerce Platform", category: "Website", description: "Next-gen online store with seamless checkout experience", color: "#FF4D4D", metrics: ["150% sales increase", "40% faster load time", "3.2% conversion rate"] },
-  { title: "Local SEO Campaign", category: "SEO", description: "Top 3 rankings across 50+ local search terms", color: "#4D7AFF", metrics: ["Top 3 for 50+ keywords", "300% traffic boost", "200% lead increase"] },
-  { title: "Google Ads Optimization", category: "Ads", description: "3.5x ROAS improvement through smart bidding", color: "#8B5CF6", metrics: ["3.5x ROAS", "60% lower CPA", "250% more conversions"] },
-  { title: "Brand Identity Design", category: "Branding", description: "Complete brand overhaul for a fintech startup", color: "#FF4D4D", metrics: ["80% brand recall", "50% perception boost", "40% loyalty increase"] },
-  { title: "SaaS Dashboard", category: "Website", description: "Interactive analytics dashboard with real-time data", color: "#4D7AFF", metrics: ["2x user engagement", "45% retention boost", "98% satisfaction"] },
-  { title: "Meta Ads Campaign", category: "Ads", description: "Scaled revenue 4x with targeted social advertising", color: "#8B5CF6", metrics: ["4x revenue scale", "5x ROAS", "500k+ reach"] },
-  { title: "Corporate Website Redesign", category: "Website", description: "Modern redesign for a B2B technology company", color: "#FF4D4D", metrics: ["70% bounce rate reduction", "200% page views", "3x lead generation"] },
-  { title: "Social Media Campaign", category: "Branding", description: "Integrated social strategy for a lifestyle brand", color: "#4D7AFF", metrics: ["200% engagement", "150k new followers", "40% conversion rate"] },
-  { title: "Mobile App UI/UX", category: "Design", description: "Intuitive mobile app design with 5-star ratings", color: "#8B5CF6", metrics: ["4.8 star rating", "60% user retention", "90% task completion"] },
-  { title: "Ecommerce SEO Strategy", category: "SEO", description: "Comprehensive SEO for a multi-product online store", color: "#FF4D4D", metrics: ["400% organic traffic", "Top 5 for 100+ terms", "180% revenue increase"] },
-  { title: "Video Ad Campaign", category: "Ads", description: "High-converting video ads for a D2C brand", color: "#4D7AFF", metrics: ["10M+ video views", "3x CTR", "150% ROAS increase"] },
-  { title: "Brand Guidelines & Collateral", category: "Branding", description: "Comprehensive brand system for a healthcare startup", color: "#8B5CF6", metrics: ["100% brand consistency", "2x brand awareness", "60% faster time-to-market"] },
+  { title: "White Bricks Real Estate", category: "Social Media", description: "Instagram management, post design & content calendar for a premium real estate brand.", color: "#FF4D4D", image: "/portfolio/white-bricks.jpg", instagramUrl: "https://www.instagram.com/whitebrickrealestate", metrics: ["Instagram Management", "Post Design", "Content Calendar"] },
+  { title: "Dr. Neha Vasishth", category: "SEO", description: "Google My Business management for one of Delhi's leading consultant psychologists.", color: "#4D7AFF", image: "/portfolio/neha-vasishth.jpg", metrics: ["Google My Business", "Local SEO", "Online Reputation"] },
+  { title: "Build With Nishant", category: "Social Media", description: "Personal brand presence & content strategy to grow his digital footprint.", color: "#8B5CF6", image: "/portfolio/build-with-nishant.jpg", metrics: ["Brand Presence", "Content Strategy", "Growth"] },
+  { title: "Eco Vibe", category: "Video Editing", description: "Full YouTube channel management for Economics by Sapan Kumar — edits, uploads & SEO.", color: "#60A5FA", image: "/portfolio/eco-vibe.jpg", videoUrl: "https://www.youtube.com/@Economicsbysapankumar", metrics: ["YouTube Management", "Video Editing", "YouTube SEO"] },
+  { title: "Lawfine Care", category: "Ads", description: "Instagram posts, paid ads & video editing for a legal services brand.", color: "#FF4D4D", image: "/portfolio/lawfine-care.jpg", instagramUrl: "https://www.instagram.com/lawyerpanelexpert", metrics: ["Instagram Marketing", "Meta Ads", "Video Editing"] },
+  { title: "Charru Gupta", category: "Video Editing", description: "YouTube video editing for content creator Charru Gupta.", color: "#4D7AFF", image: "/portfolio/charru-gupta.jpg", videoUrl: "https://youtu.be/AzxXnDwudjs", metrics: ["Video Editing", "Reels"] },
+  { title: "YCB Toy Zone", category: "Video Editing", description: "Video editing for the YCB Toy Zone YouTube channel.", color: "#8B5CF6", image: "/portfolio/ycb-toy.jpg", videoUrl: "https://www.youtube.com/@YCBToyZone", metrics: ["Video Editing", "YouTube"] },
+  { title: "Ambrosial Catering", category: "Social Media", description: "Full-stack social media — Instagram & Facebook management, Meta ads, Pinterest & video editing.", color: "#60A5FA", image: "/portfolio/ambrosial.jpg", instagramUrl: "https://www.instagram.com/ambrosial.catering", metrics: ["Instagram & Facebook", "Meta Ads", "Pinterest", "Video Editing"] },
+  { title: "ATV News Bihar", category: "Design", description: "Logo and banner design for the ATV Bihar news channel.", color: "#FF4D4D", image: "/portfolio/atv-news.jpg", videoUrl: "https://www.youtube.com/@AtvBihar", metrics: ["Logo Design", "Banner Design", "Channel Branding"] },
+  { title: "Anytime Impressions", category: "Video Editing", description: "YouTube & Instagram handling — editing and everything for Anytime Impressions.", color: "#4D7AFF", image: "/portfolio/anytime.jpg", videoUrl: "https://www.youtube.com/@Anytimeimpressions", metrics: ["YouTube + Instagram", "Editing", "Content"] },
+  { title: "Suraj Paul", category: "Social Media", description: "Instagram, LinkedIn & Facebook management, paid ads, Google My Business and video editing.", color: "#8B5CF6", image: "/portfolio/suraj-paul.jpg", instagramUrl: "https://www.instagram.com/surajpaulprosperity", metrics: ["Instagram / LinkedIn / Facebook", "Paid Ads", "Google My Business", "Video Editing"] },
+  { title: "MS Tutorials Vaishali", category: "Social Media", description: "Post management, Google My Business, YouTube & Facebook handling with video editing.", color: "#60A5FA", image: "/portfolio/ms-tutorial.jpg", instagramUrl: "https://www.instagram.com/m.s_tutorials_vaishali", metrics: ["Google My Business", "YouTube & Facebook", "Video Editing"] },
+  { title: "Vidya Vibe Academy", category: "Social Media", description: "Instagram management — posts & editing for VVA Vasundhara.", color: "#FF4D4D", image: "/portfolio/vidya-vibe.jpg", instagramUrl: "https://www.instagram.com/vva_vasundhara", metrics: ["Instagram Management", "Posts", "Editing"] },
 ];
 
 function loadProjects(): Project[] {
@@ -37,11 +39,12 @@ function loadProjects(): Project[] {
   if (cms.length > 0) {
     return cms.map((p: any) => ({
       title: p.title,
-      category: p.category || 'Website',
+      category: p.category || 'Social Media',
       description: p.description || '',
       color: p.color || '#4D7AFF',
       image: p.image || '',
       videoUrl: p.videoUrl || '',
+      instagramUrl: p.instagramUrl || '',
       metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
     }))
   }
@@ -132,11 +135,39 @@ export default function Portfolio() {
                       {project.image ? (
                         <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : project.videoUrl ? (
-                        <div className="absolute inset-0">
-                          <YoutubeEmbed url={project.videoUrl} title={project.title} className="w-full h-full rounded-none" />
-                        </div>
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-black/10 group-hover:bg-black/20 transition-colors duration-500">
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500" />
+                      ) : null}
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
+                      <div className="absolute top-3 right-3 flex items-center gap-2">
+                        {project.instagramUrl && (
+                          <a
+                            href={project.instagramUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-9 h-9 flex items-center justify-center bg-white border-2 border-[#111] text-[#111] hover:bg-[#60A5FA] transition-all duration-300 shadow-[2px_2px_0_#111]"
+                            style={{ borderRadius: "8px" }}
+                            aria-label={`${project.title} on Instagram`}
+                          >
+                            <SocialIcon platform="Instagram" className="w-4 h-4" />
+                          </a>
+                        )}
+                        {project.videoUrl && (
+                          <a
+                            href={project.videoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-9 h-9 flex items-center justify-center bg-white border-2 border-[#111] text-[#111] hover:bg-[#FF4D4D] transition-all duration-300 shadow-[2px_2px_0_#111]"
+                            style={{ borderRadius: "8px" }}
+                            aria-label={`${project.title} on YouTube`}
+                          >
+                            <SocialIcon platform="YouTube" className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                      {!project.image && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                           <span className="text-6xl font-black text-white/90 select-none">{project.title.charAt(0).toUpperCase()}</span>
                           <span className="text-[10px] tracking-[0.3em] uppercase text-white/70 font-bold px-3 py-1 border-2 border-white/40">{project.category}</span>
                         </div>

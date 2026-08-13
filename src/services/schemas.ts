@@ -299,6 +299,7 @@ export const schemas: Record<string, SchemaDefinition> = {
       { key: 'image', label: 'Main Image', type: 'image' },
       { key: 'gallery', label: 'Image Gallery', type: 'gallery' },
       { key: 'videoUrl', label: 'Client YouTube Video Link', type: 'url', description: 'Paste a YouTube link — thumbnail shows automatically when no image is set' },
+      { key: 'instagramUrl', label: 'Client Instagram Link', type: 'url', description: 'Paste the client\'s Instagram profile link to show the Instagram button on the card' },
       { key: 'clientName', label: 'Client Name', type: 'text' },
       { key: 'technologies', label: 'Technologies Used (one per line)', type: 'textarea' },
       { key: 'projectUrl', label: 'Live Project URL', type: 'url' },
