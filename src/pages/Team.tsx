@@ -16,9 +16,6 @@ const hardcodedTeam = [
 ]
 
 const hardcodedStats = [
-  { value: '15+', label: 'Years Combined Experience' },
-  { value: '200+', label: 'Happy Clients' },
-  { value: '50+', label: 'Awards Won' },
   { value: '6', label: 'Core Team Members' },
 ]
 
@@ -105,7 +102,7 @@ export default function Team() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className={`grid gap-6 ${stats.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 md:grid-cols-4'}`}>
             {stats.map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 0.1}>
                 <div className="doodle-card-accent p-6 text-center">
