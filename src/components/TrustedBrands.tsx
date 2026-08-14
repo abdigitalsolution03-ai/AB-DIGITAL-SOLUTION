@@ -1,19 +1,18 @@
 import { motion } from "framer-motion";
 
-const brands = [
-  "Google", "Meta", "Amazon", "Microsoft", "Shopify",
-  "HubSpot", "Salesforce", "Adobe", "Mailchimp", "Canva",
-  "WordPress", "Webflow", "Stripe", "Zapier", "Calendly",
-  "Slack", "Notion", "Figma", "Vercel", "Netlify",
+const services = [
+  "Website Development", "SEO", "Google Ads", "Meta Ads", "Social Media Marketing",
+  "Content Marketing", "Branding", "AI Automation", "Lead Generation",
+  "Video Editing", "YouTube Management", "Google My Business",
 ];
 
 export default function TrustedBrands() {
   return (
     <section className="relative py-20 bg-white overflow-hidden">
       <div className="max-w-[1280px] mx-auto px-6 mb-10 text-center">
-        <span className="section-label">Trusted Partners</span>
+        <span className="section-label">What We Do</span>
         <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mt-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          Brands We Work With
+          Our Services
         </h2>
       </div>
 
@@ -31,14 +30,14 @@ export default function TrustedBrands() {
               repeat: Infinity,
               ease: "linear"}}}
         >
-          {[...brands, ...brands, ...brands].map((brand, i) => (
+          {[...services, ...services, ...services].map((service, i) => (
             <div
               key={i}
               className="shrink-0 px-4 md:px-6 py-2 md:py-3 bg-white border-3 border-[#111111]"
               style={{ borderRadius: "20px", boxShadow: "4px 4px 0px #111111" }}
             >
               <span className="text-base md:text-lg lg:text-xl font-bold text-[#111111] whitespace-nowrap" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                {brand}
+                {service}
               </span>
             </div>
           ))}
