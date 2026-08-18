@@ -35,8 +35,15 @@ const colors = ["#FF4D4D", "#4D7AFF", "#8B5CF6"] as const;
 
 function loadPosts(): BlogPost[] {
   const cms = getAll('blog')
-  if (cms.length > 0) {
-    return cms.map((p: any, i: number) => ({
+  const published = cms.filter((p: any) => {
+    if (p.status === 'published') return true
+    if (p.status === 'scheduled' && p.scheduledAt) {
+      return new Date(p.scheduledAt).getTime() <= Date.now()
+    }
+    return false
+  })
+  if (published.length > 0) {
+    return published.map((p: any, i: number) => ({
       slug: p.slug || p.id,
       title: p.title,
       excerpt: p.excerpt || '',
