@@ -139,11 +139,11 @@ export default function Portfolio() {
                       {project.videoThumb ? (
                         <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
                           <img src={project.videoThumb} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                          <div className="absolute inset-0 flex items-center justify-center">
+                          <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0 flex items-center justify-center z-10" aria-label={`Play ${project.title} video on YouTube`}>
                             <span className="w-12 h-12 flex items-center justify-center rounded-full bg-white border-2 border-[#111] shadow-[3px_3px_0_#111] group-hover:bg-[#FF4D4D] transition-colors duration-300">
                               <svg className="w-5 h-5 text-[#111] ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                             </span>
-                          </div>
+                          </a>
                           {project.channelAvatar && (
                             <img src={project.channelAvatar} alt={`${project.title} channel`} className="absolute bottom-2 left-2 w-9 h-9 rounded-full border-2 border-[#111] bg-white object-cover" />
                           )}
