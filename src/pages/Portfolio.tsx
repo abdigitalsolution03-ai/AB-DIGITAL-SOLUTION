@@ -153,7 +153,7 @@ export default function Portfolio() {
                       ) : project.videoUrl ? (
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500" />
                       ) : null}
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
                       <div className="absolute top-3 right-3 flex items-center gap-2">
                         {project.instagramUrl && (
                           <a
