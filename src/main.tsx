@@ -5,8 +5,9 @@ import { HelmetProvider } from 'react-helmet-async'
 import { ThemeProvider } from '@/context/ThemeContext'
 import App from './App'
 import './styles/globals.css'
-import { pullCMS } from './services/cms'
+import { pullCMS, seedAllIfEmpty } from './services/cms'
 
+seedAllIfEmpty()
 void pullCMS()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

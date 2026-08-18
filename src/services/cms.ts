@@ -337,6 +337,102 @@ export function seedPortfolioIfEmpty(): void {
   saveCollection('portfolio', items)
 }
 
+const SERVICES_SEED: Array<Record<string, any>> = [
+  { title: 'SEO', slug: 'seo', category: 'Marketing', icon: 'search', description: 'Data-driven SEO strategies that boost your organic rankings, increase visibility, and drive qualified traffic to your site.', status: 'published' },
+  { title: 'Google Ads', slug: 'google-ads', category: 'Advertising', icon: 'chart', description: 'High-ROI Google Ads campaigns optimized for conversions, with precise targeting and continuous performance refinement.', status: 'published' },
+  { title: 'Meta Ads', slug: 'meta-ads', category: 'Advertising', icon: 'target', description: 'Social media advertising on Facebook & Instagram that reaches your ideal audience with compelling creative and messaging.', status: 'published' },
+  { title: 'Social Media Marketing', slug: 'social-media-marketing', category: 'Marketing', icon: 'users', description: 'Strategic social media management that builds brand awareness, engages communities, and drives measurable business growth.', status: 'published' },
+  { title: 'Content Marketing', slug: 'content-marketing', category: 'Marketing', icon: 'pen', description: 'Compelling content that tells your brand story, educates your audience, and establishes your authority in the industry.', status: 'published' },
+  { title: 'Influencer Marketing', slug: 'influencer-marketing', category: 'Marketing', icon: 'star', description: 'Strategic influencer partnerships that amplify your brand reach and build authentic connections with your target audience.', status: 'published' },
+  { title: 'Website Development', slug: 'website-development', category: 'Development', icon: 'code', description: 'Custom, responsive websites built with modern tech stacks that drive conversions and deliver exceptional user experiences.', status: 'published' },
+  { title: 'Ecommerce Marketing', slug: 'ecommerce-marketing', category: 'Marketing', icon: 'dollar', description: 'Comprehensive ecommerce marketing solutions that drive sales, reduce cart abandonment, and maximize customer lifetime value.', status: 'published' },
+  { title: 'Branding', slug: 'branding', category: 'Creative', icon: 'heart', description: 'Complete brand identity design from logo to guidelines, creating a cohesive and memorable presence that sets you apart.', status: 'published' },
+  { title: 'Graphic Design', slug: 'graphic-design', category: 'Creative', icon: 'layers', description: 'Eye-catching designs for digital and print that communicate your brand message effectively and leave lasting impressions.', status: 'published' },
+  { title: 'Video Editing', slug: 'video-editing', category: 'Creative', icon: 'camera', description: 'Professional video production and editing services that bring your brand stories to life with cinematic quality.', status: 'published' },
+  { title: 'Performance Marketing', slug: 'performance-marketing', category: 'Advertising', icon: 'zap', description: 'Data-driven performance marketing campaigns focused on measurable outcomes and maximum return on ad spend.', status: 'published' },
+  { title: 'Lead Generation', slug: 'lead-generation', category: 'Marketing', icon: 'link', description: 'Multi-channel lead generation campaigns that fill your pipeline with high-quality prospects ready to convert.', status: 'published' },
+  { title: 'Email Marketing', slug: 'email-marketing', category: 'Marketing', icon: 'mail', description: 'Strategic email campaigns that nurture leads, drive conversions, and build lasting customer relationships through personalized communication.', status: 'published' },
+  { title: 'Local SEO', slug: 'local-seo', category: 'Marketing', icon: 'globe', description: 'Hyper-local SEO strategies that help businesses dominate local search results and attract nearby customers ready to buy.', status: 'published' },
+  { title: 'YouTube Marketing', slug: 'youtube-marketing', category: 'Marketing', icon: 'megaphone', description: 'Comprehensive YouTube marketing from channel optimization to content strategy that grows your audience and revenue.', status: 'published' },
+  { title: 'AI Automation', slug: 'ai-automation', category: 'Development', icon: 'sparkles', description: 'Intelligent automation solutions powered by AI to streamline operations, reduce costs, and scale your business efficiently.', status: 'published' },
+]
+
+const TESTIMONIALS_SEED: Array<Record<string, any>> = [
+  { name: 'Rahul Sharma', role: 'Owner', company: 'Sharma Trading Co.', content: 'AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.', rating: 5, category: 'SEO', status: 'published' },
+  { name: 'Priya Patel', role: 'Founder', company: 'Patel Boutique', content: 'The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.', rating: 5, category: 'Google Ads', status: 'published' },
+  { name: 'Amit Verma', role: 'Owner', company: 'Verma Electronics', content: 'Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our customers.', rating: 5, category: 'Branding', status: 'published' },
+  { name: 'Neha Gupta', role: 'Director', company: 'Gupta Garments', content: 'From SEO to web development, every service has been top-notch. They truly understand digital strategy and execute flawlessly. Highly recommended.', rating: 5, category: 'Web Development', status: 'published' },
+  { name: 'Vikram Singh', role: 'Owner', company: 'Singh Sweets & Snacks', content: 'The Google Ads campaign they managed for us generated a 400% ROI in the first month alone. Their expertise in paid advertising is exceptional.', rating: 5, category: 'Google Ads', status: 'published' },
+  { name: 'Sunil Kumar', role: 'Proprietor', company: 'Kumar Furniture', content: 'Their website development team built us a stunning platform that perfectly captures our brand essence. The attention to detail was incredible.', rating: 5, category: 'Web Development', status: 'published' },
+  { name: 'Divya Nair', role: 'Owner', company: 'Nair Spices', content: 'Our social media engagement has skyrocketed since partnering with AB DIGITAL SOLUTION. They truly understand how to build communities.', rating: 5, category: 'Social Media', status: 'published' },
+  { name: 'Rajesh Yadav', role: 'Owner', company: 'Yadav Hardware', content: 'The SEO results have been phenomenal. We went from page 5 to page 1 for our key terms within 4 months. Outstanding work.', rating: 5, category: 'SEO', status: 'published' },
+  { name: 'Sneha Deshmukh', role: 'Founder', company: 'Deshmukh Beauty Salon', content: 'The branding package they created for us was beyond anything we imagined. Our customers love the new look and feel.', rating: 5, category: 'Branding', status: 'published' },
+  { name: 'Mohit Agarwal', role: 'Partner', company: 'Agarwal Traders', content: 'Their content marketing strategy helped us establish thought leadership in our industry. Our blog traffic increased by 500%.', rating: 5, category: 'Content Marketing', status: 'published' },
+  { name: 'Kavita Reddy', role: 'Owner', company: 'Reddy Realty', content: "Local SEO services from AB DIGITAL SOLUTION put us on the map. We're now the top result for 'near me' searches in our area.", rating: 5, category: 'Local SEO', status: 'published' },
+  { name: 'Arjun Menon', role: 'Owner', company: 'Menon Jewelry', content: 'The lead generation campaigns they run for us consistently deliver high-quality prospects. Our sales team is busier than ever.', rating: 5, category: 'Lead Generation', status: 'published' },
+]
+
+const TEAM_SEED: Array<Record<string, any>> = [
+  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.', status: 'published' },
+  { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.', status: 'published' },
+  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.', status: 'published' },
+  { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.', status: 'published' },
+  { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.', status: 'published' },
+  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', status: 'published' },
+]
+
+const FAQS_SEED: Array<Record<string, any>> = [
+  { question: 'What services does AB DIGITAL SOLUTION offer?', answer: 'We offer a comprehensive range of digital marketing and web development services including Website Development, SEO, Google Ads, Meta Ads, Social Media Marketing, Content Marketing, Branding, AI Automation, and Lead Generation.', category: 'General', status: 'published' },
+  { question: 'How long does it take to see results?', answer: 'Timelines vary by service. SEO typically shows significant results within 3-6 months, while paid advertising can deliver immediate traffic and leads. Web development projects usually take 4-8 weeks depending on complexity.', category: 'General', status: 'published' },
+  { question: 'Do you work with small businesses?', answer: 'Absolutely! We work with businesses of all sizes, from startups to established enterprises. Our Starter package is specifically designed for small businesses looking to establish their digital presence.', category: 'General', status: 'published' },
+  { question: 'What industries do you specialize in?', answer: 'We have experience across a wide range of industries including e-commerce, SaaS, healthcare, real estate, finance, education, and professional services. Our strategies are tailored to your specific industry and target audience.', category: 'General', status: 'published' },
+  { question: 'How do you measure success?', answer: 'We use data-driven KPIs tailored to your goals including traffic, rankings, conversion rates, ROAS, lead quality, and revenue growth. You\'ll receive detailed monthly reports with actionable insights.', category: 'General', status: 'published' },
+  { question: 'Can I customize my package?', answer: 'Yes! Every business is unique. We offer fully customizable solutions. Contact us for a personalized quote tailored to your specific needs, goals, and budget.', category: 'General', status: 'published' },
+]
+
+const BLOG_SEED: Array<Record<string, any>> = [
+  { title: 'SEO Trends to Dominate Search Rankings in 2025', slug: 'seo-trends-2025', excerpt: 'Discover the latest SEO trends and strategies that will help your website rank higher in search results this year.', content: '<p>Search engines are evolving faster than ever. Here are the trends shaping 2025 and how to use them.</p><p>From AI-driven search to voice queries, staying ahead requires a content-first approach with technical excellence.</p>', categories: ['SEO'], tags: ['seo', 'trends'], author: 'Ansh', status: 'published' },
+  { title: 'Building a Social Media Marketing Strategy That Works', slug: 'social-media-marketing-strategy', excerpt: 'Learn how to create a comprehensive social media strategy that drives engagement, builds community, and generates leads.', content: '<p>A winning social media strategy starts with clear goals and a deep understanding of your audience.</p><p>Consistency, storytelling, and data-driven iteration are the keys to long-term growth.</p>', categories: ['Marketing'], tags: ['social media', 'strategy'], author: 'Ansh', status: 'published' },
+  { title: 'Modern Web Development: Frameworks and Best Practices for 2025', slug: 'web-development-trends', excerpt: 'Explore the latest web development frameworks, tools, and best practices to build high-performance websites.', content: '<p>Modern websites need to be fast, accessible, and easy to maintain. Choose the right stack for your goals.</p><p>Core Web Vitals matter more than ever for both users and search rankings.</p>', categories: ['Web Development'], tags: ['web', 'development'], author: 'Deepanshu Singh Adhikari', status: 'published' },
+  { title: 'The Ultimate Guide to Building a Strong Brand Identity', slug: 'brand-identity-guide', excerpt: 'From logo design to brand guidelines, learn everything you need to create a memorable brand identity.', content: '<p>Your brand is more than a logo — it is the emotional connection your audience feels with your business.</p><p>Build a cohesive identity across every touchpoint to stand out in a crowded market.</p>', categories: ['Branding'], tags: ['branding', 'identity'], author: 'Pooja', status: 'published' },
+  { title: 'Google Ads Optimization: Tips for Higher ROAS', slug: 'google-ads-optimization', excerpt: 'Proven strategies to optimize your Google Ads campaigns for better performance and higher return on ad spend.', content: '<p>Optimization is a continuous process. Start with clean account structure and let data guide your bids.</p><p>Test ad copy, refine audiences, and prune what does not perform.</p>', categories: ['SEO'], tags: ['google ads', 'roas'], author: 'Ansh', status: 'published' },
+  { title: 'Measuring Content Marketing ROI: A Complete Framework', slug: 'content-marketing-roi', excerpt: 'Learn how to track and measure the return on investment of your content marketing efforts effectively.', content: '<p>Content ROI goes beyond traffic. Map every piece of content to a business outcome.</p><p>Attribution, lifetime value, and pipeline influence paint the real picture.</p>', categories: ['Marketing'], tags: ['content', 'roi'], author: 'Avnish Yadav', status: 'published' },
+  { title: 'Ecommerce Conversion Optimization: Turn Visitors into Customers', slug: 'ecommerce-conversion-optimization', excerpt: 'Actionable strategies to improve your ecommerce conversion rates and boost online sales.', content: '<p>Every click matters. Simplify checkout, strengthen product pages, and build trust with social proof.</p><p>Small changes can compound into significant revenue growth.</p>', categories: ['Business'], tags: ['ecommerce', 'conversion'], author: 'Ansh', status: 'published' },
+  { title: 'Local SEO for Small Businesses: A Step-by-Step Guide', slug: 'local-seo-small-business', excerpt: 'Dominate local search results and attract more customers with this comprehensive local SEO guide.', content: '<p>Google My Business is the foundation of local visibility. Claim, verify, and optimize your profile.</p><p>Reviews and local citations complete the picture for local dominance.</p>', categories: ['SEO'], tags: ['local seo', 'small business'], author: 'Ansh', status: 'published' },
+  { title: 'Optimizing React Website Performance for Better UX', slug: 'react-website-performance', excerpt: "Tips and techniques to improve your React website's performance and deliver a better user experience.", content: '<p>Performance is a feature. Lazy load, code-split, and keep your bundles lean.</p><p>Measure with Lighthouse and Core Web Vitals to track real progress.</p>', categories: ['Web Development'], tags: ['react', 'performance'], author: 'Deepanshu Singh Adhikari', status: 'published' },
+  { title: 'Email Marketing Best Practices for Higher Engagement', slug: 'email-marketing-best-practices', excerpt: 'Master the art of email marketing with these proven best practices for open rates and conversions.', content: '<p>Email remains one of the highest-ROI channels. Segment your list and personalize every send.</p><p>Timing, subject lines, and clear CTAs drive engagement.</p>', categories: ['Marketing'], tags: ['email', 'marketing'], author: 'Ansh', status: 'published' },
+]
+
+const CLIENTS_SEED: Array<Record<string, any>> = [
+  'Sharma Trading', 'Patel Boutique', 'Verma Electronics', 'Gupta Garments', 'Singh Sweets',
+  'Kumar Furniture', 'Nair Spices', 'Yadav Hardware', 'Deshmukh Salon', 'Agarwal Traders',
+  'Reddy Realty', 'Menon Jewelry', 'Mehta Pharma', 'Joshi Stationery', 'Kapoor Textiles',
+  'Iyer Matrimony', 'Chopra Foods', 'Bhatia Travels', 'Sawant Fitness', 'Pillai Autos',
+].map((name, i) => ({ name, website: '', displayOrder: i, status: 'published' }))
+
+export function seedAllIfEmpty(): void {
+  const seeds: Record<string, Array<Record<string, any>>> = {
+    services: SERVICES_SEED,
+    testimonials: TESTIMONIALS_SEED,
+    team: TEAM_SEED,
+    faqs: FAQS_SEED,
+    blog: BLOG_SEED,
+    clients: CLIENTS_SEED,
+  }
+  for (const [name, items] of Object.entries(seeds)) {
+    const existing = collection(name)
+    if (existing.length > 0) continue
+    const seeded = items.map((item, i) => ({
+      ...item,
+      displayOrder: typeof item.displayOrder === 'number' ? item.displayOrder : i,
+      id: generateId(),
+      createdAt: now(),
+      updatedAt: now(),
+    }))
+    saveCollection(name, seeded)
+  }
+}
+
 export function get<T = any>(name: string): T {
   const items = collection(name)
   return items[0] as T
