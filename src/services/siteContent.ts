@@ -25,7 +25,7 @@ export interface SiteContent {
 }
 
 const defaultContent: SiteContent = {
-  version: 3,
+  version: 4,
   header: {
     logo: 'AB', logoHighlight: 'DIGITAL',
     navItems: [
@@ -45,7 +45,7 @@ const defaultContent: SiteContent = {
       { value: 100, suffix: '+', label: 'Happy Clients' },
       { value: 500, suffix: '+', label: 'Projects Done' },
       { value: 98, suffix: '%', label: 'Satisfaction' },
-      { value: 5, suffix: '+', label: 'Years Experience' },
+      { value: 3, suffix: '+', label: 'Years Experience' },
     ],
   },
   footer: {
@@ -118,7 +118,7 @@ const defaultContent: SiteContent = {
       { value: 100, suffix: '+', label: 'Happy Clients' },
       { value: 500, suffix: '+', label: 'Projects Completed' },
       { value: 98, suffix: '%', label: 'Client Satisfaction' },
-      { value: 5, suffix: '+', label: 'Years Experience' },
+      { value: 3, suffix: '+', label: 'Years Experience' },
     ],
     cta: 'Start Your Journey', ctaLink: '/contact',
   },

@@ -9,32 +9,38 @@ const hardcodedProjects = [
     title: "E-Commerce Platform",
     category: "Website",
     description: "Next-gen online store with seamless checkout experience",
-    gradient: "from-blue-200 to-blue-400"},
+    gradient: "from-blue-200 to-blue-400",
+    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=900&q=60"},
   {
     title: "Local SEO Campaign",
     category: "SEO",
     description: "Top 3 rankings across 50+ local search terms",
-    gradient: "from-blue-300 to-blue-500"},
+    gradient: "from-blue-300 to-blue-500",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=900&q=60"},
   {
     title: "Google Ads Optimization",
     category: "Ads",
     description: "3.5x ROAS improvement through smart bidding",
-    gradient: "from-blue-300 to-blue-400"},
+    gradient: "from-blue-300 to-blue-400",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=60"},
   {
     title: "Brand Identity Design",
     category: "Branding",
     description: "Complete brand overhaul for a fintech startup",
-    gradient: "from-blue-200 to-blue-400"},
+    gradient: "from-blue-200 to-blue-400",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=900&q=60"},
   {
     title: "SaaS Dashboard",
     category: "Website",
     description: "Interactive analytics dashboard with real-time data",
-    gradient: "from-blue-200 to-blue-500"},
+    gradient: "from-blue-200 to-blue-500",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=60"},
   {
     title: "Meta Ads Campaign",
     category: "Ads",
     description: "Scaled revenue 4x with targeted social advertising",
-    gradient: "from-blue-300 to-blue-400"},
+    gradient: "from-blue-300 to-blue-400",
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=900&q=60"},
 ];
 
 export default function Portfolio() {
@@ -121,19 +127,28 @@ export default function Portfolio() {
                   <div
                     className={`aspect-[4/3] bg-gradient-to-br ${project.gradient} relative`}
                   >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg
-                        className="w-16 h-16 text-[#111111] opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-110"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={1}
-                      >
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <polyline points="21 15 16 10 5 21" />
-                      </svg>
-                    </div>
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <svg
+                          className="w-16 h-16 text-[#111111] opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-110"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={1}
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
                   </div>
                 </div>
