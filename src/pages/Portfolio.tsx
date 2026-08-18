@@ -14,6 +14,8 @@ interface Project {
   color: string;
   image?: string;
   videoUrl?: string;
+  videoThumb?: string;
+  channelAvatar?: string;
   instagramUrl?: string;
   metrics: string[];
 }
@@ -22,13 +24,13 @@ const hardcodedProjects: Project[] = [
   { title: "White Bricks Real Estate", category: "Social Media", description: "Instagram management, post design & content calendar for a premium real estate brand.", color: "#FF4D4D", image: "/portfolio/white-bricks.jpg", instagramUrl: "https://www.instagram.com/whitebrickrealestate", metrics: ["Instagram Management", "Post Design", "Content Calendar"] },
   { title: "Dr. Neha Vasishth", category: "SEO", description: "Google My Business management for one of Delhi's leading consultant psychologists.", color: "#4D7AFF", image: "/portfolio/neha-vasishth.jpg", metrics: ["Google My Business", "Local SEO", "Online Reputation"] },
   { title: "Build With Nishant", category: "Social Media", description: "Personal brand presence & content strategy to grow his digital footprint.", color: "#8B5CF6", image: "/portfolio/build-with-nishant.jpg", metrics: ["Brand Presence", "Content Strategy", "Growth"] },
-  { title: "Eco Vibe", category: "Video Editing", description: "Full YouTube channel management for Economics by Sapan Kumar — edits, uploads & SEO.", color: "#60A5FA", image: "/portfolio/eco-vibe.jpg", videoUrl: "https://www.youtube.com/@Economicsbysapankumar", metrics: ["YouTube Management", "Video Editing", "YouTube SEO"] },
+  { title: "Eco Vibe", category: "Video Editing", description: "Full YouTube channel management for Economics by Sapan Kumar — edits, uploads & SEO.", color: "#60A5FA", image: "/portfolio/eco-vibe.jpg", videoUrl: "https://www.youtube.com/@Economicsbysapankumar", videoThumb: "https://i.ytimg.com/vi/hYeA0iVMNv8/hqdefault.jpg", channelAvatar: "https://yt3.googleusercontent.com/XidJwUvUbs8tXvWc3m0xBwv15wYaKfZG4TG6tgp0TJWxrImihtRrwRO4mY7yUuAxJ4Zeb7u4NQ=s200-c-k-c0x00ffffff-no-rj", metrics: ["YouTube Management", "Video Editing", "YouTube SEO"] },
   { title: "Lawfine Care", category: "Ads", description: "Instagram posts, paid ads & video editing for a legal services brand.", color: "#FF4D4D", image: "/portfolio/lawfine-care.jpg", instagramUrl: "https://www.instagram.com/lawyerpanelexpert", metrics: ["Instagram Marketing", "Meta Ads", "Video Editing"] },
-  { title: "Charru Gupta", category: "Video Editing", description: "YouTube video editing for content creator Charru Gupta.", color: "#4D7AFF", image: "/portfolio/charru-gupta.jpg", videoUrl: "https://youtu.be/AzxXnDwudjs", metrics: ["Video Editing", "Reels"] },
-  { title: "YCB Toy Zone", category: "Video Editing", description: "Video editing for the YCB Toy Zone YouTube channel.", color: "#8B5CF6", image: "/portfolio/ycb-toy.jpg", videoUrl: "https://www.youtube.com/@YCBToyZone", metrics: ["Video Editing", "YouTube"] },
+  { title: "Charru Gupta", category: "Video Editing", description: "YouTube video editing for content creator Charru Gupta.", color: "#4D7AFF", image: "/portfolio/charru-gupta.jpg", videoUrl: "https://youtu.be/AzxXnDwudjs", videoThumb: "https://i.ytimg.com/vi/AzxXnDwudjs/hqdefault.jpg", metrics: ["Video Editing", "Reels"] },
+  { title: "YCB Toy Zone", category: "Video Editing", description: "Video editing for the YCB Toy Zone YouTube channel.", color: "#8B5CF6", image: "/portfolio/ycb-toy.jpg", videoUrl: "https://www.youtube.com/@YCBToyZone", videoThumb: "https://i.ytimg.com/vi/2Vd1JJpoxTA/hqdefault.jpg", channelAvatar: "https://yt3.googleusercontent.com/LO92V_JjM7IJtU-4NW6KLtsWjv_wIKywV5RW3AzWgyLMn7oXzD6eqN033986P1jmNp1_J6-eNc0=s200-c-k-c0x00ffffff-no-rj", metrics: ["Video Editing", "YouTube"] },
   { title: "Ambrosial Catering", category: "Social Media", description: "Full-stack social media — Instagram & Facebook management, Meta ads, Pinterest & video editing.", color: "#60A5FA", image: "/portfolio/ambrosial.jpg", instagramUrl: "https://www.instagram.com/ambrosial.catering", metrics: ["Instagram & Facebook", "Meta Ads", "Pinterest", "Video Editing"] },
-  { title: "ATV News Bihar", category: "Design", description: "Logo and banner design for the ATV Bihar news channel.", color: "#FF4D4D", image: "/portfolio/atv-news.jpg", videoUrl: "https://www.youtube.com/@AtvBihar", metrics: ["Logo Design", "Banner Design", "Channel Branding"] },
-  { title: "Anytime Impressions", category: "Video Editing", description: "YouTube & Instagram handling — editing and everything for Anytime Impressions.", color: "#4D7AFF", image: "/portfolio/anytime.jpg", videoUrl: "https://www.youtube.com/@Anytimeimpressions", metrics: ["YouTube + Instagram", "Editing", "Content"] },
+  { title: "ATV News Bihar", category: "Design", description: "Logo and banner design for the ATV Bihar news channel.", color: "#FF4D4D", image: "/portfolio/atv-news.jpg", videoUrl: "https://www.youtube.com/@AtvBihar", videoThumb: "https://i.ytimg.com/vi/50oa9NjCKxg/hqdefault.jpg", channelAvatar: "https://yt3.googleusercontent.com/LHmvmQ-K6O9t3ZgTrl0-V2rTRWnA1MnW4YrRSzUD8kIn6bt8SXi94IsZWf8VaK4oCUVNumt1THo=s200-c-k-c0x00ffffff-no-rj", metrics: ["Logo Design", "Banner Design", "Channel Branding"] },
+  { title: "Anytime Impressions", category: "Video Editing", description: "YouTube & Instagram handling — editing and everything for Anytime Impressions.", color: "#4D7AFF", image: "/portfolio/anytime.jpg", videoUrl: "https://www.youtube.com/@Anytimeimpressions", videoThumb: "https://i.ytimg.com/vi/pBA2zZfg_Uo/hqdefault.jpg", channelAvatar: "https://yt3.googleusercontent.com/xHJ4KySUi9WmidIsJ8fbjhSAoX8R_Qb8T2X1mCubm6UlKIZYUrEPDRCdz2rtixx3ExHPS4mTb-Y=s200-c-k-c0x00ffffff-no-rj", metrics: ["YouTube + Instagram", "Editing", "Content"] },
   { title: "Suraj Paul", category: "Social Media", description: "Instagram, LinkedIn & Facebook management, paid ads, Google My Business and video editing.", color: "#8B5CF6", image: "/portfolio/suraj-paul.jpg", instagramUrl: "https://www.instagram.com/surajpaulprosperity", metrics: ["Instagram / LinkedIn / Facebook", "Paid Ads", "Google My Business", "Video Editing"] },
   { title: "MS Tutorials Vaishali", category: "Social Media", description: "Post management, Google My Business, YouTube & Facebook handling with video editing.", color: "#60A5FA", image: "/portfolio/ms-tutorial.jpg", instagramUrl: "https://www.instagram.com/m.s_tutorials_vaishali", metrics: ["Google My Business", "YouTube & Facebook", "Video Editing"] },
   { title: "Vidya Vibe Academy", category: "Social Media", description: "Instagram management — posts & editing for VVA Vasundhara.", color: "#FF4D4D", image: "/portfolio/vidya-vibe.jpg", instagramUrl: "https://www.instagram.com/vva_vasundhara", metrics: ["Instagram Management", "Posts", "Editing"] },
@@ -44,6 +46,8 @@ function loadProjects(): Project[] {
       color: p.color || '#4D7AFF',
       image: p.image || '',
       videoUrl: p.videoUrl || '',
+      videoThumb: p.videoThumb || '',
+      channelAvatar: p.channelAvatar || '',
       instagramUrl: p.instagramUrl || '',
       metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
     }))
@@ -132,7 +136,19 @@ export default function Portfolio() {
                 >
                   <div className={`${getCardClass(project.color)} p-0 overflow-hidden cursor-pointer group`}>
                     <div className="relative h-48 border-b-3 border-[#111] overflow-hidden" style={{ backgroundColor: project.color }}>
-                      {project.image ? (
+                      {project.videoThumb ? (
+                        <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                          <img src={project.videoThumb} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="w-12 h-12 flex items-center justify-center rounded-full bg-white border-2 border-[#111] shadow-[3px_3px_0_#111] group-hover:bg-[#FF4D4D] transition-colors duration-300">
+                              <svg className="w-5 h-5 text-[#111] ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                            </span>
+                          </div>
+                          {project.channelAvatar && (
+                            <img src={project.channelAvatar} alt={`${project.title} channel`} className="absolute bottom-2 left-2 w-9 h-9 rounded-full border-2 border-[#111] bg-white object-cover" />
+                          )}
+                        </a>
+                      ) : project.image ? (
                         <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : project.videoUrl ? (
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500" />

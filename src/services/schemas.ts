@@ -299,6 +299,8 @@ export const schemas: Record<string, SchemaDefinition> = {
       { key: 'image', label: 'Main Image', type: 'image' },
       { key: 'gallery', label: 'Image Gallery', type: 'gallery' },
       { key: 'videoUrl', label: 'Client YouTube Video Link', type: 'url', description: 'Paste a YouTube link — thumbnail shows automatically when no image is set' },
+      { key: 'videoThumb', label: 'YouTube Video Thumbnail URL', type: 'url', description: 'Paste the video thumbnail URL (i.ytimg.com) to show the actual video frame on the card' },
+      { key: 'channelAvatar', label: 'YouTube Channel Logo URL', type: 'url', description: 'Paste the channel avatar URL (yt3.googleusercontent.com) to show the channel logo on the card' },
       { key: 'instagramUrl', label: 'Client Instagram Link', type: 'url', description: 'Paste the client\'s Instagram profile link to show the Instagram button on the card' },
       { key: 'clientName', label: 'Client Name', type: 'text' },
       { key: 'technologies', label: 'Technologies Used (one per line)', type: 'textarea' },
