@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
+import { getAll } from "@/services/cms";
 
 const defaultTestimonials = [
   {
@@ -41,15 +42,20 @@ export default function Testimonials() {
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("adminTestimonials");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length) {
-          setTestimonials(parsed);
-        }
+    const cms = getAll<any>("testimonials");
+    if (Array.isArray(cms) && cms.length) {
+      const published = cms.filter((t: any) => !t.status || t.status === "published");
+      if (published.length) {
+        setTestimonials(
+          published.map((t: any) => ({
+            name: t.name || "Client",
+            role: [t.role, t.company].filter(Boolean).join(", ") || "Client",
+            content: t.content || "",
+            rating: Number(t.rating) || 5,
+          }))
+        );
       }
-    } catch { /* ignore */ }
+    }
   }, []);
 
   useEffect(() => {

@@ -306,6 +306,37 @@ export function initCMS(): void {
   if (changed) save(data)
 }
 
+const PORTFOLIO_SEED: Array<Record<string, any>> = [
+  { title: 'White Bricks Real Estate', category: 'Social Media', description: 'Instagram management, post design & content calendar for a premium real estate brand.', image: '/portfolio/white-bricks.jpg', instagramUrl: 'https://www.instagram.com/whitebrickrealestate', results: 'Instagram Management\nPost Design\nContent Calendar' },
+  { title: 'Dr. Neha Vasishth', category: 'SEO', description: "Google My Business management for one of Delhi's leading consultant psychologists.", image: '/portfolio/neha-vasishth.jpg', results: 'Google My Business\nLocal SEO\nOnline Reputation' },
+  { title: 'Build With Nishant', category: 'Social Media', description: 'Personal brand presence & content strategy to grow his digital footprint.', image: '/portfolio/build-with-nishant.jpg', results: 'Brand Presence\nContent Strategy\nGrowth' },
+  { title: 'Eco Vibe', category: 'Video Editing', description: 'Full YouTube channel management for Economics by Sapan Kumar — edits, uploads & SEO.', image: '/portfolio/eco-vibe.jpg', videoUrl: 'https://www.youtube.com/@Economicsbysapankumar', videoThumb: 'https://i.ytimg.com/vi/hYeA0iVMNv8/hqdefault.jpg', channelAvatar: 'https://yt3.googleusercontent.com/XidJwUvUbs8tXvWc3m0xBwv15wYaKfZG4TG6tgp0TJWxrImihtRrwRO4mY7yUuAxJ4Zeb7u4NQ=s200-c-k-c0x00ffffff-no-rj', results: 'YouTube Management\nVideo Editing\nYouTube SEO' },
+  { title: 'Lawfine Care', category: 'Ads', description: 'Instagram posts, paid ads & video editing for a legal services brand.', image: '/portfolio/lawfine-care.jpg', instagramUrl: 'https://www.instagram.com/lawyerpanelexpert', results: 'Instagram Marketing\nMeta Ads\nVideo Editing' },
+  { title: 'Charru Gupta', category: 'Video Editing', description: 'YouTube video editing for content creator Charru Gupta.', image: '/portfolio/charru-gupta.jpg', videoUrl: 'https://youtu.be/AzxXnDwudjs', videoThumb: 'https://i.ytimg.com/vi/AzxXnDwudjs/hqdefault.jpg', results: 'Video Editing\nReels' },
+  { title: 'YCB Toy Zone', category: 'Video Editing', description: 'Video editing for the YCB Toy Zone YouTube channel.', image: '/portfolio/ycb-toy.jpg', videoUrl: 'https://www.youtube.com/@YCBToyZone', videoThumb: 'https://i.ytimg.com/vi/2Vd1JJpoxTA/hqdefault.jpg', channelAvatar: 'https://yt3.googleusercontent.com/LO92V_JjM7IJtU-4NW6KLtsWjv_wIKywV5RW3AzWgyLMn7oXzD6eqN033986P1jmNp1_J6-eNc0=s200-c-k-c0x00ffffff-no-rj', results: 'Video Editing\nYouTube' },
+  { title: 'Ambrosial Catering', category: 'Social Media', description: 'Full-stack social media — Instagram & Facebook management, Meta ads, Pinterest & video editing.', image: '/portfolio/ambrosial.jpg', instagramUrl: 'https://www.instagram.com/ambrosial.catering', results: 'Instagram & Facebook\nMeta Ads\nPinterest\nVideo Editing' },
+  { title: 'ATV News Bihar', category: 'Design', description: 'Logo and banner design for the ATV Bihar news channel.', image: '/portfolio/atv-news.jpg', videoUrl: 'https://www.youtube.com/@AtvBihar', videoThumb: 'https://i.ytimg.com/vi/50oa9NjCKxg/hqdefault.jpg', channelAvatar: 'https://yt3.googleusercontent.com/LHmvmQ-K6O9t3ZgTrl0-V2rTRWnA1MnW4YrRSzUD8kIn6bt8SXi94IsZWf8VaK4oCUVNumt1THo=s200-c-k-c0x00ffffff-no-rj', results: 'Logo Design\nBanner Design\nChannel Branding' },
+  { title: 'Anytime Impressions', category: 'Video Editing', description: 'YouTube & Instagram handling — editing and everything for Anytime Impressions.', image: '/portfolio/anytime.jpg', videoUrl: 'https://www.youtube.com/@Anytimeimpressions', videoThumb: 'https://i.ytimg.com/vi/pBA2zZfg_Uo/hqdefault.jpg', channelAvatar: 'https://yt3.googleusercontent.com/xHJ4KySUi9WmidIsJ8fbjhSAoX8R_Qb8T2X1mCubm6UlKIZYUrEPDRCdz2rtixx3ExHPS4mTb-Y=s200-c-k-c0x00ffffff-no-rj', results: 'YouTube + Instagram\nEditing\nContent' },
+  { title: 'Suraj Paul', category: 'Social Media', description: 'Instagram, LinkedIn & Facebook management, paid ads, Google My Business and video editing.', image: '/portfolio/suraj-paul.jpg', instagramUrl: 'https://www.instagram.com/surajpaulprosperity', results: 'Instagram / LinkedIn / Facebook\nPaid Ads\nGoogle My Business\nVideo Editing' },
+  { title: 'MS Tutorials Vaishali', category: 'Social Media', description: 'Post management, Google My Business, YouTube & Facebook handling with video editing.', image: '/portfolio/ms-tutorial.jpg', instagramUrl: 'https://www.instagram.com/m.s_tutorials_vaishali', results: 'Google My Business\nYouTube & Facebook\nVideo Editing' },
+  { title: 'Vidya Vibe Academy', category: 'Social Media', description: 'Instagram management — posts & editing for VVA Vasundhara.', image: '/portfolio/vidya-vibe.jpg', instagramUrl: 'https://www.instagram.com/vva_vasundhara', results: 'Instagram Management\nPosts\nEditing' },
+]
+
+export function seedPortfolioIfEmpty(): void {
+  const existing = collection('portfolio')
+  if (existing.length > 0) return
+  const items = PORTFOLIO_SEED.map((p, i) => ({
+    ...p,
+    status: 'published',
+    displayOrder: i,
+    clientName: '',
+    id: generateId(),
+    createdAt: now(),
+    updatedAt: now(),
+  }))
+  saveCollection('portfolio', items)
+}
+
 export function get<T = any>(name: string): T {
   const items = collection(name)
   return items[0] as T

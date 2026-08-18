@@ -35,6 +35,7 @@ const navSections = [
     items: [
       { label: 'Content Manager', path: '/admin/content', icon: <FiFileText size={15} /> },
       { label: 'Blog Posts', path: '/admin/blog', icon: <FiPenTool size={15} /> },
+      { label: 'Portfolio', path: '/admin/portfolio', icon: <FiImage size={15} /> },
       { label: 'Services', path: '/admin/services', icon: <FiList size={15} /> },
       { label: 'Team', path: '/admin/team', icon: <FiUsers size={15} /> },
       { label: 'Testimonials', path: '/admin/testimonials', icon: <FiStar size={15} /> },

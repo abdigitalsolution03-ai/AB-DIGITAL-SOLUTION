@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
-import { FiPlus, FiEdit2, FiTrash2, FiEye, FiClock, FiCalendar } from 'react-icons/fi'
+import { FiPlus, FiEdit2, FiTrash2, FiEye, FiClock, FiCalendar, FiImage } from 'react-icons/fi'
 import { getAll, create, update, remove, type BlogPost } from '@/services/cms'
 import { Card, Button, Modal, Input, Badge, EmptyState, ConfirmDialog } from '@/components/ui'
+import MediaPicker from '@/components/admin/MediaPicker'
 
 const STATUS_COLOR: Record<string, any> = { published: 'success', scheduled: 'warning', draft: 'default' }
 
@@ -33,6 +34,7 @@ export default function AdminBlog() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'scheduled'>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [pickerField, setPickerField] = useState<'featuredImage' | 'ogImage' | null>(null)
   const [form, setForm] = useState({
     title: '', slug: '', excerpt: '', content: '', featuredImage: '',
     categories: '', tags: '', author: '', status: 'draft' as const,
@@ -199,7 +201,16 @@ export default function AdminBlog() {
             <textarea value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} rows={8} className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm font-mono" placeholder="<p>Write your post…</p>" />
             {form.content && <p className="text-xs text-[var(--text-tertiary)] mt-1">{wordCount(form.content)} words · {readTime(form.content)} min read</p>}
           </div>
-          <Input label="Featured Image URL" value={form.featuredImage} onChange={v => setForm({ ...form, featuredImage: v })} />
+          <div>
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1 flex items-center justify-between">
+              <span>Featured Image</span>
+              <Button variant="outline" size="xs" icon={<FiImage />} onClick={() => setPickerField('featuredImage')}>Browse Media</Button>
+            </label>
+            <div className="flex items-center gap-3">
+              {form.featuredImage && <img src={form.featuredImage} alt="" className="w-16 h-12 rounded-lg object-cover shrink-0" />}
+              <input value={form.featuredImage} onChange={e => setForm({ ...form, featuredImage: e.target.value })} placeholder="Paste image URL or browse media" className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm" />
+            </div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Categories (comma separated)" value={form.categories} onChange={v => setForm({ ...form, categories: v })} />
             <Input label="Tags (comma separated)" value={form.tags} onChange={v => setForm({ ...form, tags: v })} />
@@ -231,7 +242,13 @@ export default function AdminBlog() {
             </div>
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Focus Keywords" value={form.seo.keywords || ''} onChange={v => setForm({ ...form, seo: { ...form.seo, keywords: v } })} />
-              <Input label="OG Image URL" value={form.seo.ogImage || ''} onChange={v => setForm({ ...form, seo: { ...form.seo, ogImage: v } })} />
+              <div>
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1 flex items-center justify-between">
+                  <span>OG Image</span>
+                  <Button variant="outline" size="xs" icon={<FiImage />} onClick={() => setPickerField('ogImage')}>Browse Media</Button>
+                </label>
+                <input value={form.seo.ogImage || ''} onChange={e => setForm({ ...form, seo: { ...form.seo, ogImage: e.target.value } })} placeholder="Paste URL or browse media" className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] outline-none focus:border-blue-500 text-sm" />
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
@@ -240,6 +257,15 @@ export default function AdminBlog() {
           </div>
         </div>
       </Modal>
+      <MediaPicker
+        open={pickerField !== null}
+        onClose={() => setPickerField(null)}
+        onSelect={url => {
+          if (pickerField === 'featuredImage') setForm(prev => ({ ...prev, featuredImage: url }))
+          if (pickerField === 'ogImage') setForm(prev => ({ ...prev, seo: { ...prev.seo, ogImage: url } }))
+          setPickerField(null)
+        }}
+      />
       <ConfirmDialog open={!!deleteId} onConfirm={() => { if (deleteId) { remove('blog', deleteId); setDeleteId(null); refresh() } }} onCancel={() => setDeleteId(null)} title="Delete Post?" message="This cannot be undone." confirmLabel="Delete" variant="danger" />
     </div>
   )

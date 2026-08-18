@@ -41,6 +41,7 @@ import AdminHero from './pages/admin/Hero'
 import AdminFooter from './pages/admin/Footer'
 import AdminBranding from './pages/admin/Branding'
 import AdminServices from './pages/admin/Services'
+import AdminPortfolio from './pages/admin/Portfolio'
 import AdminTeam from './pages/admin/Team'
 import AdminTestimonials from './pages/admin/Testimonials'
 import AdminFAQ from './pages/admin/FAQ'
@@ -92,6 +93,7 @@ export default function App() {
           <Route path="footer" element={<PageTransition><AdminFooter /></PageTransition>} />
           <Route path="branding" element={<PageTransition><AdminBranding /></PageTransition>} />
           <Route path="services" element={<PageTransition><AdminServices /></PageTransition>} />
+          <Route path="portfolio" element={<PageTransition><AdminPortfolio /></PageTransition>} />
           <Route path="team" element={<PageTransition><AdminTeam /></PageTransition>} />
           <Route path="testimonials" element={<PageTransition><AdminTestimonials /></PageTransition>} />
           <Route path="faq" element={<PageTransition><AdminFAQ /></PageTransition>} />
