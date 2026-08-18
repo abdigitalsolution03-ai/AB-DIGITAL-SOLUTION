@@ -157,3 +157,16 @@ export async function deleteEnquiry(id: string): Promise<boolean> {
   }
   return true
 }
+
+export async function updateEnquiry(id: string, patch: Partial<Pick<Enquiry, 'read' | 'status'>>): Promise<Enquiry | null> {
+  const all = await listEnquiries(ENQUIRIES_MAX)
+  const idx = all.findIndex((e) => e.id === id)
+  if (idx === -1) return null
+  const updated = { ...all[idx], ...patch }
+  all[idx] = updated
+  await kv.del(ENQUIRIES_KEY)
+  for (const e of all) {
+    await kv.lpush(ENQUIRIES_KEY, JSON.stringify(e))
+  }
+  return updated
+}

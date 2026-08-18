@@ -27,11 +27,26 @@ import NotFound from './pages/NotFound'
 
 import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
+import AdminAnalytics from './pages/admin/Analytics'
 import AdminPages from './pages/admin/Pages'
 import AdminManager from './pages/admin/AdminManager'
 import AdminSecurity from './pages/admin/Security'
 import AdminProfile from './pages/admin/Profile'
 import AdminMedia from './pages/admin/Media'
+import AdminBlog from './pages/admin/Blog'
+import AdminEnquiries from './pages/admin/Enquiries'
+import AdminTheme from './pages/admin/Theme'
+import AdminHeader from './pages/admin/Header'
+import AdminHero from './pages/admin/Hero'
+import AdminFooter from './pages/admin/Footer'
+import AdminBranding from './pages/admin/Branding'
+import AdminServices from './pages/admin/Services'
+import AdminTeam from './pages/admin/Team'
+import AdminTestimonials from './pages/admin/Testimonials'
+import AdminFAQ from './pages/admin/FAQ'
+import AdminSubscribers from './pages/admin/Subscribers'
+import AdminSEO from './pages/admin/SEO'
+import AdminSettings from './pages/admin/Settings'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true)
@@ -63,11 +78,26 @@ export default function App() {
         <Route path="/code03" element={<PageTransition><AdminLogin codeMode /></PageTransition>} />
         <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index element={<PageTransition><AdminDashboard /></PageTransition>} />
+          <Route path="analytics" element={<PageTransition><AdminAnalytics /></PageTransition>} />
           <Route path="pages" element={<PageTransition><AdminPages /></PageTransition>} />
           <Route path="content" element={<PageTransition><AdminManager /></PageTransition>} />
           <Route path="media" element={<PageTransition><AdminMedia /></PageTransition>} />
           <Route path="profile" element={<PageTransition><AdminProfile /></PageTransition>} />
           <Route path="security" element={<PageTransition><AdminSecurity /></PageTransition>} />
+          <Route path="blog" element={<PageTransition><AdminBlog /></PageTransition>} />
+          <Route path="enquiries" element={<PageTransition><AdminEnquiries /></PageTransition>} />
+          <Route path="theme" element={<PageTransition><AdminTheme /></PageTransition>} />
+          <Route path="header" element={<PageTransition><AdminHeader /></PageTransition>} />
+          <Route path="hero" element={<PageTransition><AdminHero /></PageTransition>} />
+          <Route path="footer" element={<PageTransition><AdminFooter /></PageTransition>} />
+          <Route path="branding" element={<PageTransition><AdminBranding /></PageTransition>} />
+          <Route path="services" element={<PageTransition><AdminServices /></PageTransition>} />
+          <Route path="team" element={<PageTransition><AdminTeam /></PageTransition>} />
+          <Route path="testimonials" element={<PageTransition><AdminTestimonials /></PageTransition>} />
+          <Route path="faq" element={<PageTransition><AdminFAQ /></PageTransition>} />
+          <Route path="subscribers" element={<PageTransition><AdminSubscribers /></PageTransition>} />
+          <Route path="seo" element={<PageTransition><AdminSEO /></PageTransition>} />
+          <Route path="settings" element={<PageTransition><AdminSettings /></PageTransition>} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Routes>

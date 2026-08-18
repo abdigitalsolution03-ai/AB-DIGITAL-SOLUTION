@@ -346,6 +346,11 @@ export async function removeEnquiry(id: string): Promise<void> {
   await apiFetch('/admin/enquiries', { method: 'DELETE', body: JSON.stringify({ id }) })
 }
 
+export async function updateEnquiry(id: string, patch: { read?: boolean; status?: string }): Promise<any> {
+  const body = await apiFetch<{ enquiry: any }>('/admin/enquiries', { method: 'PATCH', body: JSON.stringify({ id, ...patch }) })
+  return body.enquiry
+}
+
 export async function getBootstrapStatus(): Promise<{ needsBootstrap: boolean }> {
   return apiFetch('/auth/bootstrap', { method: 'GET' }, false)
 }

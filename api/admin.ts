@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { withApi, ok, created, json, methodNotAllowed, readJson, HttpError, getClientIp } from '../lib/http.js'
 import { requireAuth } from '../lib/auth.js'
-import { listUsers, createUser, updateUser, deleteUser, getUserById, listEnquiries, deleteEnquiry, type Role } from '../lib/store.js'
+import { listUsers, createUser, updateUser, deleteUser, getUserById, listEnquiries, deleteEnquiry, updateEnquiry, type Role } from '../lib/store.js'
 import { audit, getAuditLog } from '../lib/audit.js'
 import { PASSWORD_MIN_LENGTH } from '../lib/config.js'
 import { getCollection, setCollection, CMS_COLLECTIONS } from '../lib/cms-store.js'
@@ -125,6 +125,21 @@ async function enquiries(req: Request): Promise<Response> {
     return ok({ enquiries })
   }
 
+  if (req.method === 'PATCH') {
+    const body = await readJson(req)
+    const patchSchema = z.object({
+      id: z.string(),
+      read: z.boolean().optional(),
+      status: z.enum(['new', 'contacted', 'won', 'lost']).optional(),
+    })
+    const parsed = patchSchema.safeParse(body)
+    if (!parsed.success) throw new HttpError(400, 'Invalid input', parsed.error.flatten())
+    const updated = await updateEnquiry(parsed.data.id, { read: parsed.data.read, status: parsed.data.status })
+    if (!updated) throw new HttpError(404, 'Enquiry not found')
+    await audit({ actor: user.email, action: 'enquiries.update', detail: parsed.data.id, ip })
+    return ok({ success: true, enquiry: updated })
+  }
+
   if (req.method === 'DELETE') {
     const body = await readJson(req)
     const parsed = deleteSchema.safeParse(body)
@@ -135,7 +150,7 @@ async function enquiries(req: Request): Promise<Response> {
     return ok({ success: true })
   }
 
-  return methodNotAllowed(['GET', 'DELETE'])
+  return methodNotAllowed(['GET', 'PATCH', 'DELETE'])
 }
 
 async function auditLog(req: Request): Promise<Response> {
