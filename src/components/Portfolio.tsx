@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-import { getAll } from "@/services/cms";
 
 const hardcodedCategories = ["All", "Website", "SEO", "Ads", "Branding"];
 
@@ -255,38 +254,6 @@ export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [projects, setProjects] = useState(hardcodedProjects);
   const [categories, setCategories] = useState(hardcodedCategories);
-
-  useEffect(() => {
-    const cms = getAll<any>("portfolio");
-    if (Array.isArray(cms) && cms.length > 0) {
-      const published = cms.filter((p: any) => !p.status || p.status === "published");
-      if (published.length) {
-        const mapped = published.slice(0, 6).map((item) => {
-          const cat = item.category || "Website";
-          const visual = cat.includes("SEO")
-            ? "seo"
-            : cat.includes("Ads")
-            ? "googleads"
-            : cat.includes("Design") || cat.includes("Brand")
-            ? "branding"
-            : cat.includes("Web")
-            ? "saas"
-            : "meta";
-          return {
-            title: item.title,
-            category: cat,
-            description: item.description || "",
-            gradient: "from-blue-200 to-blue-400",
-            visual: item.image ? "" : visual,
-            image: item.image || "",
-          };
-        });
-        setProjects(mapped);
-        const uniqueCats = ["All", ...new Set(mapped.map((p) => p.category))];
-        setCategories(uniqueCats);
-      }
-    }
-  }, []);
 
   const filtered = projects.filter(
     (p) => activeCategory === "All" || p.category === activeCategory
