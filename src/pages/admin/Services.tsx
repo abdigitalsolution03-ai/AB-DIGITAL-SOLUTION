@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { FiPlus, FiEdit2, FiTrash2, FiEye } from 'react-icons/fi'
 import { getAll, create, update, remove } from '@/services/cms'
 import { Card, Button, Modal, Input, Badge, EmptyState, ConfirmDialog } from '@/components/ui'
+import { iconByName } from '@/components/ServiceIcon'
 
 interface ServiceItem {
   id: string
@@ -101,7 +102,7 @@ export default function AdminServices() {
             {filtered.map(item => (
               <div key={item.id} className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-secondary)] group">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 text-lg shrink-0">
-                  {item.icon || '○'}
+                  {iconByName(item.icon) || '○'}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[var(--text-primary)]">{item.title}</p>

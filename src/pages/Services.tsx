@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getAll } from '@/services/cms';
+import { iconByName } from '@/components/ServiceIcon';
 
 interface Service {
   id: string;
@@ -42,7 +43,7 @@ function loadServices(): Service[] {
       title: s.title,
       description: s.description,
       category: s.category || 'Other',
-      icon: s.icon ? <span className="text-2xl">{s.icon}</span> : hardcodedServices.find(h => h.id === (s.slug || s.id))?.icon || <span className="w-8 h-8" />,
+      icon: s.icon ? iconByName(s.icon) : hardcodedServices.find(h => h.id === (s.slug || s.id))?.icon || iconByName(),
     }))
   }
   return hardcodedServices

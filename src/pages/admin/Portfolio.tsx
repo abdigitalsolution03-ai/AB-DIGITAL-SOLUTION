@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { FiPlus, FiEdit2, FiTrash2, FiEye, FiImage, FiInstagram, FiYoutube } from 'react-icons/fi'
 import { getAll, create, update, remove, seedPortfolioIfEmpty } from '@/services/cms'
 import { Card, Button, Modal, Input, Badge, EmptyState, ConfirmDialog } from '@/components/ui'
@@ -42,12 +42,12 @@ export default function AdminPortfolio() {
     displayOrder: 0, status: 'published' as const,
   })
 
+  const refresh = useCallback(() => setItems(getAll<PortfolioItem>('portfolio')), [])
+
   useEffect(() => {
     seedPortfolioIfEmpty()
     refresh()
-  }, [])
-
-  const refresh = () => setItems(getAll<PortfolioItem>('portfolio'))
+  }, [refresh])
 
   const allCategories = useMemo(() => {
     const set = new Set<string>(CATEGORIES)

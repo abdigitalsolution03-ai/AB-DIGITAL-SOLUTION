@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getAll } from '@/services/cms';
+import { iconByName } from '@/components/ServiceIcon';
 
 interface ServiceData {
   id: string;
@@ -243,7 +244,7 @@ function loadService(slug: string): ServiceData {
     ...defaultService,
     ...fallback,
     ...cms,
-    icon: fallback?.icon ?? defaultService.icon,
+    icon: (cms?.icon ? iconByName(cms.icon) : null) ?? fallback?.icon ?? defaultService.icon,
   };
 }
 

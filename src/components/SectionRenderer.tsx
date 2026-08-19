@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getMediaUrl } from '@/services/cms'
 import { sectionDefinitions, type SectionType } from '@/services/pageRegistry'
 import AnimatedSection from './AnimatedSection'
+import { iconByName } from './ServiceIcon'
 
 interface SectionRendererProps {
   type: SectionType
@@ -102,7 +103,7 @@ export default function SectionRenderer({ type, data }: SectionRendererProps) {
                   transition={{ delay: i * 0.05 }}
                   className="group p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-primary)] hover:border-blue-500/30 hover:shadow-lg transition-all"
                 >
-                  {item.icon && <div className="text-3xl mb-4">{item.icon}</div>}
+                  {item.icon && <div className="text-3xl mb-4">{iconByName(item.icon)}</div>}
                   <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
                   {item.description && <p className="text-sm text-[var(--text-tertiary)] mb-4">{item.description}</p>}
                   {item.features && (
@@ -456,7 +457,7 @@ export default function SectionRenderer({ type, data }: SectionRendererProps) {
                   transition={{ delay: i * 0.05 }}
                   className="p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-primary)] hover:border-blue-500/30 transition-all"
                 >
-                  {item.icon && <div className="text-3xl mb-4">{item.icon}</div>}
+                  {item.icon && <div className="text-3xl mb-4">{iconByName(item.icon)}</div>}
                   <h3 className="text-base font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
                   {item.description && <p className="text-sm text-[var(--text-tertiary)]">{item.description}</p>}
                 </motion.div>
