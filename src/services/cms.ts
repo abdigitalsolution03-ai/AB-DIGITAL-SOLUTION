@@ -418,6 +418,7 @@ export function seedAllIfEmpty(): void {
     faqs: FAQS_SEED,
     blog: BLOG_SEED,
     clients: CLIENTS_SEED,
+    portfolio: PORTFOLIO_SEED.map((p) => ({ ...p, status: 'published', clientName: '' })),
   }
   for (const [name, items] of Object.entries(seeds)) {
     const existing = collection(name)
