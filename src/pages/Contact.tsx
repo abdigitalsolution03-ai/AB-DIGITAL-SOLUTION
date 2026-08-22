@@ -146,9 +146,7 @@ export default function Contact() {
                 <h3 className="text-[#111] text-lg font-bold mb-4">Business Hours</h3>
                 <div className="space-y-3">
                   {[
-                    { day: "Monday - Friday", hours: "9:00 AM - 6:00 PM" },
-                    { day: "Saturday", hours: "10:00 AM - 4:00 PM" },
-                    { day: "Sunday", hours: "Closed" },
+                    { day: "Everyday", hours: "9:00 AM - 9:00 PM" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center justify-between py-2 border-b-3 border-[#111] last:border-b-0">
                       <span className="text-[#111]/60">{item.day}</span>

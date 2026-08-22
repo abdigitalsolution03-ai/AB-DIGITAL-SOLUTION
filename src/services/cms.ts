@@ -373,15 +373,15 @@ const TESTIMONIALS_SEED: Array<Record<string, any>> = [
 ]
 
 const TEAM_SEED: Array<Record<string, any>> = [
-  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.', image: '/team/page_1.png', status: 'published' },
-  { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.', image: '/team/page_2.png', status: 'published' },
-  { name: 'Rajneesh', role: 'Content Writer', bio: 'Crafts compelling copy that turns ideas into stories and products into must-haves. Writes captions, scripts, and long-form content that drives engagement and conversions.', image: '/team/page_3.png', status: 'published' },
-  { name: 'Ansh', role: 'Video Shooting', bio: 'On-field video shooter capturing high-quality footage for reels, ads, and brand stories. Handles camera work, lighting, and on-location shoots to bring creative concepts to life.', image: '/team/page_4.png', status: 'published' },
-  { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.', image: '/team/ansh_smm.png', status: 'published' },
-  { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.', image: '/team/page_5.png', status: 'published' },
-  { name: 'Subham', role: 'Performance Marketer', bio: 'Data-driven performance marketer running paid campaigns across Meta and Google Ads. Optimizes ad spend, audiences, and funnels to deliver measurable ROI for every brand.', image: '/team/page_6.png', status: 'published' },
-  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.', image: '/team/page_7.png', status: 'published' },
-  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', image: '/team/page_8.png', status: 'published' },
+  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary founder driving strategy and brand growth.', image: '/team/page_1.png', status: 'published' },
+  { name: 'Boby Singh', role: 'Co-Founder', bio: 'Co-founder managing operations and client success.', image: '/team/page_2.png', status: 'published' },
+  { name: 'Rajnish Yadav', role: 'Content Writer', bio: 'Crafts engaging copy, captions and scripts that convert.', image: '/team/page_3.png', status: 'published' },
+  { name: 'Ansh', role: 'Business Ads', bio: 'Plans and shoots business ads that drive leads and sales.', image: '/team/page_4.png', status: 'published' },
+  { name: 'Ansh', role: 'Social Media Manager', bio: 'Manages social growth, content calendars and campaigns.', image: '/team/ansh_smm.png', status: 'published' },
+  { name: 'Abhay Sharma', role: 'Video Editor', bio: 'Edits reels and long-form videos focused on retention.', image: '/team/page_5.png', status: 'published' },
+  { name: 'Subham', role: 'Performance Marketer', bio: 'Runs Meta and Google Ads for maximum ROI.', image: '/team/page_6.png', status: 'published' },
+  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds fast, modern websites that convert visitors.', image: '/team/page_7.png', status: 'published' },
+  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives and premium brand visuals.', image: '/team/page_8.png', status: 'published' },
 ]
 
 const FAQS_SEED: Array<Record<string, any>> = [
