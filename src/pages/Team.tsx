@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import PageTransition from '@/components/PageTransition'
 import AnimatedSection from '@/components/AnimatedSection'
-import { getAll, pullCMS } from '@/services/cms'
+import { getAll } from '@/services/cms'
 import YoutubeEmbed from '@/components/YoutubeEmbed'
 
 const hardcodedTeam = [
@@ -23,16 +23,23 @@ const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981', '#F59E0B'
 function loadTeam() {
   const cms = getAll('team')
   if (cms.length > 0) {
-    return cms
+    const cmsByNameRole: Record<string, any> = {}
+    cms
       .filter((m: any) => !m.status || m.status === 'published')
-      .map((m: any, i: number) => ({
-        name: m.name,
-        role: m.role || '',
-        bio: m.bio || '',
-        image: m.image || '',
-        videoUrl: m.videoUrl || '',
+      .forEach((m: any) => { cmsByNameRole[`${m.name}|${m.role}`] = m })
+
+    return hardcodedTeam.map((member, i) => {
+      const key = `${member.name}|${member.role}`
+      const cmsEntry = cmsByNameRole[key]
+      return {
+        name: member.name,
+        role: member.role,
+        bio: cmsEntry?.bio || member.bio,
+        image: cmsEntry?.image || member.image,
+        videoUrl: cmsEntry?.videoUrl || '',
         color: colors[i % colors.length],
-      }))
+      }
+    })
   }
   return hardcodedTeam
 }
@@ -41,11 +48,7 @@ export default function Team() {
   const [teamMembers, setTeamMembers] = useState(loadTeam);
 
   useEffect(() => {
-    let active = true
-    void pullCMS().then(() => {
-      if (active) setTeamMembers(loadTeam())
-    })
-    return () => { active = false }
+    setTeamMembers(loadTeam())
   }, [])
   return (
     <PageTransition>
@@ -54,49 +57,49 @@ export default function Team() {
         <meta name="description" content="Meet the creative minds behind AB DIGITAL SOLUTION. Our team of experts delivers digital marketing excellence." />
       </Helmet>
 
-      <section className="pt-32 pb-20 px-6">
+      <section className="pt-32 pb-20 px-6 bg-white" style={{ backgroundColor: '#ffffff' }}>
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Team</span>
-            <h1 className="text-5xl md:text-7xl font-bold text-[#111] mt-6 tracking-tight">
-              Meet the <span className="text-[#60A5FA]">Mafia</span>
+            <h1 className="text-5xl md:text-7xl font-bold text-[#111] mt-6 tracking-tight" style={{ color: '#111111' }}>
+              Meet the <span className="text-[#60A5FA]" style={{ color: '#60A5FA' }}>Mafia</span>
             </h1>
-            <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-lg" style={{ color: '#6b7280' }}>
               A powerhouse of creative strategists, tech wizards, and marketing mavericks — we don't just follow trends, we set them.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, i) => (
-              <AnimatedSection key={`${member.name}-${member.role}-${i}`} delay={i * 0.05}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  className="doodle-card p-8 text-center group"
-                >
-                  {member.image ? (
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-24 h-24 mx-auto rounded-full border-4 border-[#111] object-cover mb-5 group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div
-                      className="w-24 h-24 mx-auto rounded-full border-4 border-[#111] flex items-center justify-center text-3xl font-bold text-white mb-5"
-                      style={{ backgroundColor: member.color }}
-                    >
-                      {member.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                  )}
-                  <h3 className="text-xl font-bold text-[#111] mb-1">{member.name}</h3>
-                  <p className="text-sm font-semibold text-[#60A5FA] mb-3">{member.role}</p>
-                  <p className="text-gray-500 text-sm">{member.bio}</p>
-                  {member.videoUrl && (
-                    <div className="mt-5">
-                      <YoutubeEmbed url={member.videoUrl} title={`${member.name} video`} />
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatedSection>
+              <div
+                key={`${member.name}-${member.role}-${i}`}
+                className="rounded-2xl p-8 text-center group border-2 border-[#111111]"
+                style={{ backgroundColor: '#ffffff', color: '#111111', borderColor: '#111111', boxShadow: '4px 4px 0 0 #111111' }}
+              >
+                {member.image ? (
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-24 h-24 mx-auto rounded-full border-4 object-cover mb-5 group-hover:scale-105 transition-transform"
+                    style={{ borderColor: '#111111' }}
+                  />
+                ) : (
+                  <div
+                    className="w-24 h-24 mx-auto rounded-full border-4 flex items-center justify-center text-3xl font-bold text-white mb-5"
+                    style={{ backgroundColor: member.color, borderColor: '#111111' }}
+                  >
+                    {member.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                )}
+                <h3 className="text-xl font-bold mb-1" style={{ color: '#111111' }}>{member.name}</h3>
+                <p className="text-sm font-semibold mb-3" style={{ color: '#60A5FA' }}>{member.role}</p>
+                <p className="text-sm" style={{ color: '#4b5563' }}>{member.bio}</p>
+                {member.videoUrl && (
+                  <div className="mt-5">
+                    <YoutubeEmbed url={member.videoUrl} title={`${member.name} video`} />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
