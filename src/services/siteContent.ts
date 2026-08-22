@@ -132,9 +132,12 @@ const defaultContent: SiteContent = {
     team: [
       { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.' },
       { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.' },
-      { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.' },
+      { name: 'Rajneesh', role: 'Content Writer', bio: 'Crafts compelling copy that turns ideas into stories and products into must-haves. Writes captions, scripts, and long-form content that drives engagement and conversions.' },
+      { name: 'Ansh', role: 'Video Shooting', bio: 'On-field video shooter capturing high-quality footage for reels, ads, and brand stories. Handles camera work, lighting, and on-location shoots to bring creative concepts to life.' },
       { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.' },
       { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.' },
+      { name: 'Subham', role: 'Performance Marketer', bio: 'Data-driven performance marketer running paid campaigns across Meta and Google Ads. Optimizes ad spend, audiences, and funnels to deliver measurable ROI for every brand.' },
+      { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.' },
       { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.' },
     ],
     timeline: [

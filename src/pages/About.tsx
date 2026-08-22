@@ -133,33 +133,58 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-white py-[100px]">
+      <section className="bg-white py-[100px]" style={{ backgroundColor: '#ffffff' }}>
         <div className="max-w-[1280px] mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
             <span className="section-label">Our Team</span>
-            <h2 className="text-4xl md:text-5xl font-black text-[#111] mt-4 tracking-tight">
-              Meet the <span className="text-[#60A5FA]">Experts</span>
+            <h2 className="text-4xl md:text-5xl font-black text-[#111] mt-4 tracking-tight" style={{ color: '#111111' }}>
+              Meet the <span className="text-[#60A5FA]" style={{ color: '#60A5FA' }}>Experts</span>
             </h2>
-            <p className="text-[#111] mt-4 max-w-2xl mx-auto">
+            <p className="text-[#111] mt-4 max-w-2xl mx-auto" style={{ color: '#111111' }}>
               A diverse team of passionate professionals dedicated to your success.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {content.aboutPage.team.map((member, i) => (
-              <AnimatedSection key={i} delay={i * 0.05}>
-                <div className="doodle-card p-8 group">
-                  <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mb-5 shadow-[3px_3px_0_#111]">
-                    <span className="text-2xl font-black text-[#111]">
-                      {member.name.split(" ").map(n => n[0]).join("")}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-[#111]">{member.name}</h3>
-                  <p className="text-[#60A5FA] font-bold mt-1">{member.role}</p>
-                  <p className="text-[#111]/70 mt-3 leading-relaxed">{member.bio}</p>
+            {content.aboutPage.team.map((member, i) => {
+              const imageMap: Record<string, string> = {
+                'Avnish Yadav': '/team/page_1.png',
+                'Bobby': '/team/page_2.png',
+                'Rajneesh': '/team/page_3.png',
+                'Ansh|Video Shooting': '/team/page_4.png',
+                'Ansh|Social Media Manager': '/team/ansh_smm.png',
+                'Abhay': '/team/page_5.png',
+                'Subham': '/team/page_6.png',
+                'Deepanshu Singh Adhikari': '/team/page_7.png',
+                'Pooja': '/team/page_8.png',
+              }
+              const photo = imageMap[`${member.name}|${member.role}`] || imageMap[member.name] || ''
+              return (
+                <div
+                  key={`${member.name}-${member.role}-${i}`}
+                  className="p-8 group rounded-2xl border-2 border-[#111111]"
+                  style={{ backgroundColor: '#ffffff', color: '#111111', borderColor: '#111111', boxShadow: '4px 4px 0 0 #111111' }}
+                >
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt={member.name}
+                      className="w-16 h-16 object-cover mb-5 border-3 border-[#111]"
+                      style={{ borderColor: '#111111', borderRadius: '9999px' }}
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-[#60A5FA] border-3 border-[#111] flex items-center justify-center mb-5 shadow-[3px_3px_0_#111]">
+                      <span className="text-2xl font-black text-[#111]">
+                        {member.name.split(" ").map(n => n[0]).join("")}
+                      </span>
+                    </div>
+                  )}
+                  <h3 className="text-lg font-bold" style={{ color: '#111111' }}>{member.name}</h3>
+                  <p className="text-[#60A5FA] font-bold mt-1" style={{ color: '#60A5FA' }}>{member.role}</p>
+                  <p className="text-[#111]/70 mt-3 leading-relaxed" style={{ color: '#4b5563' }}>{member.bio}</p>
                 </div>
-              </AnimatedSection>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
