@@ -7,15 +7,18 @@ import { getAll, pullCMS } from '@/services/cms'
 import YoutubeEmbed from '@/components/YoutubeEmbed'
 
 const hardcodedTeam = [
-  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.', color: '#60A5FA' },
-  { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.', color: '#FF4D4D' },
-  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.', color: '#4D7AFF' },
-  { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.', color: '#8B5CF6' },
-  { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.', color: '#10B981' },
-  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', color: '#60A5FA' },
+  { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary leader who founded AB DIGITAL SOLUTION to help businesses grow through digital marketing. Guides strategy, client relationships, and long-term brand growth.', color: '#60A5FA', image: '/team/page_1.png' },
+  { name: 'Bobby', role: 'Co-Founder', bio: 'Co-founder driving operations and business growth. Works alongside the founder to keep every project on track and every client happy.', color: '#FF4D4D', image: '/team/page_2.png' },
+  { name: 'Rajneesh', role: 'Content Writer', bio: 'Crafts compelling copy that turns ideas into stories and products into must-haves. Writes captions, scripts, and long-form content that drives engagement and conversions.', color: '#F59E0B', image: '/team/page_3.png' },
+  { name: 'Ansh', role: 'Video Shooting', bio: 'On-field video shooter capturing high-quality footage for reels, ads, and brand stories. Handles camera work, lighting, and on-location shoots to bring creative concepts to life.', color: '#EC4899', image: '/team/page_4.png' },
+  { name: 'Ansh', role: 'Social Media Manager', bio: 'Plans content calendars and manages Instagram, Facebook, YouTube, and LinkedIn growth. Creates captions, hashtags, and campaigns that keep audiences engaged.', color: '#8B5CF6', image: '/team/ansh_smm.png' },
+  { name: 'Abhay', role: 'Video Editor', bio: 'Professional reel and video editor crafting short-form content that captures attention. Handles YouTube long-form editing with a focus on retention and storytelling.', color: '#10B981', image: '/team/page_5.png' },
+  { name: 'Subham', role: 'Performance Marketer', bio: 'Data-driven performance marketer running paid campaigns across Meta and Google Ads. Optimizes ad spend, audiences, and funnels to deliver measurable ROI for every brand.', color: '#EF4444', image: '/team/page_6.png' },
+  { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds clean, fast, and responsive websites using modern technologies. Turns designs into digital experiences that help businesses convert visitors into customers.', color: '#4D7AFF', image: '/team/page_7.png' },
+  { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, creatives, and brand visuals that stand out in the feed. Combines aesthetics with marketing insight to make brands look premium.', color: '#60A5FA', image: '/team/page_8.png' },
 ]
 
-const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981']
+const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981', '#F59E0B', '#EC4899', '#EF4444']
 
 function loadTeam() {
   const cms = getAll('team')
@@ -65,7 +68,7 @@ export default function Team() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, i) => (
-              <AnimatedSection key={member.name} delay={i * 0.05}>
+              <AnimatedSection key={`${member.name}-${member.role}-${i}`} delay={i * 0.05}>
                 <motion.div
                   whileHover={{ y: -6 }}
                   className="doodle-card p-8 text-center group"
