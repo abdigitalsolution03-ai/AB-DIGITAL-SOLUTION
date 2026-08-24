@@ -156,22 +156,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="doodle-card p-8 md:p-10">
-                <h3 className="text-[#111] text-lg font-bold mb-4">Follow Us</h3>
-                <div className="flex items-center gap-4">
-                  {["Facebook", "Instagram", "LinkedIn", "Twitter"].map((social) => (
-                    <a
-                      key={social} href="#"
-                      className="w-10 h-10 border-3 border-[#111] flex items-center justify-center text-[#111]/60 hover:text-[#60A5FA] hover:bg-[#60A5FA] transition-all duration-300"
-                      aria-label={social}
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                      </svg>
-                    </a>
-                  ))}
-                </div>
-              </div>
             </AnimatedSection>
           </div>
         </div>
