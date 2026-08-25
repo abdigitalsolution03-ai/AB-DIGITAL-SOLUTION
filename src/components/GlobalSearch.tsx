@@ -160,7 +160,7 @@ export default function GlobalSearch() {
 
                 {query.trim() && flatResults.length > 0 && (
                   <div className="px-3 py-2 mt-1 border-t border-[var(--border-primary)]">
-                    <p className="text-[10px] text-[var(--text-tertiary)]">
+                    <p className="text-xs text-[var(--text-tertiary)]">
                       <kbd className="px-1 py-0.5 rounded bg-[var(--bg-tertiary)] font-mono">↑↓</kbd> Navigate{' '}
                       <kbd className="px-1 py-0.5 rounded bg-[var(--bg-tertiary)] font-mono">Enter</kbd> Open{' '}
                       <kbd className="px-1 py-0.5 rounded bg-[var(--bg-tertiary)] font-mono">Esc</kbd> Close

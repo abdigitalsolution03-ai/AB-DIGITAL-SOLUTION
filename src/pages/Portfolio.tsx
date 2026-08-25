@@ -185,7 +185,7 @@ export default function Portfolio() {
                       {!project.image && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                           <span className="text-6xl font-black text-white/90 select-none">{project.title.charAt(0).toUpperCase()}</span>
-                          <span className="text-[10px] tracking-[0.3em] uppercase text-white/70 font-bold px-3 py-1 border-2 border-white/40">{project.category}</span>
+                          <span className="text-xs tracking-[0.2em] uppercase text-white/70 font-bold px-3 py-1 border-2 border-white/40">{project.category}</span>
                         </div>
                       )}
                     </div>
@@ -203,7 +203,7 @@ export default function Portfolio() {
                       className="px-6 pb-6 flex flex-wrap gap-2"
                     >
                       {project.metrics.map((metric, j) => (
-                        <span key={j} className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                        <span key={j} className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                           {metric}
                         </span>
                       ))}

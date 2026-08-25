@@ -84,6 +84,8 @@
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -128,6 +130,11 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', system-ui, sans-serif;
     color: var(--text-primary);
+    line-height: 1.15;
+  }
+
+  p {
+    line-height: 1.65;
   }
 
   p, li, span, a {
@@ -141,6 +148,153 @@
 }
 
 @layer components {
+  /* ---------- Typography scale (site-wide system) ----------
+     12px micro metadata · 14px supporting · 16px body · 18px lead
+     20px small heading · 24px card/section heading · 32px large
+     40px major · 48-64px display/hero */
+  .t-micro { font-size: 0.75rem; line-height: 1.4; letter-spacing: 0.05em; }
+  .t-small { font-size: 0.875rem; line-height: 1.5; }
+  .t-body { font-size: 1rem; line-height: 1.65; }
+  .t-lead { font-size: 1.125rem; line-height: 1.6; }
+  .t-h4 { font-size: 1.25rem; line-height: 1.25; font-weight: 700; }
+  .t-h3 { font-size: 1.5rem; line-height: 1.2; font-weight: 700; }
+  .t-h2 { font-size: clamp(1.75rem, 3vw, 2rem); line-height: 1.2; font-weight: 700; }
+  .t-h1 { font-size: clamp(2rem, 4vw, 2.5rem); line-height: 1.15; font-weight: 800; }
+
+  .doodle-card {
+    background: #FFFFFF;
+    border: 3px solid #111111;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 4px 4px 0px #111111;
+  }
+
+  .doodle-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px #111111;
+  }
+
+  .doodle-card-accent {
+    background: #FFD400;
+    border: 3px solid #111111;
+    border-radius: 20px;
+    box-shadow: 4px 4px 0px #111111;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .doodle-card-accent:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px #111111;
+  }
+
+  .doodle-card-red {
+    background: #FF4D4D;
+    border: 3px solid #111111;
+    border-radius: 20px;
+    box-shadow: 4px 4px 0px #111111;
+  }
+
+  .doodle-card-blue {
+    background: #4D7AFF;
+    border: 3px solid #111111;
+    border-radius: 20px;
+    box-shadow: 4px 4px 0px #111111;
+  }
+
+  .doodle-card-purple {
+    background: #8B5CF6;
+    border: 3px solid #111111;
+    border-radius: 20px;
+    box-shadow: 4px 4px 0px #111111;
+  }
+
+  .doodle-btn {
+    background: #111111;
+    color: #FFFFFF;
+    border: 3px solid #111111;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0);
+  }
+
+  .doodle-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+  }
+
+  .doodle-btn-accent {
+    background: #60A5FA;
+    color: #111111;
+    border: 3px solid #111111;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 4px 4px 0px #111111;
+  }
+
+  .doodle-btn-accent:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0px #111111;
+  }
+
+  .doodle-btn-outline {
+    background: transparent;
+    color: #111111;
+    border: 3px solid #111111;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .doodle-btn-outline:hover {
+    background: #111111;
+    color: #FFFFFF;
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+  }
+
+  .section-label {
+    display: inline-block;
+    background: #FFD400;
+    color: #111111;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 6px 16px;
+    border: 2px solid #111111;
+    border-radius: 8px;
+  }
+
   .glass {
     background: var(--bg-glass);
     backdrop-filter: blur(16px);

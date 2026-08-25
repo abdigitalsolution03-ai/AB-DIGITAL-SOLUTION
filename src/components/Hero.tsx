@@ -108,7 +108,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-400 tracking-[0.3em]"
+              className="inline-block text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-400 tracking-[0.25em]"
             >
               {content.hero.headline1}
             </motion.span>
@@ -118,7 +118,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-[#111111] tracking-tight"
+              className="inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] tracking-tight"
             >
               {content.hero.headline2}<span className="text-[#60A5FA]">{content.hero.headlineHighlight}</span>
             </motion.span>
@@ -163,8 +163,8 @@ export default function Hero() {
         >
           {content.hero.stats.map((stat, i) => (
             <div key={i} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{stat.value}{stat.suffix}</div>
-              <div className="text-xs text-gray-500 tracking-wider uppercase mt-1 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</div>
+              <div className="text-3xl md:text-4xl font-bold text-[#111111] leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{stat.value}{stat.suffix}</div>
+              <div className="text-sm text-gray-500 mt-2 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</div>
             </div>
           ))}
         </motion.div>

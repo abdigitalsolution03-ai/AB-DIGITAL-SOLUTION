@@ -80,7 +80,7 @@ export default function TestimonialsPage() {
                       </svg>
                     ))}
                   </div>
-                  <span className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                  <span className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                     {t.category}
                   </span>
                 </div>

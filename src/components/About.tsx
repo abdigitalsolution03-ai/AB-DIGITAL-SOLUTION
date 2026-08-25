@@ -33,12 +33,12 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        <span className="text-5xl md:text-6xl font-bold text-[#111111]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+        <span className="text-4xl md:text-5xl font-bold text-[#111111] leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
           {count}
           <span className="text-[#60A5FA]">{suffix}</span>
         </span>
       </motion.div>
-      <p className="text-gray-500 text-sm mt-2 tracking-wider uppercase font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{label}</p>
+      <p className="text-gray-500 text-sm mt-3 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>{label}</p>
     </div>
   );
 }

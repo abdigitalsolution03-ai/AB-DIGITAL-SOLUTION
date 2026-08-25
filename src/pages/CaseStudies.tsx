@@ -170,7 +170,7 @@ export default function CaseStudies() {
                         {cs.metrics.map((metric, j) => (
                           <div key={j} className="text-center">
                             <p className="text-[#60A5FA] text-xl font-black">{metric.value}</p>
-                            <p className="text-[#111]/50 text-[10px] uppercase tracking-wider mt-1">{metric.label}</p>
+                            <p className="text-[#111]/50 text-xs uppercase tracking-wider mt-1">{metric.label}</p>
                           </div>
                         ))}
                       </div>

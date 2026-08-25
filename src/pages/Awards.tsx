@@ -130,7 +130,7 @@ export default function Awards() {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <h3 className="text-[#111] font-bold text-lg">{award.title}</h3>
-                        <span className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                        <span className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                           {award.year}
                         </span>
                       </div>

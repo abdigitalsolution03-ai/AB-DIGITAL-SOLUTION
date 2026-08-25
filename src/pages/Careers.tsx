@@ -199,7 +199,7 @@ export default function Careers() {
                             <span className="text-[#111]/40">-</span>
                             <span className="text-[#111]/60 text-xs">{job.location}</span>
                             <span className="text-[#111]/40">-</span>
-                            <span className="px-2.5 py-0.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                            <span className="px-2.5 py-0.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                               {job.type}
                             </span>
                           </div>

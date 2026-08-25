@@ -130,7 +130,7 @@ export default function Blog() {
                     className={`block ${getColorClass(post.color)} overflow-hidden h-full group`}
                   >
                     <div className="p-6" style={{ backgroundColor: post.color }}>
-                      <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                      <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                         {post.category}
                       </span>
                     </div>
@@ -144,7 +144,7 @@ export default function Blog() {
                       <div className="flex items-center justify-between mt-4 pt-4 border-t-3 border-[#111]">
                         <div>
                           <p className="text-[#111] text-xs font-bold">{post.author}</p>
-                          <p className="text-[#111]/40 text-[10px] mt-0.5">{post.date} - {post.readTime}</p>
+                          <p className="text-[#111]/40 text-xs mt-0.5">{post.date} - {post.readTime}</p>
                         </div>
                         <span className="text-[#111] group-hover:translate-x-1 transition-transform duration-300">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

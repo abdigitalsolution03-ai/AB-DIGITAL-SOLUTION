@@ -153,7 +153,7 @@ export default function BlogPost() {
               <AnimatedSection>
                 <div className="doodle-card overflow-hidden mb-8">
                   <div className="bg-[#60A5FA] border-b-3 border-[#111] px-8 py-6">
-                    <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                    <span className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                       {data.category}
                     </span>
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#111] mt-4 tracking-tight">
@@ -174,7 +174,7 @@ export default function BlogPost() {
                     
                     <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t-3 border-[#111]">
                       {data.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-[10px] font-bold shadow-[2px_2px_0_#111]">
+                        <span key={tag} className="px-3 py-1.5 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                           #{tag}
                         </span>
                       ))}

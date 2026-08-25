@@ -54,12 +54,12 @@ function ProjectVisual({ type }: { type: string }) {
         <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-[#4285F4]" />
-            <span className="text-[9px] font-bold text-[#111]">Google Ads — Campaign Dashboard</span>
+            <span className="text-[11px] font-bold text-[#111]">Google Ads — Campaign Dashboard</span>
           </div>
           <div className="mt-2 grid grid-cols-3 gap-1.5">
             {[["Clicks", "12,480"], ["CTR", "8.2%"], ["ROAS", "3.5x"]].map(([k, v]) => (
               <div key={k} className="bg-gray-100 rounded-md p-1.5">
-                <div className="text-[7px] text-gray-500 font-semibold uppercase">{k}</div>
+                <div className="text-[9px] text-gray-500 font-semibold uppercase">{k}</div>
                 <div className="text-[10px] font-black text-[#111]">{v}</div>
               </div>
             ))}
@@ -69,17 +69,17 @@ function ProjectVisual({ type }: { type: string }) {
           </div>
           <div className="mt-1.5 flex items-center gap-1">
             {["Paused", "Enabled", "Enabled"].map((s) => (
-              <span key={s} className={`text-[7px] font-bold px-1.5 py-0.5 rounded-full border-2 border-[#111] ${s === "Enabled" ? "bg-[#4285F4] text-white" : "bg-gray-200 text-gray-500"}`}>{s}</span>
+              <span key={s} className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border-2 border-[#111] ${s === "Enabled" ? "bg-[#4285F4] text-white" : "bg-gray-200 text-gray-500"}`}>{s}</span>
             ))}
           </div>
         </div>
         <div className="flex gap-2 items-center">
           <div className="flex-1 bg-white rounded-md border-2 border-[#111] p-2 shadow-[2px_2px_0_#111]">
-            <div className="text-[7px] text-gray-500 font-semibold">Campaign · Search</div>
-            <div className="text-[9px] font-bold text-[#111]">Best Bidding Strategy</div>
-            <div className="text-[8px] font-black text-[#4285F4]">$0.42 CPC · 99.9% Valid</div>
+            <div className="text-[9px] text-gray-500 font-semibold">Campaign · Search</div>
+            <div className="text-[11px] font-bold text-[#111]">Best Bidding Strategy</div>
+            <div className="text-[10px] font-black text-[#4285F4]">$0.42 CPC · 99.9% Valid</div>
           </div>
-          <div className="bg-[#4285F4] text-white text-[9px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">3.5x ROAS</div>
+          <div className="bg-[#4285F4] text-white text-[11px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">3.5x ROAS</div>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ function ProjectVisual({ type }: { type: string }) {
         <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-[#60A5FA]" />
-            <span className="text-[9px] font-bold text-[#111]">Google Search Results</span>
+            <span className="text-[11px] font-bold text-[#111]">Google Search Results</span>
           </div>
           <div className="mt-2 space-y-1.5">
             {[
@@ -100,17 +100,17 @@ function ProjectVisual({ type }: { type: string }) {
               ["3", "Reviews & Offers · Free Quote", "maps.google.com"],
             ].map(([rank, t, u]) => (
               <div key={rank} className="flex items-center gap-2 bg-gray-100 rounded-md p-1.5">
-                <span className="w-4 h-4 flex items-center justify-center rounded-full bg-[#60A5FA] border-2 border-[#111] text-[8px] font-black text-[#111]">{rank}</span>
+                <span className="w-4 h-4 flex items-center justify-center rounded-full bg-[#60A5FA] border-2 border-[#111] text-[10px] font-black text-[#111]">{rank}</span>
                 <div className="min-w-0">
-                  <div className="text-[8px] font-bold text-[#111] truncate">{t}</div>
-                  <div className="text-[7px] text-gray-500 truncate">{u}</div>
+                  <div className="text-[10px] font-bold text-[#111] truncate">{t}</div>
+                  <div className="text-[9px] text-gray-500 truncate">{u}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
         <div className="bg-white rounded-lg border-2 border-[#111] p-2 shadow-[2px_2px_0_#111]">
-          <div className="flex justify-between text-[8px] font-bold text-[#111]"><span>Organic Traffic</span><span className="text-green-600">+300%</span></div>
+          <div className="flex justify-between text-[10px] font-bold text-[#111]"><span>Organic Traffic</span><span className="text-green-600">+300%</span></div>
           <div className="mt-1 flex items-end gap-1 h-10">
             {[30, 45, 40, 60, 55, 80, 100].map((h, i) => bar(`${h}%`, "#4ADE80"))}
           </div>
@@ -124,8 +124,8 @@ function ProjectVisual({ type }: { type: string }) {
       <div className="absolute inset-0 flex flex-col gap-2 p-4" style={{ fontFamily: "'Inter', sans-serif" }}>
         <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] font-bold text-[#111]">Store Revenue</span>
-            <span className="text-[8px] font-black text-green-600 bg-green-100 px-1.5 py-0.5 rounded-md border-2 border-[#111]">+150%</span>
+            <span className="text-[11px] font-bold text-[#111]">Store Revenue</span>
+            <span className="text-[10px] font-black text-green-600 bg-green-100 px-1.5 py-0.5 rounded-md border-2 border-[#111]">+150%</span>
           </div>
           <div className="mt-2 flex items-end gap-1.5 h-14">
             {[40, 55, 45, 70, 62, 88, 100].map((h, i) => bar(`${h}%`, i === 6 ? "#FF4D4D" : "#FCA5A5"))}
@@ -133,7 +133,7 @@ function ProjectVisual({ type }: { type: string }) {
           <div className="mt-2 grid grid-cols-3 gap-1.5">
             {[["Orders", "3,214"], ["Conversion", "3.2%"], ["Cart Value", "$84"]].map(([k, v]) => (
               <div key={k} className="bg-gray-100 rounded-md p-1.5">
-                <div className="text-[7px] text-gray-500 font-semibold uppercase">{k}</div>
+                <div className="text-[9px] text-gray-500 font-semibold uppercase">{k}</div>
                 <div className="text-[10px] font-black text-[#111]">{v}</div>
               </div>
             ))}
@@ -141,10 +141,10 @@ function ProjectVisual({ type }: { type: string }) {
         </div>
         <div className="flex gap-2 items-center">
           <div className="flex-1 bg-white rounded-md border-2 border-[#111] p-2 shadow-[2px_2px_0_#111]">
-            <div className="text-[8px] font-bold text-[#111]">🛒 New Order #4821</div>
-            <div className="text-[7px] text-gray-500">Noida, UP · COD</div>
+            <div className="text-[10px] font-bold text-[#111]">🛒 New Order #4821</div>
+            <div className="text-[9px] text-gray-500">Noida, UP · COD</div>
           </div>
-          <div className="bg-[#FF4D4D] text-white text-[9px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">Checkout</div>
+          <div className="bg-[#FF4D4D] text-white text-[11px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">Checkout</div>
         </div>
       </div>
     );
@@ -155,13 +155,13 @@ function ProjectVisual({ type }: { type: string }) {
       <div className="absolute inset-0 flex flex-col gap-2 p-4" style={{ fontFamily: "'Inter', sans-serif" }}>
         <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] font-bold text-[#111]">Analytics Overview</span>
-            <span className="text-[8px] text-gray-500 font-semibold">Last 30 days</span>
+            <span className="text-[11px] font-bold text-[#111]">Analytics Overview</span>
+            <span className="text-[10px] text-gray-500 font-semibold">Last 30 days</span>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-1.5">
             {[["Active Users", "48,290"], ["Engagement", "2x"], ["Retention", "45%"], ["Sessions", "102k"]].map(([k, v]) => (
               <div key={k} className="bg-gray-100 rounded-md p-1.5">
-                <div className="text-[7px] text-gray-500 font-semibold uppercase">{k}</div>
+                <div className="text-[9px] text-gray-500 font-semibold uppercase">{k}</div>
                 <div className="text-[10px] font-black text-[#111]">{v}</div>
               </div>
             ))}
@@ -173,8 +173,8 @@ function ProjectVisual({ type }: { type: string }) {
         <div className="bg-white rounded-md border-2 border-[#111] p-2 shadow-[2px_2px_0_#111]">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm bg-[#4D7AFF]" />
-            <div className="text-[8px] font-bold text-[#111] flex-1">Weekly Active Users</div>
-            <div className="text-[8px] font-black text-green-600">↑ 45%</div>
+            <div className="text-[10px] font-bold text-[#111] flex-1">Weekly Active Users</div>
+            <div className="text-[10px] font-black text-green-600">↑ 45%</div>
           </div>
         </div>
       </div>
@@ -187,12 +187,12 @@ function ProjectVisual({ type }: { type: string }) {
         <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-[#FF4D4D]" />
-            <span className="text-[9px] font-bold text-[#111]">Meta Ads Manager</span>
+            <span className="text-[11px] font-bold text-[#111]">Meta Ads Manager</span>
           </div>
           <div className="mt-2 grid grid-cols-3 gap-1.5">
             {[["Reach", "500k+"], ["Results", "4x"], ["ROAS", "5x"]].map(([k, v]) => (
               <div key={k} className="bg-gray-100 rounded-md p-1.5">
-                <div className="text-[7px] text-gray-500 font-semibold uppercase">{k}</div>
+                <div className="text-[9px] text-gray-500 font-semibold uppercase">{k}</div>
                 <div className="text-[10px] font-black text-[#111]">{v}</div>
               </div>
             ))}
@@ -201,15 +201,15 @@ function ProjectVisual({ type }: { type: string }) {
             {[["Summer Sale 40% Off", "Video · Conversions", "$1,240"], ["New Collection", "Carousel · Traffic", "$980"]].map(([name, type_, spend]) => (
               <div key={name} className="flex items-center justify-between bg-gray-100 rounded-md p-1.5">
                 <div className="min-w-0">
-                  <div className="text-[8px] font-bold text-[#111] truncate">{name}</div>
-                  <div className="text-[7px] text-gray-500">{type_}</div>
+                  <div className="text-[10px] font-bold text-[#111] truncate">{name}</div>
+                  <div className="text-[9px] text-gray-500">{type_}</div>
                 </div>
-                <span className="text-[8px] font-black text-[#111]">{spend}</span>
+                <span className="text-[10px] font-black text-[#111]">{spend}</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="bg-[#FF4D4D] text-white text-[9px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111] self-end">Live: 12 Campaigns</div>
+        <div className="bg-[#FF4D4D] text-white text-[11px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111] self-end">Live: 12 Campaigns</div>
       </div>
     );
   }
@@ -218,7 +218,7 @@ function ProjectVisual({ type }: { type: string }) {
     <div className="absolute inset-0 flex flex-col gap-2 p-4" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="bg-white rounded-lg border-2 border-[#111] p-3 shadow-[3px_3px_0_#111]">
         <div className="flex items-center justify-between">
-          <span className="text-[9px] font-bold text-[#111]">Brand Identity</span>
+          <span className="text-[11px] font-bold text-[#111]">Brand Identity</span>
           <div className="flex gap-1">
             {["#FF4D4D", "#4D7AFF", "#8B5CF6", "#60A5FA"].map((c) => <div key={c} className="w-3.5 h-3.5 rounded-full border-2 border-[#111]" style={{ background: c }} />)}
           </div>
@@ -226,25 +226,25 @@ function ProjectVisual({ type }: { type: string }) {
         <div className="mt-2 bg-[#111] rounded-md p-3 flex items-center justify-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-[#FF4D4D] flex items-center justify-center text-white text-[12px] font-black">AB</span>
           <div>
-            <div className="text-white text-[9px] font-black">BRAND NAME</div>
-            <div className="text-white/60 text-[7px] font-semibold">Est. 2023 · Digital</div>
+            <div className="text-white text-[11px] font-black">BRAND NAME</div>
+            <div className="text-white/60 text-[9px] font-semibold">Est. 2023 · Digital</div>
           </div>
         </div>
         <div className="mt-2 grid grid-cols-3 gap-1.5">
           {[["Logo", "Done"], ["Colors", "Done"], ["Type", "Done"]].map(([k, v]) => (
             <div key={k} className="bg-gray-100 rounded-md p-1.5 flex items-center justify-between">
-              <span className="text-[7px] text-gray-500 font-semibold">{k}</span>
-              <span className="text-[8px] font-black text-green-600">✓</span>
+              <span className="text-[9px] text-gray-500 font-semibold">{k}</span>
+              <span className="text-[10px] font-black text-green-600">✓</span>
             </div>
           ))}
         </div>
       </div>
       <div className="flex gap-2 items-center">
         <div className="flex-1 bg-white rounded-md border-2 border-[#111] p-2 shadow-[2px_2px_0_#111]">
-          <div className="text-[8px] font-bold text-[#111]">Brand Kit</div>
-          <div className="text-[7px] text-gray-500">Typography · Logo · Guidelines</div>
+          <div className="text-[10px] font-bold text-[#111]">Brand Kit</div>
+          <div className="text-[9px] text-gray-500">Typography · Logo · Guidelines</div>
         </div>
-        <div className="bg-[#8B5CF6] text-white text-[9px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">80% Recall</div>
+        <div className="bg-[#8B5CF6] text-white text-[11px] font-black px-2 py-1.5 rounded-md border-2 border-[#111] shadow-[2px_2px_0_#111]">80% Recall</div>
       </div>
     </div>
   );
