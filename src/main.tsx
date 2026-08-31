@@ -6,16 +6,23 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import App from './App'
 import './styles/globals.css'
 import { pullCMS, seedAllIfEmpty } from './services/cms'
+import { useAnalyticsInit, usePageTracking } from '@/hooks/useAnalytics'
 
 seedAllIfEmpty()
 void pullCMS()
+
+function AppWithAnalytics() {
+  useAnalyticsInit()
+  usePageTracking()
+  return <App />
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
         <ThemeProvider>
-          <App />
+          <AppWithAnalytics />
         </ThemeProvider>
       </BrowserRouter>
     </HelmetProvider>
