@@ -68,7 +68,7 @@ const defaultContent: SiteContent = {
   contact: {
     heading: "Let's Work Together", subtext: 'Ready to take your digital presence to the next level? Get in touch with us today.',
     serviceOptions: ['Website Development', 'SEO Optimization', 'Google Ads', 'Meta Ads', 'Social Media Marketing', 'Content Marketing', 'Branding', 'AI Automation', 'Lead Generation'],
-    info: { email: 'abdigitalsolution03@gmail.com', phone: '+91 81785-26092', location: 'Noida, Uttar Pradesh, India', whatsapp: 'https://wa.me/918178526092' },
+    info: { email: 'abdigitalsolution03@gmail.com', phone: '+91 81785-26092', location: 'Noida Sector 63, Uttar Pradesh, India', whatsapp: 'https://wa.me/918178526092' },
     socialLinks: [
       { platform: 'Instagram', url: 'https://www.instagram.com/ab_digitalsolution1' },
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ab-digital-solution-96679a34b' },

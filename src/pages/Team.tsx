@@ -11,11 +11,12 @@ const hardcodedTeam = [
   { name: 'Ansh', role: 'Social Media Manager', bio: 'Manages social media growth, content calendars and daily engagement.', color: '#8B5CF6', image: '/team/ansh_smm.png' },
   { name: 'Abhay Sharma', role: 'Video Editor', bio: 'Edits reels and long form videos focused on retention and growth.', color: '#10B981', image: '/team/page_5.png' },
   { name: 'Subham', role: 'Performance Marketer', bio: 'Runs data driven Meta and Google Ads campaigns for maximum ROI.', color: '#EF4444', image: '/team/page_6.png' },
+  { name: 'Subham', role: 'Software Engineer', bio: 'Builds scalable web applications and robust backend systems with clean code.', color: '#10B981', image: '/team/subham.png' },
   { name: 'Deepanshu Singh Adhikari', role: 'Website Developer', bio: 'Builds fast, modern websites that turn visitors into paying customers.', color: '#4D7AFF', image: '/team/page_7.png' },
   { name: 'Pooja', role: 'Graphic Designer', bio: 'Designs thumbnails, social creatives and premium brand visuals daily.', color: '#F59E0B', image: '/team/page_8.png' },
 ]
 
-const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981', '#F59E0B', '#EC4899', '#EF4444']
+const colors = ['#60A5FA', '#FF4D4D', '#4D7AFF', '#8B5CF6', '#10B981', '#F59E0B', '#EC4899', '#EF4444', '#10B981']
 
 export default function Team() {
   const [teamMembers] = useState(hardcodedTeam)
