@@ -74,7 +74,7 @@ const defaultContent: SiteContent = {
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ab-digital-solution-96679a34b' },
       { platform: 'YouTube', url: 'https://www.youtube.com/@AbDigitalsolution' },
     ],
-    mapsEmbed: 'https://www.google.com/maps?q=Noida%2C%20Uttar%20Pradesh%2C%20India&z=12&output=embed',
+    mapsEmbed: 'https://www.google.com/maps?q=Noida%20Sector%2063%2C%20Uttar%20Pradesh%2C%20India&z=12&output=embed',
   },
   whyChooseUs: {
     label: 'Why Choose Us', heading: 'Built for', headingHighlight: 'Excellence',

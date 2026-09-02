@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { submitContact } from "@/services/auth";
+import { getSiteContent } from "@/services/siteContent";
 
 const serviceOptions = [
   "Website Development", "SEO Optimization", "Google Ads", "Meta Ads",
@@ -12,18 +13,27 @@ const serviceOptions = [
 ];
 
 export default function Contact() {
+  const content = getSiteContent();
+  const contactInfo = content.contact.info;
+  const mapsEmbed = content.contact.mapsEmbed;
   const [formData, setFormData] = useState({
     name: "", phone: "", email: "", business: "", service: "", message: ""});
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear field error when user starts typing
+    if (fieldErrors[e.target.name]) {
+      setFieldErrors(prev => ({ ...prev, [e.target.name]: "" }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setFieldErrors({});
     try {
       await submitContact({
         name: formData.name.trim(),
@@ -36,6 +46,18 @@ export default function Contact() {
       if (err?.status === 429) {
         setError("Too many messages — please wait a few minutes and try again.")
         return
+      }
+      // Handle field-specific validation errors from Zod
+      if (err?.status === 400 && err?.details?.formErrors) {
+        const fieldErrors: Record<string, string> = {};
+        for (const [field, messages] of Object.entries(err.details.formErrors)) {
+          if (Array.isArray(messages) && messages.length > 0) {
+            fieldErrors[field] = messages[0];
+          }
+        }
+        setFieldErrors(fieldErrors);
+        setError("Please fix the errors below and try again.");
+        return;
       }
       setError(err?.message || "Message could not be sent. Please try again.")
       return
@@ -67,7 +89,7 @@ export default function Contact() {
           <AnimatedSection>
             <div className="doodle-card overflow-hidden mb-12">
               <iframe
-                src="https://www.google.com/maps?q=Noida%2C%20Uttar%20Pradesh%2C%20India&z=12&output=embed"
+                src={mapsEmbed}
                 width="100%" height="300" style={{ border: 0 }} allowFullScreen loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="AB DIGITAL SOLUTION Location"
@@ -79,33 +101,39 @@ export default function Contact() {
             <AnimatedSection direction="left">
               <form onSubmit={handleSubmit} className="doodle-card p-8 md:p-10 space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <InputField label="Name" name="name" value={formData.name} onChange={handleChange} required />
-                  <InputField label="Phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required />
+                  <InputField label="Name" name="name" value={formData.name} onChange={handleChange} required error={fieldErrors.name} />
+                  <InputField label="Phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required error={fieldErrors.phone} />
                 </div>
-                <InputField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
-                <InputField label="Business Name" name="business" value={formData.business} onChange={handleChange} />
+                <InputField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required error={fieldErrors.email} />
+                <InputField label="Business Name" name="business" value={formData.business} onChange={handleChange} error={fieldErrors.business} />
                 <div>
                   <label className="block text-[#111] text-sm font-bold mb-2">
                     Required Service <span className="text-[#60A5FA]">*</span>
                   </label>
                   <select
                     name="service" value={formData.service} onChange={handleChange} required
-                    className="w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none"
+                    className={`w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none ${
+                      fieldErrors.service ? "border-red-500 focus:border-red-500" : ""
+                    }`}
                   >
                     <option value="">Select a service</option>
                     {serviceOptions.map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
+                  {fieldErrors.service && <p className="text-sm text-red-600 mt-1">{fieldErrors.service}</p>}
                 </div>
                 <div>
                   <label className="block text-[#111] text-sm font-bold mb-2">Message</label>
                   <textarea
                     name="message" value={formData.message} onChange={handleChange}
                     rows={4} placeholder="Tell us about your project..."
-                    className="w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none resize-none"
+                    className={`w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none resize-none ${
+                      fieldErrors.message ? "border-red-500 focus:border-red-500" : ""
+                    }`}
                     required
                   />
+                  {fieldErrors.message && <p className="text-sm text-red-600 mt-1">{fieldErrors.message}</p>}
                 </div>
                 {error && (
                   <p className="text-sm text-red-600 bg-red-50 border-2 border-red-200 px-4 py-3" style={{ borderRadius: "12px" }}>
@@ -137,7 +165,7 @@ export default function Contact() {
                   />
                   <ContactInfo
                     icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-                    label="Location" value="Noida, Uttar Pradesh, India"
+                    label="Location" value={contactInfo.location}
                   />
                 </div>
               </div>
@@ -165,9 +193,9 @@ export default function Contact() {
 }
 
 function InputField({
-  label, name, type = "text", value, onChange, required = false}: {
+  label, name, type = "text", value, onChange, required = false, error}: {
   label: string; name: string; type?: string; value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean; error?: string;
 }) {
   return (
     <div>
@@ -176,11 +204,14 @@ function InputField({
       </label>
       <input
         type={type} name={name} value={value} onChange={onChange}
-        className="w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none placeholder:text-[#111]/30"
+        className={`w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none placeholder:text-[#111]/30 ${
+          error ? "border-red-500 focus:border-red-500" : ""
+        }`}
         placeholder={`Your ${label.toLowerCase()}`} required={required}
       />
+      {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
     </div>
-  );
+  )
 }
 
 function ContactInfo({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
