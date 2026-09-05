@@ -10,6 +10,8 @@ const SERVICE_ID = "service_qwtksgx";
 const TEMPLATE_ID = "template_estln1a";
 const PUBLIC_KEY = "HNrX23yoxClMBvQEt";
 
+emailjs.init(PUBLIC_KEY);
+
 const serviceOptions = [
   "Website Development", "SEO Optimization", "Google Ads", "Meta Ads",
   "Social Media Marketing", "Content Marketing", "Branding", "AI Automation",
@@ -47,7 +49,7 @@ export default function Contact() {
         phone: formData.phone.trim() || "Not provided",
         service: formData.service || "Not specified",
         message: formData.message.trim(),
-      }, PUBLIC_KEY);
+      });
 
       // Also save to backend
       await submitContact({
@@ -58,7 +60,8 @@ export default function Contact() {
         message: formData.message.trim(),
       }).catch(() => {});
     } catch (err: any) {
-      setError("Message could not be sent. Please try again.")
+      console.error("EmailJS error:", err);
+      setError(err?.text || err?.message || "Message could not be sent. Please try again.")
       return
     }
     setFormData({ name: "", phone: "", email: "", business: "", service: "", message: "" });
