@@ -203,7 +203,7 @@ export default function Portfolio() {
                       className="px-6 pb-6 flex flex-wrap gap-2"
                     >
                       {project.metrics.map((metric, j) => (
-                        <span key={j} className="px-3 py-1 bg-[#60A5FA] border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
+                        <span key={j} className="px-3 py-1 bg-white border-2 border-[#111] text-[#111] text-xs font-bold shadow-[2px_2px_0_#111]">
                           {metric}
                         </span>
                       ))}
