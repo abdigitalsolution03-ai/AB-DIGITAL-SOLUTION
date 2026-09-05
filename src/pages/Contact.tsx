@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { submitContact } from "@/services/auth";
 import { getSiteContent } from "@/services/siteContent";
+import emailjs from "@emailjs/browser";
+
+const SERVICE_ID = "service_qwtksgx";
+const TEMPLATE_ID = "template_estln1a";
+const PUBLIC_KEY = "HNrX23yoxClMBvQEt";
 
 const serviceOptions = [
   "Website Development", "SEO Optimization", "Google Ads", "Meta Ads",
@@ -35,31 +40,25 @@ export default function Contact() {
     setError("");
     setFieldErrors({});
     try {
+      // Send email via EmailJS
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        from_name: formData.name.trim(),
+        from_email: formData.email.trim(),
+        phone: formData.phone.trim() || "Not provided",
+        service: formData.service || "Not specified",
+        message: formData.message.trim(),
+      }, PUBLIC_KEY);
+
+      // Also save to backend
       await submitContact({
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim() || undefined,
         service: formData.service || undefined,
         message: formData.message.trim(),
-      })
+      }).catch(() => {});
     } catch (err: any) {
-      if (err?.status === 429) {
-        setError("Too many messages — please wait a few minutes and try again.")
-        return
-      }
-      // Handle field-specific validation errors from Zod
-      if (err?.status === 400 && err?.details?.formErrors) {
-        const fieldErrors: Record<string, string> = {};
-        for (const [field, messages] of Object.entries(err.details.formErrors)) {
-          if (Array.isArray(messages) && messages.length > 0) {
-            fieldErrors[field] = messages[0];
-          }
-        }
-        setFieldErrors(fieldErrors);
-        setError("Please fix the errors below and try again.");
-        return;
-      }
-      setError(err?.message || "Message could not be sent. Please try again.")
+      setError("Message could not be sent. Please try again.")
       return
     }
     setFormData({ name: "", phone: "", email: "", business: "", service: "", message: "" });
