@@ -2,7 +2,6 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
-import { getAll } from '@/services/cms';
 
 interface Testimonial {
   name: string;
@@ -18,22 +17,8 @@ const hardcodedTestimonials: Testimonial[] = [
   { name: "Sapan Kumar", role: "Director, Vidya Vibe Academy", content: "Our online presence has never been stronger, thanks to the team's expertise and dedication.", rating: 5, category: "Social Media" },
 ];
 
-function loadTestimonials(): Testimonial[] {
-  const cms = getAll('testimonials')
-  if (cms.length > 0) {
-    return cms.map((t: any) => ({
-      name: t.name,
-      role: [t.role, t.company].filter(Boolean).join(', '),
-      content: t.content,
-      rating: t.rating || 5,
-      category: t.category || 'SEO',
-    }))
-  }
-  return hardcodedTestimonials
-}
-
 export default function TestimonialsPage() {
-  const [testimonials] = useState(loadTestimonials);
+  const [testimonials] = useState(hardcodedTestimonials);
   return (
     <>
       <Helmet>
