@@ -5,34 +5,22 @@ import { getAll } from "@/services/cms";
 
 const defaultTestimonials = [
   {
-    name: "Rahul Sharma",
-    role: "Owner, Sharma Trading Co.",
+    name: "Rakesh Pandey",
+    role: "Director, Star X Institute Private Limited",
     content:
-      "AB DIGITAL SOLUTION transformed our online presence. Our traffic increased by 300% within three months. Their strategic approach and attention to detail are unmatched.",
+      "Our online presence has never been stronger, thanks to the team's expertise and dedication.",
     rating: 5},
   {
-    name: "Priya Patel",
-    role: "Founder, Patel Boutique",
+    name: "Suraj Paul",
+    role: "Gmd Financial Services",
     content:
-      "The team at AB DIGITAL SOLUTION delivered beyond our expectations. Our conversion rate doubled, and the ROI on our ad spend has been remarkable.",
+      "Our online presence has never been stronger, thanks to the team's expertise and dedication.",
     rating: 5},
   {
-    name: "Amit Verma",
-    role: "Owner, Verma Electronics",
+    name: "Sapan Kumar",
+    role: "Director, Vidya Vibe Academy",
     content:
-      "Working with AB DIGITAL SOLUTION has been a game-changer. Their branding work gave us a completely new identity that resonates perfectly with our customers.",
-    rating: 5},
-  {
-    name: "Neha Gupta",
-    role: "Director, Gupta Garments",
-    content:
-      "From SEO to web development, every service has been top-notch. They truly understand digital strategy and execute flawlessly. Highly recommended.",
-    rating: 5},
-  {
-    name: "Vikram Singh",
-    role: "Owner, Singh Sweets & Snacks",
-    content:
-      "The Google Ads campaign they managed for us generated a 400% ROI in the first month alone. Their expertise in paid advertising is exceptional.",
+      "Our online presence has never been stronger, thanks to the team's expertise and dedication.",
     rating: 5},
 ];
 
