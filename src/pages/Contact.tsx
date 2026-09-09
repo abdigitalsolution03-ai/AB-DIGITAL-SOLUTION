@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+﻿import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -11,6 +11,17 @@ const TEMPLATE_ID = "template_estln1a";
 const PUBLIC_KEY = "HNrX23yoxClMBvQEt";
 
 emailjs.init(PUBLIC_KEY);
+
+function generateCaptcha() {
+  const ops = ['+', '-', '×'];
+  const op = ops[Math.floor(Math.random() * ops.length)];
+  let a: number, b: number;
+  if (op === '+') { a = Math.floor(Math.random() * 20) + 1; b = Math.floor(Math.random() * 20) + 1; }
+  else if (op === '-') { a = Math.floor(Math.random() * 20) + 10; b = Math.floor(Math.random() * 10) + 1; }
+  else { a = Math.floor(Math.random() * 10) + 1; b = Math.floor(Math.random() * 10) + 1; }
+  const answer = op === '+' ? a + b : op === '-' ? a - b : a * b;
+  return { question: `${a} ${op} ${b}`, answer };
+}
 
 const serviceOptions = [
   "Website Development", "SEO Optimization", "Google Ads", "Meta Ads",
@@ -28,10 +39,14 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [captcha, setCaptcha] = useState(generateCaptcha);
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+
+  useEffect(() => { setCaptcha(generateCaptcha()); }, [submitted]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear field error when user starts typing
     if (fieldErrors[e.target.name]) {
       setFieldErrors(prev => ({ ...prev, [e.target.name]: "" }));
     }
@@ -41,17 +56,24 @@ export default function Contact() {
     e.preventDefault();
     setError("");
     setFieldErrors({});
+    setCaptchaError("");
+
+    if (parseInt(captchaInput) !== captcha.answer) {
+      setCaptchaError("Incorrect answer. Please try again.");
+      setCaptcha(generateCaptcha());
+      setCaptchaInput("");
+      return;
+    }
+
     try {
-      // Send email via EmailJS
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
         from_name: formData.name.trim(),
         from_email: formData.email.trim(),
         phone: formData.phone.trim() || "Not provided",
         service: formData.service || "Not specified",
         message: formData.message.trim(),
-      });
+      }, PUBLIC_KEY);
 
-      // Also save to backend
       await submitContact({
         name: formData.name.trim(),
         email: formData.email.trim(),
@@ -65,6 +87,7 @@ export default function Contact() {
       return
     }
     setFormData({ name: "", phone: "", email: "", business: "", service: "", message: "" });
+    setCaptchaInput("");
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
   };
@@ -142,6 +165,31 @@ export default function Contact() {
                     {error}
                   </p>
                 )}
+                <div className="doodle-card p-4 flex items-center gap-4">
+                  <div className="flex-1">
+                    <label className="block text-[#111] text-sm font-bold mb-2">
+                      Verify you're human <span className="text-[#60A5FA]">*</span>
+                    </label>
+                    <p className="text-[#111] text-lg font-bold mb-2">What is {captcha.question} = ?</p>
+                    <input
+                      type="number"
+                      value={captchaInput}
+                      onChange={(e) => { setCaptchaInput(e.target.value); setCaptchaError(""); }}
+                      className="w-full px-4 py-3 bg-white border-3 border-[#111] text-[#111] focus:outline-none"
+                      placeholder="Your answer"
+                      required
+                    />
+                    {captchaError && <p className="text-sm text-red-600 mt-1">{captchaError}</p>}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setCaptcha(generateCaptcha()); setCaptchaInput(""); setCaptchaError(""); }}
+                    className="mt-6 w-10 h-10 bg-white border-3 border-[#111] flex items-center justify-center text-[#111] hover:bg-[#60A5FA] transition-colors shadow-[2px_2px_0_#111]"
+                    title="New question"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  </button>
+                </div>
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.01 }}
