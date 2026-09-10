@@ -6,7 +6,7 @@ import YoutubeEmbed from '@/components/YoutubeEmbed'
 
 const hardcodedTeam = [
   { name: 'Avnish Yadav', role: 'Founder', bio: 'Visionary founder driving digital strategy and brand growth for every client.', color: '#60A5FA', image: '/team/page_1.png' },
-  { name: 'Bobby Singh', role: 'Founder', bio: 'Founder managing operations and making sure every client project succeeds.', color: '#FF4D4D', image: '/team/page_2.png' },
+  { name: 'Boby Singh', role: 'Founder', bio: 'Founder managing operations and making sure every client project succeeds.', color: '#FF4D4D', image: '/team/page_2.png' },
   { name: 'Ansh', role: 'Business Head', bio: 'Plans and shoots high converting business ad campaigns for growing brands.', color: '#EC4899', image: '/team/page_4.png' },
   { name: 'Ansh', role: 'Social Media Manager', bio: 'Manages social media growth, content calendars and daily engagement.', color: '#8B5CF6', image: '/team/ansh_smm.png' },
   { name: 'Abhay Sharma', role: 'Video Editor', bio: 'Edits reels and long form videos focused on retention and growth.', color: '#10B981', image: '/team/page_5.png' },
