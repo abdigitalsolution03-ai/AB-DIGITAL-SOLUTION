@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
-import { getAll, pullCMS } from '@/services/cms';
 import SocialIcon from '@/components/SocialIcon';
 
 const categories = ["All", "Social Media", "Video Editing", "Ads", "Design", "SEO"];
@@ -38,37 +37,10 @@ const hardcodedProjects: Project[] = [
   { title: "Prediction", category: "Design", description: "Thumbnail and content design for Prediction, an astrology content brand.", color: "#8B5CF6", image: "/portfolio-covers/prediction-cover.png", metrics: ["Thumbnail Design", "Content Design"] },
 ];
 
-function loadProjects(): Project[] {
-  const cms = getAll('portfolio')
-  if (cms.length > 0) {
-    return cms.map((p: any) => ({
-      title: p.title,
-      category: p.category || 'Social Media',
-      description: p.description || '',
-      color: p.color || '#4D7AFF',
-      image: p.image || '',
-      videoUrl: p.videoUrl || '',
-      videoThumb: p.videoThumb || '',
-      channelAvatar: p.channelAvatar || '',
-      instagramUrl: p.instagramUrl || '',
-      metrics: (p.results || '').split('\n').filter(Boolean).map((m: string) => m.trim()),
-    }))
-  }
-  return hardcodedProjects
-}
-
 export default function Portfolio() {
-  const [projects, setProjects] = useState(loadProjects);
+  const [projects] = useState(hardcodedProjects);
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    let active = true
-    void pullCMS().then(() => {
-      if (active) setProjects(loadProjects())
-    })
-    return () => { active = false }
-  }, [])
 
   const filtered = projects.filter(
     (p) => activeCategory === "All" || p.category === activeCategory
