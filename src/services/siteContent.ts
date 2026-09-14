@@ -25,7 +25,7 @@ export interface SiteContent {
 }
 
 const defaultContent: SiteContent = {
-  version: 4,
+  version: 5,
   header: {
     logo: 'AB', logoHighlight: 'DIGITAL',
     navItems: [
@@ -71,6 +71,7 @@ const defaultContent: SiteContent = {
     info: { email: 'abdigitalsolution03@gmail.com', phone: '+91 81785-26092', location: 'Noida Sector 63, Uttar Pradesh, India', whatsapp: 'https://wa.me/918178526092' },
     socialLinks: [
       { platform: 'Instagram', url: 'https://www.instagram.com/ab_digitalsolution1' },
+      { platform: 'Facebook', url: 'https://www.facebook.com/share/1DwtRf5CGP/' },
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ab-digital-solution-96679a34b' },
       { platform: 'YouTube', url: 'https://www.youtube.com/@AbDigitalsolution' },
     ],
@@ -244,6 +245,15 @@ function loadContent(): SiteContent {
     }
   } catch {
     // fall through to defaults
+  }
+
+  // Ensure Facebook link is present even if CMS override removed it
+  if (!result.contact.socialLinks.some(s => s.platform.toLowerCase() === 'facebook')) {
+    const fb = { platform: 'Facebook', url: 'https://www.facebook.com/share/1DwtRf5CGP/' }
+    // Insert after Instagram if present, else at start
+    const igIndex = result.contact.socialLinks.findIndex(s => s.platform.toLowerCase() === 'instagram')
+    if (igIndex !== -1) result.contact.socialLinks.splice(igIndex + 1, 0, fb)
+    else result.contact.socialLinks.unshift(fb)
   }
 
   return result
