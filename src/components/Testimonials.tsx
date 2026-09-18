@@ -21,6 +21,12 @@ const defaultTestimonials = [
     content:
       "Our online presence has never been stronger, thanks to the team's expertise and dedication.",
     rating: 5},
+  {
+    name: "MS Tutorial",
+    role: "Director, MS Tutorials Vaishali - Coaching Institute",
+    content:
+      "AB DIGITAL SOLUTION helped our coaching institute grow admissions with Google My Business, YouTube and social media. Student enquiries and online visibility have improved remarkably.",
+    rating: 5},
 ];
 
 export default function Testimonials() {

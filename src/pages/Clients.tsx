@@ -8,6 +8,7 @@ const clientLogos = [
   "Kumar Furniture", "Nair Spices", "Yadav Hardware", "Deshmukh Salon", "Agarwal Traders",
   "Reddy Realty", "Menon Jewelry", "Mehta Pharma", "Joshi Stationery", "Kapoor Textiles",
   "Iyer Matrimony", "Chopra Foods", "Bhatia Travels", "Sawant Fitness", "Pillai Autos",
+  "MS Tutorials Vaishali",
 ];
 
 const stats = [
@@ -32,6 +33,11 @@ const testimonials = [
     name: "Sapan Kumar",
     role: "Director, Vidya Vibe Academy",
     content: "Our online presence has never been stronger, thanks to the team's expertise and dedication.",
+    rating: 5},
+  {
+    name: "MS Tutorial",
+    role: "Director, MS Tutorials Vaishali - Coaching Institute",
+    content: "AB DIGITAL SOLUTION helped our coaching institute grow admissions with Google My Business, YouTube and social media. Student enquiries and online visibility have improved remarkably.",
     rating: 5},
 ];
 

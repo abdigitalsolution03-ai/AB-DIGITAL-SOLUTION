@@ -372,6 +372,7 @@ const TESTIMONIALS_SEED: Array<Record<string, any>> = [
   { name: 'Mohit Agarwal', role: 'Partner', company: 'Agarwal Traders', content: 'Their content marketing strategy helped us establish thought leadership in our industry. Our blog traffic increased by 500%.', rating: 5, category: 'Content Marketing', status: 'published' },
   { name: 'Kavita Reddy', role: 'Owner', company: 'Reddy Realty', content: "Local SEO services from AB DIGITAL SOLUTION put us on the map. We're now the top result for 'near me' searches in our area.", rating: 5, category: 'Local SEO', status: 'published' },
   { name: 'Arjun Menon', role: 'Owner', company: 'Menon Jewelry', content: 'The lead generation campaigns they run for us consistently deliver high-quality prospects. Our sales team is busier than ever.', rating: 5, category: 'Lead Generation', status: 'published' },
+  { name: 'MS Tutorial', role: 'Director', company: 'MS Tutorials Vaishali - Coaching Institute', content: 'AB DIGITAL SOLUTION helped our coaching institute grow admissions with Google My Business, YouTube and social media. Student enquiries and online visibility have improved remarkably.', rating: 5, category: 'Social Media', status: 'published' },
 ]
 
 const TEAM_SEED: Array<Record<string, any>> = [

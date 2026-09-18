@@ -1,4 +1,5 @@
-﻿import { Helmet } from "react-helmet-async";
+﻿import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
@@ -15,6 +16,7 @@ const hardcodedTestimonials: Testimonial[] = [
   { name: "Rakesh Pandey", role: "Director, Star X Institute Private Limited", content: "Our online presence has never been stronger, thanks to the team's expertise and dedication.", rating: 5, category: "Social Media" },
   { name: "Suraj Paul", role: "Gmd Financial Services", content: "Our online presence has never been stronger, thanks to the team's expertise and dedication.", rating: 5, category: "SEO" },
   { name: "Sapan Kumar", role: "Director, Vidya Vibe Academy", content: "Our online presence has never been stronger, thanks to the team's expertise and dedication.", rating: 5, category: "Social Media" },
+  { name: "MS Tutorial", role: "Director, MS Tutorials Vaishali - Coaching Institute", content: "AB DIGITAL SOLUTION helped our coaching institute grow admissions with Google My Business, YouTube and social media. Student enquiries and online visibility have improved remarkably.", rating: 5, category: "Social Media" },
 ];
 
 export default function TestimonialsPage() {
