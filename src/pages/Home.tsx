@@ -5,7 +5,6 @@ import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
 import Process from "@/components/Process";
 import WhyChooseUs from "@/components/WhyChooseUs";
-import Awards from "@/components/Awards";
 import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
 import FAQ from "@/components/FAQ";
@@ -22,7 +21,6 @@ export default function Home() {
       <Portfolio />
       <Process />
       <WhyChooseUs />
-      <Awards />
       <Testimonials />
       <Pricing />
       <FAQ />
