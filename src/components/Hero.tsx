@@ -118,7 +118,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold italic text-[#111111] tracking-tight"
+              className="inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] tracking-tight"
             >
               {content.hero.headline2}<span className="text-[#60A5FA]">{content.hero.headlineHighlight}</span>
             </motion.span>
